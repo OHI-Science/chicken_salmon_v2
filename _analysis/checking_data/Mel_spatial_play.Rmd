@@ -1,0 +1,50 @@
+---
+title: "Spatial"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+library(fasterize)
+library(sf)
+library(tidyverse)
+library(raster)
+library(here)
+library(mapview)
+
+map <- st_read("/home/shares/food-systems/Food_footprint/_raw_data/GADM36/gadm36.shp")
+#mapview(map)
+
+tmp <- filter(map, GID_0=="USA")
+
+palm <- map[grep("Palmyra", map$NAME_1), ]
+mapview(palm)
+palm_buffer <- st_buffer(palm, 10)
+
+# Albers Equal Area Conic
+# Need a different equal area projection (this is North America centric)
+palm_equal_area <- st_transform(palm, 5070)
+mapview(palm_equal_area)
+crs(palm_equal_area)
+
+palm_buffer <- st_buffer(palm_equal_area, 3000)
+mapview(palm_buffer)
+
+
+tet <- map[grep("Teti", map$NAME_4), ]
+mapview(tet)
+palm_buffer <- st_buffer(palm, 10)
+
+# Albers Equal Area Conic
+# Need a different equal area projection (this is North America centric)
+palm_equal_area <- st_transform(palm, 5070)
+mapview(palm_equal_area)
+crs(palm_equal_area)
+
+palm_buffer <- st_buffer(palm_equal_area, 3000)
+mapview(palm_buffer)
+
+```
+

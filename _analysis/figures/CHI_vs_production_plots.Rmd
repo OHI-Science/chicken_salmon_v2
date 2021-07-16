@@ -1,0 +1,134 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "01/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(tidyverse)
+library(ggplot2)
+library(here)
+library(ggrepel)
+library(png)
+library(grid)
+library(RCurl)
+library(patchwork)
+```
+
+
+# Production data by country
+
+Chicken
+
+```{r}
+chicken_prod<-read.csv(here("/_analysis/data/broiler_production.csv")) %>% 
+  dplyr::select(iso3c, broiler_count, broiler_slaughter_wt_tonnes)
+```
+
+
+
+Salmon
+```{r}
+salmon_prod<-read.csv(here("/_analysis/data/salmon_production.csv")) %>% 
+  dplyr::select(iso3c, fao_tonnes_production)
+```
+
+
+
+# CHI data by country
+
+```{r}
+country_chicken<-read.csv(here("_analysis/figures/Country_results/Broiler_country_cpi.csv")) 
+
+country_salmon<-read.csv(here("_analysis/figures/Country_results/Salmon_country_cpi.csv"))
+
+country_chicken_km2<-read.csv(here("_analysis/figures/Country_results/Broiler_country_cpi_km2.csv")) 
+
+country_salmon_km2<-read.csv(here("_analysis/figures/Country_results/Salmon_country_cpi_km2.csv"))
+
+```
+
+
+```{r}
+chick_dat<-full_join(country_chicken, chicken_prod, by = "iso3c") %>% 
+  mutate(labels = ifelse(country_farm_feed_chi>0.3|broiler_slaughter_wt_tonnes>1500000, as.character(iso3c), NA))
+
+png(here("_analysis", "figures","chicken_salmon_production", "chicken_production_cpi.png"), width = 8, height = 8, units = "in", res = 300)
+
+ggplot(chick_dat, aes(x = country_farm_feed_chi, y = broiler_slaughter_wt_tonnes/1000000, label = labels)) +
+  geom_point() + 
+  geom_smooth(formula = y~x, method = "lm") +
+  #annotation_custom(, ymin = 2.5, ymax = 3, xmin = 15, xmax=18) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+  ylab("Production (slaughter weight, millions of tonnes)") +
+  xlab("Cumulative pressure index") +
+  geom_text_repel()
+
+dev.off()
+```
+
+```{r}
+salmon_dat<-full_join(country_salmon, salmon_prod, by = "iso3c") %>% 
+  mutate(labels = ifelse(country_farm_feed_chi>0.05|fao_tonnes_production>10000, as.character(iso3c), NA))
+
+png(here("_analysis", "figures","chicken_salmon_production", "salmon_production_cpi.png"), width = 8, height = 8, units = "in", res = 300)
+ggplot(salmon_dat, aes(x = country_farm_feed_chi, y = fao_tonnes_production/1000000, label = labels)) +
+  geom_point() + 
+  geom_smooth(formula = y~x, method = "lm") +
+  #annotation_custom(, ymin = 2.5, ymax = 3, xmin = 15, xmax=18) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+  ylab("Production (slaughter weight, millions of tonnes)") +
+  xlab("Cumulative pressure index") +
+  geom_text_repel()
+
+dev.off()
+```
+
+```{r}
+chick_dat_km2<-full_join(country_chicken_km2, chicken_prod, by = "iso3c") %>% 
+  mutate(labels = ifelse(avg_cum_stress_km2>0.0000001|broiler_slaughter_wt_tonnes>1500000, as.character(iso3c), NA))
+
+png(here("_analysis", "figures","chicken_salmon_production", "chicken_production_cpi_km2.png"), width = 8, height = 8, units = "in", res = 300)
+
+ggplot(chick_dat_km2, aes(x = avg_cum_stress_km2, y = broiler_slaughter_wt_tonnes/1000000, label = labels)) +
+  geom_point() + 
+  geom_smooth(formula = y~x, method = "lm") +
+  #annotation_custom(, ymin = 2.5, ymax = 3, xmin = 15, xmax=18) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+  ylab("Production (slaughter weight, millions of tonnes)") +
+  labs(x = expression("Cumulative pressure index per"~km^2)) +
+  geom_text_repel()
+
+dev.off()
+```
+```{r}
+salmon_dat_km2<-full_join(country_salmon_km2, salmon_prod, by = "iso3c") #%>% 
+  #mutate(labels = ifelse(avg_cum_stress_km2>0.000000001|fao_tonnes_production>1500000, as.character(iso3c), NA))
+
+png(here("_analysis", "figures","chicken_salmon_production", "salmon_production_cpi_km2.png"), width = 8, height = 8, units = "in", res = 300)
+
+ggplot(salmon_dat_km2, aes(x = avg_cum_stress_km2, y = fao_tonnes_production/1000000, label = iso3c)) +
+  geom_point() + 
+  geom_smooth(formula = y~x, method = "lm") +
+  #annotation_custom(, ymin = 2.5, ymax = 3, xmin = 15, xmax=18) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+  labs(x = expression("Cumulative pressure index per"~km^2)) +
+  ylab("Production (slaughter weight, millions of tonnes)") +
+  geom_text_repel()
+
+dev.off()
+```

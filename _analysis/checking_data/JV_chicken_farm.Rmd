@@ -1,0 +1,56 @@
+---
+title: "JV_chicken_farm"
+author: "Juliette"
+date: "5/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(readr)
+library(tidyverse)
+library(here)
+library(countrycode)
+
+prep <- "/home/shares/food-systems/Food_footprint/dataprep/"
+final <- "/home/shares/food-systems/Food_footprint/final_data/" 
+raw <- "/home/shares/food-systems/Food_footprint/_raw_data/" 
+
+rgns_tif <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns.tif")
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+rgn_info <- read_csv(here("_spatial/output/master_rgns.csv"))
+
+
+```
+
+
+Chicken Farm
+1. Sum all heads of chicken per country and compare to FAO production data
+
+
+```{r}
+our_broiler <- read_csv(file.path(prep, "chicken_farm/chickens_spatial_df_gf.csv"), col_types = "ddcccddddccc") %>% 
+  dplyr::select(Country, iso3c, broiler_count) %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(total_heads_food_system = sum(broiler_count, na.rm = TRUE))
+
+fao_raw <- read_csv(file.path(raw, "FAO_data/v2020/manure_data/broiler_heads.csv"))
+fao <- fao_raw %>% 
+  dplyr::select(Area, Value) %>% 
+  mutate(iso3c = countrycode(Area, origin="country.name", destination = "iso3c")) %>% 
+  filter(Area != "China")
+
+compare_fao <- our_broiler %>% 
+  left_join(fao, by= "iso3c") %>% 
+  filter(!is.na(Area)) %>% 
+  mutate(per_dif = abs(total_heads_food_system-Value)/((total_heads_food_system+Value)/2))
+
+unique(our_broiler$proportion_rgns_chick_num_per_cell)
+
+```
+
+
+
+
+

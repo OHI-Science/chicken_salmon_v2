@@ -1,0 +1,144 @@
+---
+title: "Checking FAO broiler manure destiantions N amount"
+author: "Juliette"
+date: "10/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(tidyverse)
+library(gt)
+
+manage_raw <- read_csv(here("_analysis/other_stuff/data/managed_manure_all_N.csv")) %>% 
+  filter(Area != "China")
+applied_raw <- read_csv(here("_analysis/other_stuff/data/applied_manure_all_N.csv"))%>% 
+  filter(Area != "China")
+left_raw <- read_csv(here("_analysis/other_stuff/data/left_manure_all_N.csv"))%>% 
+  filter(Area != "China")
+
+
+```
+
+```{r}
+
+manage <- manage_raw %>% 
+  filter(Element == "Manure treated (N content)") %>% 
+  dplyr::select(country = Area, animal = Item, kg_N = Value) %>%
+  mutate(tonnes_N = kg_N/1000,
+         type = "managed") 
+
+applied <- applied_raw  %>% 
+  filter(Element == "Manure applied to soils (N content)") %>% 
+  dplyr::select(country = Area, animal = Item, kg_N = Value) %>%
+  mutate(tonnes_N = kg_N/1000,
+         type = "applied")
+
+left <- left_raw %>% 
+  filter(Element == "Manure left on pasture (N content)") %>% 
+  dplyr::select(country = Area, animal = Item, kg_N = Value) %>%
+  mutate(tonnes_N = kg_N/1000,
+         type = "left")
+
+manure <-rbind(manage, applied, left)
+
+```
+
+```{r}
+## just broilers
+
+broiler <- manure %>%
+  dplyr::select(-kg_N) %>% 
+  filter(animal == "Chickens, broilers") %>% 
+  pivot_wider(names_from = type, values_from = tonnes_N) %>% 
+  rowwise() %>% 
+  mutate(rgn_total = sum(managed, applied, left),
+         percent_managed = managed/rgn_total,
+         percent_applied = applied/rgn_total,
+         percent_left = left/rgn_total) %>% 
+  ungroup()
+  
+broiler_table <- broiler %>% 
+  dplyr::select(country, percent_managed, percent_applied, percent_left) %>% 
+  gt() %>% 
+  tab_header(title = "Broiler Manure Destinations",
+             subtitle = "Percents out of total broiler manure in each country, does not include other livestock")
+
+gtsave(broiler_table, "broiler_table.html", path = here("_analysis/other_stuff/data/"))
+
+```
+
+
+```{r}
+## just broilers
+
+broiler <- manure %>%
+  dplyr::select(-kg_N) %>% 
+  filter(animal == "Chickens, broilers") %>% 
+  pivot_wider(names_from = type, values_from = tonnes_N) %>% 
+  rowwise() %>% 
+  mutate(rgn_total = sum(managed, applied, left),
+         percent_managed = managed/rgn_total,
+         percent_applied = applied/rgn_total,
+         percent_left = left/rgn_total) %>% 
+  ungroup()
+  
+broiler_table <- broiler %>% 
+  dplyr::select(country, percent_managed, percent_applied, percent_left) %>% 
+  gt() %>% 
+  tab_header(title = "Broiler Manure Destinations",
+             subtitle = "Percents out of total broiler manure in each country, does not include other livestock")
+
+gtsave(broiler_table, "broiler_table.html", path = here("_analysis/other_stuff/data/"))
+
+broiler_file <- broiler %>% 
+  dplyr::select(country, percent_managed, percent_applied, percent_left) %>% 
+  write_csv(here("_analysis/other_stuff/data/broiler_manure_percents.csv"))
+
+```
+
+
+```{r}
+## compare with all
+
+all <- manure %>%
+  dplyr::select(-kg_N) %>% 
+  pivot_wider(names_from = type, values_from = tonnes_N) %>% 
+  group_by(country) %>% 
+  mutate(rgn_total = sum(managed, applied, left)) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(percent_managed = managed/rgn_total,
+         percent_applied = applied/rgn_total,
+         percent_left = left/rgn_total) %>% 
+  ungroup() %>% 
+  filter(animal == "Chickens, broilers")
+  
+all_comp_table <- all %>% 
+  dplyr::select(country, percent_managed, percent_applied, percent_left) %>% 
+  gt() %>% 
+  tab_header(title = "Broiler Manure Destinations",
+             subtitle = "Percents out of total livestock manure in each country")
+
+gtsave(all_comp_table, "all_comp_table.html", path = here("_analysis/other_stuff/data/"))
+
+all_comp_file <- all %>% 
+  dplyr::select(country, percent_managed, percent_applied, percent_left)  %>% 
+  write_csv(here("_analysis/other_stuff/data/broiler_manure_percents_comp_all.csv"))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,211 @@
+---
+title: "Error checking"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Melanie's file
+
+## Check: Nutrients
+
+1. Sum nutrient pollution across all crop rasters (raw, not area_controlled) and zonal extract sum by country.
+
+2. Download FAO fertilizer data.  For each country calculate PO4-eq from N and PO4 data. Multiply this by 0.1.  
+
+3. Compare stressor data and FAO data, should be pretty close to 1:1.
+
+NOTE: There could still be errors in distribution across country and crops.
+
+```{r}
+
+library(countrycode)
+library(raster)
+library(dplyr)
+library(ggplot2)
+
+rgns <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns.tif")
+
+rgn_master <- read_csv(here("_spatial/output/master_rgns.csv"))
+
+```
+
+# sum nutrient rasters across crops 
+## N
+```{r}
+
+N <- list.files("/home/shares/food-systems/Food_footprint/dataprep/crop_nutrient", pattern="_N", full=TRUE)
+
+N_stack <- stack(N)
+N_sum <- sum(N_stack, na.rm=TRUE)
+cellStats(N_sum, "sum", na.rm=TRUE)
+
+rgn_N <- zonal(N_sum, rgns, fun="sum", progress="text", na.rm=TRUE)
+
+rgn_N_df <- data.frame(rgn_N) %>%
+  rename(ID_0 = zone, fert_N=sum) %>%
+  left_join(rgn_master, by="ID_0")
+
+```
+
+Global sum of N is 107,671,093 tonnes according to the above raster.
+Global sum of N from FAO is 107,825,207
+
+```{r}
+
+N_fao <- read_csv(here("_analysis/checking_data/Mel_data/FAOSTAT_fert_data_5-21-2020.csv")) 
+table(N_fao$Domain)
+table(N_fao$Element)
+table(N_fao$Item)
+
+N_fao <- N_fao %>%
+  dplyr::select(Area, Item,  Value) %>%
+  tidyr::spread(Item, Value)
+
+names(N_fao)[2:4] <-c("N_fao", "P_fao", "K_fao") 
+
+N_fao$iso3c <- countrycode(N_fao$Area, origin = 'country.name', destination = 'iso3c')
+
+N_fao <- N_fao %>%
+  filter(Area != "China")
+sum(N_fao$N_fao, na.rm=TRUE)
+
+```
+
+
+# compare by country
+```{r}
+
+compare <- left_join(rgn_N_df, N_fao, by = "iso3c") 
+
+ggplot(compare, aes(x=log(N_fao+1), y=log(fert_N+1))) +
+  geom_point() +
+  geom_abline(intercept= 0, slope=1, col="red")
+ggplot(compare, aes(x=N_fao, y=fert_N)) +
+  geom_point() +
+  geom_abline(intercept= 0, slope=1, col="red")
+
+head(compare)
+
+compare$prop <- compare$fert_N/compare$N_fao
+ggplot(compare, aes(x=prop)) +
+  geom_histogram() 
+
+
+```
+
+# Data Checks
+
+## Nutrient dataframe
+```{r}
+nutrient_df <- read_csv(here("crop_nutrient/data/nutrient_df.csv"))
+names(nutrient_df)
+
+# Add up country tonnes for N fertilizer
+nutrient_df %>% 
+  group_by(nutrient) %>% 
+  summarize(total = sum(fertilizer_tonnes)) # 14358061458
+
+# Make sure proportions add up to 1
+proportion_check <- nutrient_df %>% 
+  group_by(iso3c, nutrient) %>% 
+  summarize(proportion = sum(SPAM_country_prop))
+range(proportion_check$proportion) # must be between 0 - 1
+
+```
+
+## P
+```{r}
+
+P <- list.files("/home/shares/food-systems/Food_footprint/dataprep/crop_nutrient", pattern="_P", full=TRUE)
+
+P_stack <- stack(P)
+P_sum <- sum(P_stack, na.rm=TRUE)
+cellStats(P_sum, "sum", na.rm=TRUE)
+
+# rgn_N <- zonal(N_sum, rgns, fun="sum", progress="text", na.rm=TRUE)
+# 
+# rgn_N_df <- data.frame(rgn_N) %>%
+#   rename(ID_0 = zone, fert_N=sum) %>%
+#   left_join(rgn_master, by="ID_0")
+
+```
+
+Global sum of N is 44,229,075 tonnes according to the above raster.
+Global sum of N from FAO is 44,294,649
+
+```{r}
+
+P_fao <- read_csv(here("_analysis/checking_data/Mel_data/FAOSTAT_fert_data_5-21-2020.csv")) 
+table(P_fao$Domain)
+table(P_fao$Element)
+table(P_fao$Item)
+
+P_fao <- P_fao %>%
+  dplyr::select(Area, Item,  Value) %>%
+  tidyr::spread(Item, Value)
+
+names(P_fao)[2:4] <-c("N_fao", "P_fao", "K_fao") 
+
+P_fao$iso3c <- countrycode(P_fao$Area, origin = 'country.name', destination = 'iso3c')
+
+P_fao <- P_fao %>%
+  filter(Area != "China")
+sum(P_fao$P_fao, na.rm=TRUE)
+
+```
+
+
+
+# check that we are combining the P and N data correctly to get PO4eq.
+Total global fertilizer map of all crops should sum to about: 10466850
+```{r}
+
+sum(N_fao$N_fao, na.rm=TRUE)*0.42*0.1 + 
+sum(N_fao$P_fao, na.rm=TRUE)/2.29 * 3.07 *0.1
+
+sum(N_fao$N_fao, na.rm=TRUE) + 
+sum(N_fao$P_fao, na.rm=TRUE)
+
+N <- list.files("/home/shares/food-systems/Food_footprint/final_data/_tif_version", pattern="_nutrient", full=TRUE)
+N <- grep(pattern = "crop", N, value=TRUE)
+
+N_stack <- stack(N)
+N_sum <- sum(N_stack, na.rm=TRUE)
+cellStats(N_sum, "sum", na.rm=TRUE)
+
+```
+
+## salmon check
+Juliette checked the values to make sure they coincide with Lex's.  They do.  So that looks good.  I am just going to check that the conversion to PO4 eq went well.
+77122 vs. 76015...this seems reasonable to me.
+```{r}
+112436 * 0.42 + 9739*3.07
+
+salmon <- raster("/home/shares/food-systems/Food_footprint/final_data/_tif_version/salmon_nutrient.tif")
+cellStats(salmon, "sum", na.rm=TRUE)
+
+```
+
+
+
+## Chicken nutrients
+```{r}
+nutrients <- list.files(here("crop_nutrient/data"), pattern = "FAOSTAT_data_6-1-2020", full=TRUE) %>% 
+    map_df(~read_csv(.)) %>%
+  filter(Area != "China") %>%
+  filter(grepl("leaches",Element))
+
+unique(nutrients$Area)
+unique(nutrients$Element)
+unique(nutrients$Unit)
+
+sum(nutrients$Value, na.rm=TRUE) * 0.001 * 0.42 + 
+sum(nutrients$Value, na.rm=TRUE) * 0.001 /2.29 *3.07
+# 2842314
+
+chicken <- raster("/home/shares/food-systems/Food_footprint/final_data/_tif_version/broiler_nutrient.tif")
+
+cellStats(chicken, "sum", na.rm=TRUE)
+
+```

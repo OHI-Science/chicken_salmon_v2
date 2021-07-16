@@ -1,0 +1,116 @@
+---
+title: "JV_ghg_chicken_n2o"
+author: "Juliette"
+date: "6/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(raster)
+library(tidyverse)
+
+prep <- "/home/shares/food-systems/Food_footprint/dataprep/"
+final <- "/home/shares/food-systems/Food_footprint/final_data/" 
+```
+
+
+
+```{r}
+
+broiler_consumption_list <- list.files(file.path(final, "_tif_version_raw"), pattern = "_consumption", full = TRUE)
+broiler_consumption_list <- grep(broiler_consumption_list, pattern= 'broiler', inv=F, value=T)
+broiler_consumption_list <- grep(broiler_consumption_list, pattern= 'feedfish', inv=T, value=T)
+
+crop_list <- substring(broiler_consumption_list, first = 79, last = 82)
+
+fertalizer_n2o <- data.frame(crop = NA, fert_co2 = NA)
+
+for(i in 1:length(crop_list)) {
+  #crop_name = "maiz"
+
+  ## prep the crop rasters
+    crop_name <- crop_list[i]
+
+    ## read in broiler consumption raster
+    broiler <- grep(broiler_consumption_list, pattern= crop_name, inv=F, value=T)
+    broiler_consump_raster <- raster(broiler)
+
+   ## read in crop n2o from fertalizer metabolism for that crop
+    crop_n2o <- raster(file.path(prep, paste0("crop_ghg/crop_fertilizer_N2O/co2_eq/fert_n2o_co2eq_", crop_name, ".tif", sep = "")))
+    
+    ## calculate chicken crop fertalizer n2o
+    broiler_fert_n2o <- crop_n2o*broiler_consump_raster
+    
+    ## summarise
+     
+     sum <- cellStats(broiler_fert_n2o, "sum", na.rm=TRUE)
+     ghg_sum <- data.frame(crop = crop_name , fert_co2 = sum)
+     fertalizer_n2o <- rbind(fertalizer_n2o, ghg_sum)
+
+  }
+
+```
+
+
+
+```{r}
+
+crop_res_n2o <- data.frame(crop = NA, crop_res_co2 = NA)
+
+for(i in 1:length(crop_list)) {
+  #crop_name = "maiz"
+
+  ## prep the crop rasters
+    crop_name <- crop_list[i]
+
+    ## read in broiler consumption raster
+    broiler <- grep(broiler_consumption_list, pattern= crop_name, inv=F, value=T)
+    broiler_consump_raster <- raster(broiler)
+
+   ## read in crop n2o from fertalizer metabolism for that crop
+    crop_n2o <- raster(file.path(prep, paste0("crop_ghg/crop_residue_N2O/co2_eq/res_n2o_co2eq_", crop_name, ".tif", sep = "")))
+    
+    ## calculate chicken crop fertalizer n2o
+    broiler_fert_n2o <- crop_n2o*broiler_consump_raster
+    
+    ## summarise
+     
+     sum <- cellStats(broiler_fert_n2o, "sum", na.rm=TRUE)
+     ghg_sum <- data.frame(crop = crop_name , crop_res_co2 = sum)
+     crop_res_n2o <- rbind(crop_res_n2o, ghg_sum)
+  
+  }
+
+```
+
+
+Add these up
+
+```{r}
+total <- sum(crop_res_n2o$crop_res_co2, na.rm = TRUE) + sum(fertalizer_n2o$fert_co2, na.rm = TRUE)
+
+```
+
+60,778,418
+GLEAM reports 55.4 million
+Close enough!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

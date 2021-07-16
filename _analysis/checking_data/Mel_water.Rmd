@@ -1,0 +1,210 @@
+---
+title: "water_crops_mel"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+
+library(countrycode)
+library(raster)
+library(dplyr)
+library(ggplot2)
+
+rgns <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns.tif")
+
+rgn_master <- read_csv(here("_spatial/output/master_rgns.csv"))
+
+```
+
+
+# Corn
+Going to compare our global value to Mekennon and Hoekstra.  These will not be exact because M&K is 1996 to 2005 production, but the values should be somewhat similar.
+
+M&K: maize global 770Gm3 yr−1. Our value: 1238Gm yr-1
+But there was a 79% increase in corn production during this period (!)
+Adjusted for 2016 production, M&K water use would be 1378
+Given the vagaries of these data, this seems reasonable!
+```{r setup, include=FALSE}
+# our estimate of water consumption
+crop <- raster("/home/shares/food-systems/Food_footprint/final_data/_tif_version/crop_maiz_water.tif")
+cellStats(crop, "sum", na.rm=TRUE)
+
+
+fao <- read_csv(here("_analysis/checking_data/Mel_data/FAOSTAT_maiz_prod_data_5-22-2020.csv")) %>%
+  dplyr::select(Year, Area, Item, Element, Value) %>%
+  filter(Area != "China")
+
+old <- fao %>%
+  filter(Year >= 1996 & Year <= 2005) %>%
+  group_by(Item, Year) %>%
+  summarize(total_tonnes = sum(Value, na.rm=TRUE)) %>%
+  group_by(Item) %>%
+  summarize(avg_tonnes = mean(total_tonnes))
+
+new <- fao %>%
+  filter(Year == 2016) %>%
+  group_by(Item, Year) %>%
+  summarize(total_tonnes = sum(Value, na.rm=TRUE)) %>%
+  group_by(Item) %>%
+  summarize(avg_tonnes = mean(total_tonnes))
+
+(new$avg_tonnes-old$avg_tonnes)/old$avg_tonnes
+
+
+```
+
+# Wheat
+M&K: wheat global 1087Gm3 yr−1. Our value: 1426Gm yr-1
+But there was a 26% increase in wheat production during this period
+Adjusted for 2016 production, M&K water use would be 1367
+Given the vagaries of these data, this seems reasonable!
+
+```{r setup, include=FALSE}
+# our estimate of water consumption
+crop <- raster("/home/shares/food-systems/Food_footprint/final_data/_tif_version/crop_whea_water.tif")
+cellStats(crop, "sum", na.rm=TRUE)
+
+
+fao <- read_csv(here("_analysis/checking_data/Mel_data/FAOSTAT_whea_prod_data_5-22-2020.csv")) %>%
+  dplyr::select(Year, Area, Item, Element, Value) %>%
+  filter(Area != "China")
+
+old <- fao %>%
+  filter(Year >= 1996 & Year <= 2005) %>%
+  group_by(Item, Year) %>%
+  summarize(total_tonnes = sum(Value, na.rm=TRUE)) %>%
+  group_by(Item) %>%
+  summarize(avg_tonnes = mean(total_tonnes))
+
+new <- fao %>%
+  filter(Year == 2016) %>%
+  group_by(Item, Year) %>%
+  summarize(total_tonnes = sum(Value, na.rm=TRUE)) %>%
+  group_by(Item) %>%
+  summarize(avg_tonnes = mean(total_tonnes))
+
+(new$avg_tonnes-old$avg_tonnes)/old$avg_tonnes
+
+1087*0.258+1087
+```
+
+Look at each crop category to see if m3 water per tonne of crop is similar.  There are fairly large differences for some crops...not sure if this due to changes in the extent/location of where the crops are grown or how the data are averaged..  In particular, there seems to be a fairly large difference in the grains, with our grains having about 40% more water usage.  This requires further exploration.
+
+https://www.mapspam.info/methodology/
+```{r}
+
+crop_water_use <- read_csv(here("_analysis/checking_data/Mel_data/water_use_crop_cat.csv"))
+crop_list <- read_csv(here("_analysis/checking_data/Mel_data/MAPSPAM_crops.csv")) %>%
+  left_join(crop_water_use, by="GROUP") %>%
+  mutate(observed_mean = NA,
+         observed_min = NA, 
+         observed_max = NA)
+
+for(crop in crop_list$SPAM_short_name){
+  #crop="maiz"
+  
+water <- raster(sprintf("/home/shares/food-systems/Food_footprint/final_data/_tif_version/crop_%s_water.tif", crop))
+water[water==0] <- NA
+plot(water)
+production <- raster(sprintf("/home/shares/food-systems/Food_footprint/dataprep/crop_farm/scaled_maps_2016/crop_%s_A_scaled.tif", crop))
+
+consumption <- water/production
+# plot(consumption)
+crop_list$observed_mean[crop_list$SPAM_short_name==crop] <- cellStats(consumption, "mean", na.rm=TRUE)
+crop_list$observed_min[crop_list$SPAM_short_name==crop] <- cellStats(consumption, "min", na.rm=TRUE)
+crop_list$observed_max[crop_list$SPAM_short_name==crop] <- cellStats(consumption, "max", na.rm=TRUE)
+}
+
+write_csv(crop_list, here("_analysis/checking_data/Mel_data/crop_water_consumption_new.csv"))
+
+```
+
+```{r}
+
+crop_water_use <- read_csv(here("_analysis/checking_data/Mel_data/crop_water_consumption.csv"))
+
+for(crop in crop_water_use$SPAM_short_name){
+  #crop="maiz"
+  
+water <- raster(sprintf("/home/shares/food-systems/Food_footprint/dataprep/crop_water/water_footprint_v2/crop_%s_water.tif", crop))
+production <- raster(sprintf("/home/shares/food-systems/Food_footprint/dataprep/crop_farm/scaled_maps_2016/crop_%s_A_scaled.tif", crop))
+
+consumption <- water/production
+# plot(consumption)
+crop_water_use$observed_mean_mel[crop_water_use$SPAM_short_name==crop] <- cellStats(consumption, "mean", na.rm=TRUE)
+}
+
+write_csv(crop_water_use, here("_analysis/checking_data/Mel_data/crop_water_consumption_v2.csv"))
+
+```
+
+There is no water footprint in areas with production.  Check to make sure correct raster was chosen.  This is actually ok.  There are zero produciton values in there.  Once these are cut the footprints match.
+
+```{r}
+tmp <- raster("/home/shares/food-systems/Food_footprint/dataprep/crop_water/water_footprint/crop_maiz_blue_water.tif")
+plot(tmp)
+tmp2 <- raster("/home/shares/food-systems/Food_footprint/dataprep/crop_water/water_footprint/crop_maiz_green_water.tif")
+plot(tmp2)
+click(tmp2)
+
+tmp3 <- raster("/home/shares/food-systems/Food_footprint/dataprep/crop_water/water_footprint/crop_maiz_water.tif")
+plot(tmp3)
+
+tmp3[tmp3==0] <- NA
+plot(tmp3)
+
+```
+
+
+```{r}
+library(fasterize)
+library(sf)  
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+
+# Paths
+prep <- "/home/shares/food-systems/Food_footprint/dataprep/"
+final <- "/home/shares/food-systems/Food_footprint/final_data/"
+
+# Datasets
+
+## Water footprint data
+wf_df <- read_csv(here("crop_water/data/wf_df.csv"))
+global_average <- read_csv(here("crop_water/data/global_average.csv"))
+
+## Import shp files for FIPS codes
+fips_shp_df <- read_sf("/home/shares/food-systems/Food_footprint/_raw_data/GADM36/rwdb_ad2_py/RWDB_Ad2-Py.shp", 
+                    stringsAsFactors = FALSE) %>% 
+  janitor::clean_names() %>% 
+st_drop_geometry()
+
+View(fips_shp_df)
+
+fips_shp <- read_sf("/home/shares/food-systems/Food_footprint/_raw_data/GADM36/rwdb_ad2_py/RWDB_Ad2-Py.shp", 
+                    stringsAsFactors = FALSE) %>% 
+  janitor::clean_names()
+
+us <- fips_shp %>%
+  filter(fips_admn1 == "US")
+mapview::mapView(us)
+
+```
+
+# Chickens
+Compare the total global water from the chicken raster to the extracted Chicken raster data.
+
+```{r}
+
+final_data <- raster("/home/shares/food-systems/Food_footprint/final_data/_tif_version/broiler_water.tif")
+plot(final_data)
+cellStats(final_data, "sum", na.rm=TRUE)
+
+chicken_location <- read_csv(file.path(prep, "spatial/chickens_spatial_df_gf.csv"), col_types = "ddcccddddccc") 
+sum(chicken_location$broiler_count) *(0.00018 + 0.00009)* 365
+
+
+```

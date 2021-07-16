@@ -1,0 +1,208 @@
+---
+title: "Move tifs and summarize pressure groups"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+This scripts summarizes per cell pressures for farm, crop feed, marine fisheries feed for both salmon aquaculture and broiler chickens.
+
+Files are saved as tif files on Aurora in the following folders:
+ * stressor_summary/lat_long_per_cell
+    - crop_feed (stressor for each of the crops multiplied by within country proportion of crop going to a food system)
+    - feed_farm_system_stressor (sum of stressors for each food system for: farm, feed_marinefisheries, feed_crop)
+       
+```{r setup, include=FALSE}
+
+library(raster)
+library(tidyverse)
+
+```
+
+## Farm
+Move the farm gate layers directly
+
+```{r}
+
+#broilers:
+farm_stressors <- list.files("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell", full=TRUE, pattern = "broiler")
+farm_stressors <- grep("consumption", farm_stressors, invert=TRUE, value=TRUE)
+
+
+for(farm_stressor in farm_stressors){
+  # farm_stressor = farm_broilers[1]
+  name <- basename(farm_stressor)
+  file.copy(from=farm_stressor, 
+            to=sprintf("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor/farm_%s", name),
+            overwrite = TRUE)
+}
+
+
+#salmon
+farm_stressors <- list.files("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell", full=TRUE, pattern = "salmon")
+farm_stressors <- grep("consumption", farm_stressors, invert=TRUE, value=TRUE)
+
+for(farm_stressor in farm_stressors){
+  # farm_stressor = farm_broilers[1]
+  name <- basename(farm_stressor)
+  file.copy(from=farm_stressor, 
+            to=sprintf("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor/farm_%s", name),
+            overwrite = TRUE)
+}
+
+```
+
+## Multiply crop by animal consumption proportion
+
+Function that multiplies each crop stressor by proportion of crop consumed by animal system in each country.
+```{r}
+
+prop_stressor <- function(feed_props, food_system="broiler"){
+for(feed_prop in feed_props){
+  #feed_prop <- feed_props[1]
+
+#proportion of country crop going to broiler feed
+feed_prop_rast <- raster(feed_prop)  
+#plot(feed_prop_rast)
+
+crop_name <- basename(feed_prop)
+crop_name <- gsub(paste0(food_system, "_"), "", crop_name)
+crop_name <- gsub("_consumption.tif", "", crop_name)
+
+# stressors for each crop
+crop_stressors <- list.files("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell", full=TRUE, pattern = crop_name)
+crop_stressors <- grep("crop", crop_stressors, value=TRUE)
+
+crop_stressor_stack <- stack(crop_stressors)
+names_stack <- sprintf("%s_%s.tif", food_system, names(crop_stressor_stack))
+
+# multiply total crop stressor by proportion going to animal
+proportion_stressor <- overlay(crop_stressor_stack, feed_prop_rast, fun=function(x,y){x*y})
+names(proportion_stressor) <- names_stack
+
+# save each stack layer as its own raster
+for(i in 1:4) { # i=1
+  single_band <- raster(proportion_stressor, layer = i)
+  writeRaster(single_band, sprintf("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/crop_feed/%s", names(single_band)),
+              overwrite=TRUE)
+}
+}
+}
+
+
+```
+
+## Broilers
+```{r}
+feed_props <- list.files("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell", full=TRUE, pattern = "broiler")
+feed_props <- grep("consumption", feed_props, value=TRUE)
+feed_props <- grep("feedfish", feed_props, value=TRUE, invert=TRUE) # remove feed fish
+
+prop_stressor(feed_props, food_system = "broiler")
+
+```
+
+### salmon
+
+```{r}
+
+feed_props <- list.files("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell", full=TRUE, pattern = "salmon")
+feed_props <- grep("consumption", feed_props, value=TRUE)
+feed_props <- grep("feedfish", feed_props, value=TRUE, invert=TRUE)
+
+prop_stressor(feed_props, food_system = "salmon")
+
+```
+
+## sum each crop stressor for each animal
+# chickens
+```{r}
+
+# function to sum across crops, the relative consumed stressor
+sum_feed_crop <- function(feed_crops, food_system="broiler") {
+
+stressor_list <- c("disturbance", "ghg", "nutrient", "water")
+
+  for(stressor in stressor_list){
+  # stressor <- "water"
+  target_stressor <- grep(stressor, feed_crops, value=TRUE)
+  target_stressor_stack <- stack(target_stressor)
+  stressor_sum <- sum(target_stressor_stack, na.rm=TRUE)
+
+ writeRaster(stressor_sum, sprintf("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor/feed_crop_%s_%s.tif",food_system, stressor), 
+             overwrite=TRUE)
+  }
+}
+```
+
+# broilers
+```{r}
+
+feed_crops <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/crop_feed", pattern="broiler", full=TRUE)
+
+sum_feed_crop(feed_crops, food_system="broiler")
+
+```
+
+# salmon
+```{r}
+
+feed_crops <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/crop_feed", pattern="salmon", full=TRUE)
+
+sum_feed_crop(feed_crops, food_system="salmon")
+
+
+```
+
+## Feedfish 
+
+### Multiply feedfish by animal consumption proportion
+
+A function
+
+```{r}
+
+prop_feedfish_stressor <- function(feed_props, food_system = "broiler"){
+
+feedfish_stressors <- list.files("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell", pattern="marinefisheries", full=TRUE)
+
+feedfish_stressor_stack <- stack(feedfish_stressors)
+
+names_stack <- sprintf("feed_marinefish_%s_%s.tif", food_system, names(feedfish_stressor_stack)) 
+names_stack <- gsub("marinefisheries_feedfish_", "", names_stack)
+
+
+# multiply total crop stressor by proportion going to chickens
+proportion_stressor <- overlay(feedfish_stressor_stack, feed_props, fun=function(x,y){x*y})
+names(proportion_stressor) <- names_stack
+
+# save each stack layer as its own raster
+for(i in 1:4) { # i=1
+  single_band <- raster(proportion_stressor, layer = i)
+
+  
+writeRaster(single_band, sprintf("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor/%s", names(single_band)),
+              overwrite=TRUE)
+
+}
+}
+```
+
+### broilers
+```{r}
+
+feed_props <- raster("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell/broiler_feedfish_consumption.tif")
+
+prop_feedfish_stressor(feed_props, food_system = "broiler")
+
+```
+
+##### Salmon
+```{r}
+# raw
+feed_props <- raster("/home/shares/food-systems/Food_footprint/final_data/_tif_version_per_cell/salmon_feedfish_consumption.tif")
+
+prop_feedfish_stressor(feed_props, food_system = "salmon")
+
+
+```
+

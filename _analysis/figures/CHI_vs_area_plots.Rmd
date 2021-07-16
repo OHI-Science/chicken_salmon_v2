@@ -1,0 +1,211 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "01/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(raster)
+library(sf)
+library(here)
+library(patchwork)
+```
+
+```{r}
+#global<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_combined_eez_land_global.csv"))
+rescaled<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_country.csv")) %>% 
+  group_by(Country, iso3c, animal_system) %>% 
+  summarise(chi = sum(value, na.rm = T))
+master_rgns <- read_csv(here("_spatial/output/master_rgns.csv"))
+master_rgns_shp<- st_read("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns.shp")
+eez_rgns<-read_csv(here("_spatial/output/eez_rgns.csv"))
+```
+
+
+```{r}
+EEZ_start <- st_read("/home/shares/food-systems/Food_footprint/_raw_data/marine_regions/Intersect_EEZ_IHO_v4_2020/Intersect_EEZ_IHO_v4_2020.shp")
+
+EEZ_shape <- EEZ_start %>%
+  mutate(ISO_TER1 = as.character(ISO_TER1)) %>%
+    mutate(ISO_SOV1 = as.character(ISO_SOV1))
+
+# Regions from the master list that are not in EEZ file
+no_eez <- setdiff(master_rgns$iso3c, EEZ_shape$ISO_TER1)
+landlocked <- read_csv(here("_spatial/output/UNSD_Methodology.csv")) %>%
+  filter(Land_Locked == "x") 
+setdiff(no_eez, landlocked$iso3c)
+
+## British Indian Ocean Territory
+EEZ_shape$ISO_TER1[EEZ_shape$MARREGION== "Chagos Archipelago part of the Indian Ocean"] <- "IOT"  
+## Madeira Island
+EEZ_shape$ISO_TER1[EEZ_shape$MARREGION== "Portuguese (Madeira) part of the North Atlantic Ocean"] <- "XMI"  
+
+# Check again
+# Regions from the master list that are not in EEZ file
+no_eez <- setdiff(master_rgns$iso3c, EEZ_shape$ISO_TER1)
+landlocked <- read_csv(here("_spatial/output/UNSD_Methodology.csv")) %>%
+  filter(Land_Locked == "x") 
+setdiff(no_eez, landlocked$iso3c)
+## Aland = Lumped with Finland's Baltic sea
+## HongKong, Macao = lumped with China, not possible to separate from EEZ map
+## Ilse of Man grouped with Irish Sea area Between UK and Ireland
+## NOTES:
+# Overlapping claim South China Sea part of the South China Sea is counted with China in EEZ map
+
+## Find matches to missing regions
+grep("Mac", EEZ_shape$MARREGION, value=TRUE)
+
+finding <- EEZ_shape %>%
+filter(MARREGION  == "United Kingdom part of the Irish Sea and St. George's Channel")
+plot(st_geometry(finding))
+
+finding <- EEZ_shape %>%
+filter(ISO_TER1  == "GBR")
+plot(st_geometry(finding))
+#mapview::mapview(finding)
+
+## Check reverse: regions in EEZ map not in our master list
+no_eez <- setdiff(EEZ_shape$ISO_TER1, master_rgns$iso3c)
+
+check <- EEZ_shape %>%
+  filter(ISO_TER1=="UMI")
+
+## Question: I included the following in the administrative territory.  Does this seem reasonable?
+## Method: replace ISO_Ter1 with ISO_SOV1
+# ATF French Southern Territories: no inhabitants
+# UMI United States Minor Outlying Islands, no inhabitants
+# HMD Heard and McDonald Islands, no inhabitants, australian territory
+# SGS South Georgia and the South Sandwich Islands, british overseas territory
+
+# ATA Antarctica: keep this as is
+
+EEZ_shape <- EEZ_shape %>%
+  mutate(ISO_TER1 = ifelse(ISO_TER1 %in% c("ATF", "UMI", "HMD", "SGS"), ISO_SOV1, ISO_TER1))
+setdiff(EEZ_shape$ISO_TER1, master_rgns$iso3c)  # should now only be ATA and NA
+
+## Indicate HS areas (may want to make this more specific at some point)
+EEZ_shape <- EEZ_shape %>%
+  mutate(ISO_TER1 = ifelse(is.na(ISO_TER1) & is.na(ISO_SOV1), "HS", ISO_TER1))
+setdiff(EEZ_shape$ISO_TER1, master_rgns$iso3c)  # should now only be ATA and NA
+
+filter(EEZ_shape, is.na(ISO_TER1))
+
+## assign remaining territories to administrative country
+regions <- EEZ_shape %>%
+  filter(is.na(ISO_TER1)) 
+unique(regions$TERRITORY1)
+
+EEZ_shape <- EEZ_shape %>%
+  mutate(ISO_TER1 = ifelse(is.na(ISO_TER1), ISO_SOV1, ISO_TER1))
+setdiff(EEZ_shape$ISO_TER1, master_rgns$iso3c)  # should now only be ATA and HS
+sum(is.na(EEZ_shape$ISO_TER1))
+```
+
+# Calculate areas
+
+```{r}
+eez_area<-EEZ_shape %>% 
+  mutate(eez_area = as.numeric(st_area(.)/1000000)) %>% 
+  dplyr::select(ISO_TER1, eez_area) %>% 
+  as.data.frame() %>% 
+  dplyr::select(-geometry)
+
+eez_area2<-eez_area %>% 
+  group_by(ISO_TER1) %>% 
+  summarise(eez_area = sum(eez_area))
+
+land_area<-master_rgns_shp %>% 
+  mutate(land_area = as.numeric(st_area(.)/1000000)) %>% 
+  dplyr::select(GID_0, land_area) %>% 
+  as.data.frame() %>% 
+  dplyr::select(-geometry)
+
+land_area2 <- land_area %>% 
+  group_by(GID_0) %>% 
+  summarise(land_area = sum(land_area))
+```
+
+# Combine
+
+```{r}
+all_area<-full_join(land_area2, eez_area2, by = c("GID_0" = "ISO_TER1")) %>% 
+  mutate(eez_area2 = ifelse(is.na(eez_area) == T, 0, as.numeric(eez_area)),
+        total_area = land_area + eez_area2)
+```
+
+```{r}
+area_chi<-full_join(all_area, rescaled, by = c("GID_0" = "iso3c"))
+```
+
+# Chicken plot
+
+```{r}
+chickenurl<-"http://phylopic.org/assets/images/submissions/b2de15b4-bcf1-45ad-99ff-c2b9204baa3a.128.png"
+chicken_logo<-readPNG(getURLContent(chickenurl))
+chicken_png <- rasterGrob(chicken_logo)
+```
+
+```{r}
+chicken<-area_chi %>% 
+  filter(animal_system == "broiler") %>% 
+  mutate(label = ifelse(chi>0.6, as.character(Country), NA))
+
+chicken_chi_area<-ggplot(chicken, aes(x = log10(total_area+1), y = chi, label = label)) +
+  geom_point() +
+  ggrepel::geom_text_repel() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+ # xlab("Area (km2,log transformed)")+
+  labs(x = expression ("Area ("~km^2~", log transformed)"),
+       y = "Cumulative envrionmental pressure") +
+  annotation_custom(chicken_png, xmin = 6.5, xmax = 7.2, ymin = 2.5, ymax=3)
+
+chicken_chi_area
+```
+
+# Salmon plot
+
+```{r}
+salmonurl<-"http://phylopic.org/assets/images/submissions/3c098bb8-4158-4777-b567-80e48049409c.512.png"
+salmon_logo <- readPNG(getURLContent(salmonurl))
+salmon_png <- rasterGrob(salmon_logo)
+```
+
+```{r}
+salmon<-area_chi %>% 
+  filter(animal_system == "salmon") %>% 
+  mutate(label = ifelse(chi>0.02, as.character(Country), NA))
+
+salmon_chi_area<-ggplot(salmon, aes(x =log10(total_area+1), y = chi , label = label)) +
+  geom_point() +
+  ggrepel::geom_text_repel()+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+  labs(x = expression ("Area ("~km^2~", log transformed)"),
+       y = "") +
+  annotation_custom(salmon_png, xmin = 2, xmax = 3, ymin = 0.1, ymax=0.2)
+
+salmon_chi_area
+```
+
+
+
+
+```{r}
+png(here("_analysis", "figures","CHI_vs_area", "chicken_salmon_chi_area.png"), width = 15, height = 8, units = "in", res = 300)
+chicken_chi_area + salmon_chi_area + plot_annotation(tag_levels = 'A')
+dev.off()
+```
+
+
+
+
+=

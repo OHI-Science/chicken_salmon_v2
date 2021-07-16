@@ -1,0 +1,119 @@
+---
+title: "maps_match_scales"
+author: "Juliette"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+
+library(raster)
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(RColorBrewer)
+library(rgdal)
+library(here)
+library(doParallel)
+
+water <- readOGR(here("_analysis/raw/rgn_all_gcs_med_res.shp"))
+water<-water[!water$rgn_nam == "Antarctica",]
+
+land <- ne_countries(scale = "medium", returnclass = "sp")
+land<-land[!land$sov_a3 == "ATA",]
+
+stress <-  "/home/shares/food-systems/Food_footprint/stressors/"
+
+stressor_df <- data.frame(stressor = c("ghg", "nutrient", "disturbance", "water"),
+                          stressor_unit = c("tonnes CO2eq", "tonnes", "proportion", "m3"),
+                          by_break = c(0.075, 0.005, 0.00005, 0.3))
+
+animal_list <- c("broiler", "salmon")
+stressor_list <- c("ghg", "nutrient", "disturbance", "water")
+
+```
+
+Write it as a function
+add run parallel
+```{r}
+
+stressor_same_scale <- function(type = "totals")  {
+  
+for(stressor in stressor_list) { #stressor = "ghg"
+  
+  files <- list.files("/home/shares/food-systems/Food_footprint/stressors/summed_stressors", pattern = type, full=TRUE)
+  files <- grep(stressor, files, value=TRUE)
+  
+  broiler <- raster(grep("broiler", files, value=TRUE))
+  salmon <- raster(grep("salmon", files, value=TRUE))
+
+## create the color palette we want
+  colors_main <-rev(c("#A50026", "#EF2A00", "#F59804", "#FACC00", "#FFFF65", "#FFF1CC"))
+ 
+  quant <- quantile(broiler, c(0.999))
+  by_break <- stressor_df$by_break[stressor_df$stressor == stressor] 
+                                        
+  break_broiler <- c(seq(0, quant[[1]], by=by_break))
+  
+  colors_all <- colorRampPalette(colors_main)(length(break_broiler)-1) 
+  palette <- c("#F4FBFC", colors_all)
+
+  broiler[broiler > quant] <- quant 
+  
+  ## broiler
+  png(here(paste0("_analysis/maps_same_scale/outputs/broiler_", stressor, ".png", sep="")), res=500, width=6, height=5, units="in")
+  par(oma=c(1,1,1,0)) # bottom, left, top, and right
+  par(mfrow=c(1, 1), mar=c(1, 0, 1, 0), new=TRUE)
+
+  plot(broiler,
+       main=paste0("Broiler ", stressor, sep = " "),
+       breaks = break_broiler,
+       col = palette,
+       axes=FALSE, 
+       box=FALSE,  
+       legend=TRUE, 
+       legend.shrink= 0.7, 
+       legend.width=.4, 
+       axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1), 
+       legend.args=list(text = stressor_df$stressor_unit[stressor_df$stressor == stressor], cex = 1, side = 3, line = 1))
+  
+  plot(land, border="#c5b89c", lwd=0.5, add=TRUE)
+  
+ grDevices::dev.off()
+  
+## salmon
+  salmon[salmon > quant] <- quant
+ 
+  png(here(paste0("_analysis/maps_same_scale/outputs/salmon_", stressor, ".png", sep="")), res=500, width=6, height=5, units="in")
+  par(oma=c(1,1,1,0)) # bottom, left, top, and right
+  par(mfrow=c(1, 1), mar=c(1, 0, 1, 0), new=TRUE)
+  
+   plot(salmon,
+       main=paste0("Salmon ", stressor, sep = " "),
+       breaks = break_broiler,
+       col = palette,
+       axes=FALSE, 
+       box=FALSE,  
+       legend=TRUE, 
+       legend.shrink= 0.7, 
+       legend.width=.4, 
+       axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1), 
+       legend.args=list(text = stressor_df$stressor_unit[stressor_df$stressor == stressor], cex = 1, side = 3, line = 1))
+  
+  plot(land, border="#c5b89c", lwd=0.5, add=TRUE)
+  
+ grDevices::dev.off()
+ 
+}
+}  
+
+stressor_same_scale(type = "totals")
+``` 
+
+

@@ -1,0 +1,245 @@
+"","iso3c","Country","animal_system","country_farm_feed_chi"
+"1","ABW","Aruba","broiler",0
+"2","AFG","Afghanistan","broiler",0.000532653865774918
+"3","AGO","Angola","broiler",0.00566207303484847
+"4","AIA","Anguilla","broiler",0.000038526076874185
+"5","ALA","Åland","broiler",0.000000755459094633489
+"6","ALB","Albania","broiler",0.000379948901937576
+"7","AND","Andorra","broiler",0.000000087860532304576
+"8","ARE","United Arab Emirates","broiler",0.00193022644270193
+"9","ARG","Argentina","broiler",0.176157417262159
+"10","ARM","Armenia","broiler",0.000141341858102951
+"11","ASM","American Samoa","broiler",0.00000271157132879445
+"12","ATG","Antigua and Barbuda","broiler",0.00000997741226790594
+"13","AUS","Australia","broiler",0.0677776206327868
+"14","AUT","Austria","broiler",0.00279992103665173
+"15","AZE","Azerbaijan","broiler",0.00214131665405088
+"16","BDI","Burundi","broiler",0.000151791769676163
+"17","BEL","Belgium","broiler",0.00317015272939092
+"18","BEN","Benin","broiler",0.00110217117043238
+"19","BES","Bonaire, Sint Eustatius and Saba","broiler",0.00000787938539139406
+"20","BFA","Burkina Faso","broiler",0.00426486512778333
+"21","BGD","Bangladesh","broiler",0.00275346652145147
+"22","BGR","Bulgaria","broiler",0.00647239004003268
+"23","BHR","Bahrain","broiler",0.0000297465725891077
+"24","BHS","Bahamas","broiler",0.000272785165258772
+"25","BIH","Bosnia and Herzegovina","broiler",0.00187277158107295
+"26","BLM","Saint-Barthélemy","broiler",0
+"27","BLR","Belarus","broiler",0.00869108768259014
+"28","BLZ","Belize","broiler",0.000418444515058868
+"29","BMU","Bermuda","broiler",0.00000210428631938228
+"30","BOL","Bolivia","broiler",0.0411354203527937
+"31","BRA","Brazil","broiler",0.468118223165003
+"32","BRB","Barbados","broiler",0.000254278322106412
+"33","BRN","Brunei","broiler",0.00152304103797165
+"34","BTN","Bhutan","broiler",0.0000157150705404986
+"35","BWA","Botswana","broiler",0.00037825104892041
+"36","CAF","Central African Republic","broiler",0.000898807522124886
+"37","CAN","Canada","broiler",0.0536877636826099
+"38","CCK","Cocos Islands","broiler",0.000000746741992879197
+"39","CHE","Switzerland","broiler",0.00292191122389136
+"40","CHL","Chile","broiler",0.0191161992357231
+"41","CHN","China","broiler",0.365972298725914
+"42","CIV","Côte d'Ivoire","broiler",0.00578308529923156
+"43","CMR","Cameroon","broiler",0.00674810023077971
+"44","COD","Democratic Republic of the Congo","broiler",0.00155833406826937
+"45","COG","Republic of Congo","broiler",0.00041805473641034
+"46","COK","Cook Islands","broiler",0.00000105575369700298
+"47","COL","Colombia","broiler",0.0166820719651593
+"48","COM","Comoros","broiler",0.0000285781550770011
+"49","CPV","Cape Verde","broiler",0.000147953512634564
+"50","CRI","Costa Rica","broiler",0.00203770987825827
+"51","CUB","Cuba","broiler",0.00239702475919708
+"52","CUW","Curaçao","broiler",0.00000638567558160056
+"53","CXR","Christmas Island","broiler",0.00000344080632856888
+"54","CYM","Cayman Islands","broiler",0.000000469934189493897
+"55","CYP","Cyprus","broiler",0.000252066747212074
+"56","CZE","Czech Republic","broiler",0.00637403183140901
+"57","DEU","Germany","broiler",0.0247540304387911
+"58","DJI","Djibouti","broiler",0.0000068463046526384
+"59","DMA","Dominica","broiler",0.0000137307244780055
+"60","DNK","Denmark","broiler",0.00379548087792182
+"61","DOM","Dominican Republic","broiler",0.0154455723619412
+"62","DZA","Algeria","broiler",0.00977634105157223
+"63","ECU","Ecuador","broiler",0.0212292088659814
+"64","EGY","Egypt","broiler",0.0141008256384849
+"65","ERI","Eritrea","broiler",0.00034957027778592
+"66","ESH","Western Sahara","broiler",0.000073106400377652
+"67","ESP","Spain","broiler",0.0152049491523116
+"68","EST","Estonia","broiler",0.00103856849009746
+"69","ETH","Ethiopia","broiler",0.00732236403813298
+"70","FIN","Finland","broiler",0.00153989691047552
+"71","FJI","Fiji","broiler",0.000335230156473739
+"72","FLK","Falkland Islands","broiler",0.0000152607502377248
+"73","FRA","France","broiler",0.0485411160894061
+"74","FRO","Faroe Islands","broiler",0.000095744702799891
+"75","FSM","Micronesia","broiler",0.00000715559676154933
+"76","GAB","Gabon","broiler",0.000352285707996281
+"77","GBR","United Kingdom","broiler",0.0314989691076022
+"78","GEO","Georgia","broiler",0.000783216251890314
+"79","GGY","Guernsey","broiler",0.0000122127519703662
+"80","GHA","Ghana","broiler",0.00625498183214589
+"81","GIB","Gibraltar","broiler",0.0000000856562002552217
+"82","GIN","Guinea","broiler",0.00209041496121609
+"83","GLP","Guadeloupe","broiler",0.0000144439919111642
+"84","GMB","Gambia","broiler",0.000189977660778247
+"85","GNB","Guinea-Bissau","broiler",0.000310907955384489
+"86","GNQ","Equatorial Guinea","broiler",0.0000243434690656603
+"87","GRC","Greece","broiler",0.0038498963965016
+"88","GRD","Grenada","broiler",0.0000113879337589018
+"89","GRL","Greenland","broiler",0.0000656476460983249
+"90","GTM","Guatemala","broiler",0.00484978069832308
+"91","GUF","French Guiana","broiler",0.00000448915680688886
+"92","GUM","Guam","broiler",0.0000149136098655524
+"93","GUY","Guyana","broiler",0.00251350711893526
+"94","HKG","Hong Kong","broiler",0.000115485099376054
+"95","HND","Honduras","broiler",0.00608339440610813
+"96","HRV","Croatia","broiler",0.00189245091183263
+"97","HTI","Haiti","broiler",0.000892657487964625
+"98","HUN","Hungary","broiler",0.0101697948154089
+"99","IDN","Indonesia","broiler",0.214398929439353
+"100","IMN","Isle of Man","broiler",0.00000113428934432965
+"101","IND","India","broiler",0.202643601877871
+"102","IOT","British Indian Ocean Territory","broiler",0.0000000271957433473461
+"103","IRL","Ireland","broiler",0.00201387758093532
+"104","IRN","Iran","broiler",0.115823974492432
+"105","IRQ","Iraq","broiler",0.00608604070503544
+"106","ISL","Iceland","broiler",0.000117557883848426
+"107","ISR","Israel","broiler",0.00368234377696338
+"108","ITA","Italy","broiler",0.0160246996998493
+"109","JAM","Jamaica","broiler",0.00117120209363774
+"110","JEY","Jersey","broiler",0.0000069581149242961
+"111","JOR","Jordan","broiler",0.00264459205207102
+"112","JPN","Japan","broiler",0.0206762911702014
+"113","KAZ","Kazakhstan","broiler",0.0086659565946902
+"114","KEN","Kenya","broiler",0.00295819070380017
+"115","KGZ","Kyrgyzstan","broiler",0.000161219613471208
+"116","KHM","Cambodia","broiler",0.00134082264284109
+"117","KIR","Kiribati","broiler",0.0000402747563480486
+"118","KNA","Saint Kitts and Nevis","broiler",0.00000410892681856166
+"119","KOR","South Korea","broiler",0.0112063139636778
+"120","KWT","Kuwait","broiler",0.00381684485211035
+"121","LAO","Laos","broiler",0.0030102475441119
+"122","LBN","Lebanon","broiler",0.00608924232776231
+"123","LBR","Liberia","broiler",0.000705003080830684
+"124","LBY","Libya","broiler",0.00233925094061335
+"125","LCA","Saint Lucia","broiler",0.000033929449999321
+"126","LIE","Liechtenstein","broiler",0
+"127","LKA","Sri Lanka","broiler",0.00339290204841166
+"128","LSO","Lesotho","broiler",0.00184138616708233
+"129","LTU","Lithuania","broiler",0.00363331225496226
+"130","LUX","Luxembourg","broiler",0.000256798617811156
+"131","LVA","Latvia","broiler",0.0017628974236271
+"132","MAC","Macao","broiler",0.0000618784105527107
+"133","MAF","Saint-Martin","broiler",0.00000431115683371143
+"134","MAR","Morocco","broiler",0.0178890420064475
+"135","MCO","Monaco","broiler",0.0000000321808685720453
+"136","MDA","Moldova","broiler",0.00587707840841274
+"137","MDG","Madagascar","broiler",0.0047918382130438
+"138","MDV","Maldives","broiler",0.0000000291629798099687
+"139","MEX","Mexico","broiler",0.0746551641065704
+"140","MHL","Marshall Islands","broiler",0.0000000323946855524012
+"141","MKD","Macedonia","broiler",0.0000612225530512585
+"142","MLI","Mali","broiler",0.00597949512825688
+"143","MLT","Malta","broiler",0.0000935183745319482
+"144","MMR","Myanmar","broiler",0.0288650698610309
+"145","MNE","Montenegro","broiler",0.0000179572178981731
+"146","MNG","Mongolia","broiler",0.0000286919192301704
+"147","MNP","Northern Mariana Islands","broiler",0.0000000250747873172646
+"148","MOZ","Mozambique","broiler",0.00331859953721914
+"149","MRT","Mauritania","broiler",0.000783502443027651
+"150","MSR","Montserrat","broiler",0.00000187056711589971
+"151","MTQ","Martinique","broiler",0.0000299761818329293
+"152","MUS","Mauritius","broiler",0.00121731538455947
+"153","MWI","Malawi","broiler",0.00358871864523775
+"154","MYS","Malaysia","broiler",0.0191130463823128
+"155","MYT","Mayotte","broiler",0.0000017761002582819
+"156","NAM","Namibia","broiler",0.000418552334091245
+"157","NCL","New Caledonia","broiler",0.0000246950863580301
+"158","NER","Niger","broiler",0.00306179716509019
+"159","NFK","Norfolk Island","broiler",0.00000197649844505087
+"160","NGA","Nigeria","broiler",0.0128712683808058
+"161","NIC","Nicaragua","broiler",0.00397949174540428
+"162","NIU","Niue","broiler",0.00000113145920855659
+"163","NLD","Netherlands","broiler",0.00729385281625963
+"164","NOR","Norway","broiler",0.00284795365308933
+"165","NPL","Nepal","broiler",0.00518686363647617
+"166","NRU","Nauru","broiler",0.0000000578845501690045
+"167","NZL","New Zealand","broiler",0.00483377101127105
+"168","OMN","Oman","broiler",0.000554964796807787
+"169","PAK","Pakistan","broiler",0.0615494275730221
+"170","PAN","Panama","broiler",0.00255523138434814
+"171","PCN","Pitcairn Islands","broiler",0.000000081590211512458
+"172","PER","Peru","broiler",0.0209874031616691
+"173","PHL","Philippines","broiler",0.0278107733329983
+"174","PLW","Palau","broiler",0.0000000510979191663682
+"175","PNG","Papua New Guinea","broiler",0.000206746751288639
+"176","POL","Poland","broiler",0.0382267155152388
+"177","PRI","Puerto Rico","broiler",0.00128248634566118
+"178","PRK","North Korea","broiler",0.00094964648398601
+"179","PRT","Portugal","broiler",0.00115741800667489
+"180","PRY","Paraguay","broiler",0.0369637699438799
+"181","PSE","Palestina","broiler",0.00058717036729678
+"182","PYF","French Polynesia","broiler",0.0000128311091432094
+"183","QAT","Qatar","broiler",0.000840323142038008
+"184","REU","Reunion","broiler",0.00134205113121832
+"185","ROU","Romania","broiler",0.0157024888949373
+"186","RUS","Russia","broiler",0.133891622918065
+"187","RWA","Rwanda","broiler",0.000962577248823948
+"188","SAU","Saudi Arabia","broiler",0.0217073431307327
+"189","SDN","Sudan","broiler",0.00718805534863394
+"190","SEN","Senegal","broiler",0.00504055199116037
+"191","SGP","Singapore","broiler",0.000111412098698271
+"192","SHN","Saint Helena","broiler",0.000000483563568236825
+"193","SJM","Svalbard and Jan Mayen","broiler",0.000136467728049373
+"194","SLB","Solomon Islands","broiler",0.0000062701221020407
+"195","SLE","Sierra Leone","broiler",0.00106810058598911
+"196","SLV","El Salvador","broiler",0.00227086941048858
+"197","SMR","San Marino","broiler",0.0000284805031829892
+"198","SOM","Somalia","broiler",0.000455093915880497
+"199","SPM","Saint Pierre and Miquelon","broiler",0.0000111361087552348
+"200","SRB","Serbia","broiler",0.00344158511119485
+"201","SSD","South Sudan","broiler",0.00184559601624605
+"202","STP","São Tomé and Príncipe","broiler",0.0000201219386387201
+"203","SUR","Suriname","broiler",0.000332769548571887
+"204","SVK","Slovakia","broiler",0.00356784143776041
+"205","SVN","Slovenia","broiler",0.00064921650317667
+"206","SWE","Sweden","broiler",0.00182820458097313
+"207","SWZ","Swaziland","broiler",0.000425882548090333
+"208","SXM","Sint Maarten","broiler",0
+"209","SYC","Seychelles","broiler",0.00000660462447140281
+"210","SYR","Syria","broiler",0.000584564814542743
+"211","TCA","Turks and Caicos Islands","broiler",0.00000000396192016342009
+"212","TCD","Chad","broiler",0.00127176174436281
+"213","TGO","Togo","broiler",0.00382558367763414
+"214","THA","Thailand","broiler",0.0388219349626355
+"215","TJK","Tajikistan","broiler",0.000356493036852088
+"216","TKL","Tokelau","broiler",0.000000219248755322428
+"217","TKM","Turkmenistan","broiler",0.00171491596544374
+"218","TLS","Timor-Leste","broiler",0.0000914883354740323
+"219","TON","Tonga","broiler",0.0000198622610689998
+"220","TTO","Trinidad and Tobago","broiler",0.00333683394926635
+"221","TUN","Tunisia","broiler",0.00586815596693736
+"222","TUR","Turkey","broiler",0.0498433398084364
+"223","TUV","Tuvalu","broiler",0.00000323386677359625
+"224","TWN","Taiwan","broiler",0.00514476812449927
+"225","TZA","Tanzania","broiler",0.00527027461285155
+"226","UGA","Uganda","broiler",0.0040364160087868
+"227","UKR","Ukraine","broiler",0.0612294986310954
+"228","URY","Uruguay","broiler",0.00869143397412865
+"229","USA","United States","broiler",0.687310134687945
+"230","UZB","Uzbekistan","broiler",0.00307522032723328
+"231","VCT","Saint Vincent and the Grenadines","broiler",0.0000192928665492477
+"232","VEN","Venezuela","broiler",0.0168844793482734
+"233","VGB","British Virgin Islands","broiler",0.0000128363403279601
+"234","VIR","Virgin Islands, U.S.","broiler",0.00000294458417967676
+"235","VNM","Vietnam","broiler",0.0262143668572219
+"236","VUT","Vanuatu","broiler",0.0000602079526678262
+"237","WLF","Wallis and Futuna","broiler",0.00000416086191071151
+"238","WSM","Samoa","broiler",0.0000320630895658536
+"239","XKO","Kosovo","broiler",0.0000323152481013089
+"240","XMI","Madeira Island","broiler",0.0000182862739644977
+"241","YEM","Yemen","broiler",0.00991391824402671
+"242","ZAF","South Africa","broiler",0.0500404488912801
+"243","ZMB","Zambia","broiler",0.00812553406145811
+"244","ZWE","Zimbabwe","broiler",0.00656431554099153

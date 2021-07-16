@@ -1,0 +1,153 @@
+---
+title: "Making maps"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+
+library(raster)
+library(tidyverse)
+library(sf)
+library("rnaturalearth")
+
+
+water <- readOGR(dsn=here("_analysis/raw/rgn_all_gcs_med_res.shp"))
+
+land <- ne_countries(scale = "medium", returnclass = "sp")
+plot(land)
+
+
+library(RColorBrewer)
+display.brewer.all()
+
+stressor_df <- data.frame(stressor = c("ghg", "water", "nutrient", "disturbance"),
+                          stressor_unit = c("tonnes CO2eq", "m3", "tonnes", "proportion"))
+
+```
+
+Going to try to use quantiles to identify cut points. Current plan is get quantiles 
+based on land part of broiler data (low values in ocean are blowing the top of the color scale) for each stressor and use these for all animals.
+```{r}
+animal_list <- c("broiler", "salmon")
+stressor_list <- c("ghg", "water", "nutrient", "disturbance")
+
+for(stressor in stressor_list){
+animal <- "broiler"
+files <- list.files("/home/shares/food-systems/Food_footprint/stressors", pattern = animal, full=TRUE)
+files <- grep(stressor, files, value=TRUE)
+
+land_rasts <- grep("marinefish", files, invert=TRUE, value=TRUE)
+
+land_stack <- stack(land_rasts)
+land_sum <- sum(land_stack, na.rm=TRUE)
+land_vals <- getValues(land_sum)
+land_vals_no_zero <- land_vals[land_vals>0]
+quants <- quantile(land_vals_no_zero, c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9))
+
+save(quants, file=here(sprintf("_analysis/figures/maps_unique_scale/quants/quants_%s.Rdata", stressor)))
+
+}
+
+```
+
+
+Using the quantile approach
+```{r}
+
+stressor_maps <- function(system = "broiler"){
+
+for(stressor in stressor_list){ #stressor = "ghg"
+
+quant <- load(here(sprintf("_analysis/figures/maps_unique_scale/quants/quants_%s.Rdata", stressor)))
+
+files <- list.files("/home/shares/food-systems/Food_footprint/stressors", pattern = system, full=TRUE)
+files <- grep(stressor, files, value=TRUE)
+
+stressor_stack <- stack(files)
+stressor_total <- sum(stressor_stack, na.rm = TRUE)
+
+chi_breaks <-  c(-1, 0, quants, Inf)
+chi_cols <- brewer.pal(9, "YlOrBr")
+chi_cols = colorRampPalette(chi_cols)(length(chi_breaks)-2) 
+chi_cols = c("NA", paste0(chi_cols, "BF"))
+              
+raster_data=stressor_total
+title="" 
+cols=chi_cols 
+color_breaks = chi_breaks
+legend_break_labels = chi_legend_labels
+label_sequence = chi_label_sequence
+
+
+png(here(sprintf("_analysis/figures/maps_unique_scale/output/%s_%s.png", system, stressor)), res=500, width=6, height=3, units="in")
+par(oma=c(0,0,0,0))
+par(mar=c(1,1,1,1)) # bottom, left, top, and right
+
+plot(water, border="#f2f8fc", col="#f2f8fc", lwd=0.5, main=sprintf("%s: %s", system, stressor))
+plot(land, border="#c5b89c", col="#f6f2e9", lwd=0.5, add=TRUE)
+plot(raster_data, col=cols, axes=FALSE, box=FALSE, breaks=color_breaks, legend=FALSE, add=TRUE)
+dev.off()
+}
+}  
+
+
+stressor_maps(system = "broiler")
+stressor_maps(system = "salmon")
+
+```
+
+
+Scaling linearly from 0 to 95th quantile
+```{r}
+
+stressor_maps_linear <- function(system = "broiler"){
+
+for(stressor in stressor_list){ #stressor = "ghg"
+
+quant <- load(here(sprintf("_analysis/figures/maps_unique_scale/quants/quants_%s.Rdata", stressor)))
+
+files <- list.files("/home/shares/food-systems/Food_footprint/stressors", pattern = system, full=TRUE)
+files <- grep(stressor, files, value=TRUE)
+
+stressor_stack <- stack(files)
+stressor_total <- sum(stressor_stack, na.rm = TRUE)
+quant <- quantile(stressor_total, 0.99)
+stressor_total[stressor_total > quant] <- quant 
+
+
+chi_cols <- brewer.pal(9, "YlOrBr")[4:9]
+chi_cols = colorRampPalette(chi_cols)(100) 
+chi_cols = c("NA", paste0(chi_cols, "BF"))
+              
+raster_data=stressor_total
+title="" 
+cols=chi_cols
+
+png(here(sprintf("_analysis/figures/maps_unique_scale/output/%s_%s_v2.png", system, stressor)), res=500, width=6, height=3, units="in")
+
+par(oma=c(1,1,1,0), new = TRUE) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 0))
+  
+plot(water, border="#f2f8fc", col="#f2f8fc", lwd=0.5, main=sprintf("%s: %s", system, stressor))
+plot(land, border="#c5b89c", col="#f6f2e9", lwd=0.5, add=TRUE)
+plot(raster_data, 
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     add=TRUE,  
+     legend=TRUE, 
+     legend.shrink= 0.7, 
+     legend.width=.4, 
+     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1), 
+     legend.args=list(text = stressor_df$stressor_unit[stressor_df$stressor == stressor], cex = 1, side = 3, line = 1))
+
+dev.off()
+}
+}  
+
+stressor_maps_linear(system="broiler")
+stressor_maps_linear(system = "salmon")
+
+```

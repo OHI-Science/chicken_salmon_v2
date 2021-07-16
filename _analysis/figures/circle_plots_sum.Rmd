@@ -1,0 +1,206 @@
+---
+title: "Circle barplots"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(here)
+
+un_geopolitical <- read_csv(here("_spatial/output/UNSD_Methodology.csv")) %>%
+  dplyr::select(iso3c, georegion=Region_Name)
+
+rgn_names <- read_csv(here("_spatial/output/master_rgns.csv")) %>%
+  rename(land_area_km2 = area_km2)
+eez_rgns <- read_csv(here("_spatial/output/eez_rgns.csv")) %>%
+  rename(eez_area_km2 = area_km2)
+
+rescaling_values <- read_csv(here("_analysis/step4_stressor_rescaling.csv")) 
+
+
+```
+
+
+# data
+```{r}
+
+# summarize to get country/global totals
+pressures <- read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv"))  %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  group_by(Country, iso3c, animal_system, stressor) %>%
+  summarize(country_system_stressor = sum(value, na.rm=TRUE)) %>%
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_country_system_stressor = country_system_stressor/global_total) %>%
+left_join(un_geopolitical, by="iso3c") %>%
+  select(Country, iso3c, animal_system, stressor, prop_country_system_stressor, georegion)
+
+# now determine country percentages relative to global totals
+rank_rgn <- pressures %>%
+  group_by(iso3c, Country, georegion) %>%
+  mutate(prop_cumulative = sum(prop_country_system_stressor)) %>%
+  select(iso3c, Country, georegion, prop_cumulative) %>%
+  unique()%>%
+  ungroup() %>%
+   arrange(-prop_cumulative) %>%
+  mutate(cumulative_prop_cumulative = cumsum(prop_cumulative)) 
+
+sum(rank_rgn$prop_cumulative) # should be a bit less than four because it doesn't include the open ocean
+
+
+rank_georgn <- rank_rgn %>%
+  group_by(georegion) %>%
+  summarize(mean_prop_cumulative = mean(prop_cumulative),
+            count = length(prop_cumulative)) %>%
+  ungroup() %>%
+  data.frame() %>%
+  arrange(mean_prop_cumulative)
+
+rank_rgn$georegion <- factor(rank_rgn$georegion, levels=rank_georgn$georegion)
+pressures$georegion <- factor(pressures$georegion, levels=rank_georgn$georegion)
+pressures$Country <- factor(pressures$Country, levels=rank_rgn$Country)
+
+# modify region names to be shorter
+pressures <- pressures %>%
+  mutate(rgn_name_short = Country, 
+         rgn_name_short = gsub("Islands", "Isl", rgn_name_short),
+         rgn_name_short = gsub("Island", "Isl", rgn_name_short),
+         rgn_name_short = gsub("Democratic", "Dem", rgn_name_short),
+         rgn_name_short = gsub("Republic", "Rep", rgn_name_short),
+         rgn_name_short = gsub("South", "S", rgn_name_short),
+         rgn_name_short = gsub("American", "Am", rgn_name_short),
+         rgn_name_short = gsub("the United States", "US", rgn_name_short),
+         rgn_name_short = gsub("Territory", "Terr", rgn_name_short),
+         rgn_name_short = gsub("Saint", "St", rgn_name_short),
+         rgn_name_short = gsub(" and ", " & ", rgn_name_short),
+         rgn_name_short = gsub("Republique", "Rep", rgn_name_short),
+         rgn_name_short = gsub("Dem Rep of the", "Dem Rep of", rgn_name_short),
+         rgn_name_short = gsub("Georgia and the", "Georgia and", rgn_name_short),
+         rgn_name_short = gsub("St Vincent and the", "St Vincent and", rgn_name_short),
+         rgn_name_short = gsub("Howland Isl & Baker Isl", "Howland & Baker Isl", rgn_name_short),
+         rgn_name_short = gsub("Northern", "N", rgn_name_short), 
+         rgn_name_short = gsub("Reunion", "Reunion", rgn_name_short)) %>%
+  arrange(Country)
+
+```
+## adjust data for particular plotting needs
+  - determine what will be plotted inside the circle
+  - subset the high values to be placed inside a different plot
+
+## Stuff for both plots
+```{r}
+
+myPalette <- c(colorRampPalette(c("#DCB881", "#754D24"), space="Lab")(4),          #chicken browns
+               colorRampPalette(c("#9DBCE5", "#005AB8"), space="Lab")(4))         #salmon blues
+cutoff_value <- 3 # 75
+```
+
+### Determine regions for circle and bar plot
+```{r}
+lower_regions <- filter(rank_rgn, cumulative_prop_cumulative > cutoff_value)
+lower_pressures <- pressures %>%
+  filter(Country %in% lower_regions$Country) 
+
+cutoff_country <- lower_pressures[1, "iso3c"]
+
+
+```
+
+
+#### Circle part
+Findcode in circle_plots_avg.Rmd
+#### Bar part
+```{r}
+
+higher_regions <- filter(rank_rgn, cumulative_prop_cumulative <= cutoff_value)
+
+pressures_adj_bar <- pressures %>%
+  filter(Country %in% higher_regions$Country) %>%
+  rbind(filter(pressures, iso3c==cutoff_country$iso3c)) %>%
+  rowwise() %>%
+  mutate(source_name = paste(animal_system, stressor, sep=": "))
+length(unique(pressures_adj_bar))
+# color for region labels
+#rank_rgn_adj_bar <- rank_rgn %>%
+#  mutate(Country = factor(Country, unique(Country))) %>%
+#  mutate(georegion = factor(georegion, unique(georegion))) %>%
+#  mutate(color = "black") %>%
+#  mutate(color = ifelse(is.na(prop_country_system_stressor), "white", color))%>%
+#  mutate(color = ifelse(iso3c %in% highest_country$iso3c, "red", color)) %>%
+#  arrange(Country)
+
+
+
+
+## some theme stuff to make the plot look nice
+
+bar_theme <- theme(#axis.line=element_blank(),
+                  #    axis.text.y=element_blank(),
+                      axis.ticks.y=element_blank(),
+                #      axis.title.x=element_blank(),
+                      axis.title.y=element_blank(),
+                  #    legend.position="none",
+                      panel.background=element_blank(),
+                      panel.border=element_blank(),
+                      panel.grid.major=element_blank(),
+                      panel.grid.minor=element_blank(),
+                      plot.background=element_blank(),
+                      axis.text.y = element_text(margin = margin(r= -10)),
+                      legend.title = element_blank()
+                  #    axis.text.x = element_blank()
+              )
+
+# handy: x=reorder(Country, desc(Country))
+
+p <- ggplot(data=pressures_adj_bar, aes(x=Country, y=prop_country_system_stressor, fill=source_name)) + 
+  
+  geom_bar(stat="identity") +
+  ylab("proportion of global stress") +
+  ## this adjust the inner circle size (ymin) and outer circle size (ymax), which can be expanded to include names
+  # geom_errorbar(aes(
+  #     x     = 1, 
+  #     ymin  = -1.5,   
+  #     ymax  = 3), 
+  #     alpha = 0) +
+  
+  # geom_errorbar(aes(
+  #     y     = -2, 
+  #     xmin  = -1,   
+  #     xmax  = -1), 
+  #     alpha = 0) +
+  
+      # Country name text placement
+     geom_text(
+       data = higher_regions,
+       aes(y = -0.03,
+           x = 1:length(Country),
+           label = Country),
+       inherit.aes = FALSE,
+  # #    fontface = "bold",
+       alpha = 0.9,
+       size = 3,
+       color = "gray",
+       hjust = 1) +
+
+   # Scale bar annotation, this adds the y-axis numbers
+     # annotate(
+     #   "text",
+     #   x     = c(-0.025, -0.025, -0.025, -0.025),
+     #   y     = c(0, 1, 2, 3),
+     #   label = c(0, 1, 2, 3),
+     #   color = "darkgray", size = 3) +
+
+  scale_colour_identity() +
+  scale_fill_manual(values=myPalette) +
+    coord_flip() +
+bar_theme
+
+#p
+ggsave(here('_analysis/figures/circular_plots/feed_farm_marine_land_barplot_absolute.png'), height=6, width=5, units=c("in"), bg="transparent")
+
+
+```

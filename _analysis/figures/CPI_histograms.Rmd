@@ -1,0 +1,51 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "27/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+chicken <- raster("/home/shares/food-systems/Food_footprint/stressor_summary/rescaled/cumulative_stress/broilers_cumulative_stress.tif")
+
+chicken_df<--rasterToPoints(chicken) %>% 
+  as.data.frame() %>% 
+  mutate(broiler_cum = abs(broilers_cumulative_stress)) 
+
+```
+
+```{r}
+salmon<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/rescaled/cumulative_stress/salmon_cumulative_stress.tif")
+
+salmon_df<--rasterToPoints(salmon) %>% 
+  as.data.frame() %>% 
+  mutate(salmon_cum = abs(salmon_cumulative_stress)) 
+```
+
+# Histograms
+
+Chicken
+
+```{r}
+
+test1<- chicken_df %>% 
+  filter(!broiler_cum == 0)
+
+hist(test1$broiler_cum, breaks = 10)
+
+```
+
+Salmon
+
+```{r}
+test<- salmon_df %>% 
+  filter(salmon_cum<0.00001)
+
+hist(test$salmon_cum, breaks = 10)
+```
+
+

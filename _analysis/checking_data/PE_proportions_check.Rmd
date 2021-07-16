@@ -1,0 +1,181 @@
+---
+title: "PE_proportion_check"
+output: html_document
+---
+
+# Script Description
+Check whether the proportions make sense and if they seem correct.
+Do this by:
+
+1. Seeing if the proportions add up to 1.
+2. Seeing if we get zeros in places that have production.
+3. Compare with FAOSTAT?
+
+# Data information
+MapSPAM proportion and FAOSTAT 2016 crop production data.
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+
+# File paths
+raw   <- "/home/shares/food-systems/Food_footprint/_raw_data/"
+prep  <- "/home/shares/food-systems/Food_footprint/dataprep/"
+final <- "/home/shares/food-systems/Food_footprint/final_data/" 
+
+# Import master_rgns xy df
+master_rgns_xy <- vroom::vroom(paste(prep, "spatial/master_rgns_xy.csv", sep = "")) %>% 
+  dplyr::select(x, y, iso3c)  
+``` 
+
+# Wrangle MapSPAM proportion data
+```{r}
+# Import
+MapSPAM_production_raw <- vroom::vroom(here("crop_farm/data/prod_crop_rgns.csv")) %>% 
+    rename(SPAM_short_name = crop)
+
+unaccounted_SPAM_production <- MapSPAM_production_raw %>% 
+  filter(!prod_system %in% "A" & is.na(iso3c)) %>%
+  summarise(unaccounted_production = sum(country_production)) %>% 
+  as.numeric()
+
+MapSPAM_production <- MapSPAM_production_raw %>% 
+  filter(!prod_system %in% "A" & !is.na(iso3c))
+
+# For GHA values. Check after update.
+MapSPAM_production$country_production[MapSPAM_production$country_production < 0] <- 0
+
+# Calculate the proportion of production allocated grouping by crop category
+MapSPAM_production_prop <- MapSPAM_production %>%  
+  group_by(iso3c) %>% 
+  mutate(SPAM_proportion = country_production / sum(country_production, na.rm = TRUE)) 
+  
+# Crop categories with no production end up with 0/0 = NaN
+MapSPAM_production_prop$SPAM_proportion[which(!is.finite(MapSPAM_production_prop$SPAM_proportion))] <- 0
+
+# Test to see that this works:
+sum(MapSPAM_production_prop$SPAM_proportion %in% 0)
+sum(MapSPAM_production_prop$country_production %in% 0) 
+```
+
+-------------------------------------------------------------------------------
+
+# Wrangle FAOSTAT data
+Calculate proportion of FAO crop relative to own country
+```{r}
+# Import
+FAO_data <- vroom::vroom(here("_analysis/checking_data/PE_data/FAOSTAT_2016_production.csv")) %>% 
+  clean_names() %>% 
+  # Remove crops that aren't covered by MapSPAM and those we excluded
+  filter(!item_code %in% c(256, 257, 311, 656, 667, 826) & !area_code %in% 351)
+
+FAO_rgn_codes <- vroom::vroom(here("_spatial/output/FAO_rgn_codes.csv"))
+
+FAO_data <- left_join(FAO_data, FAO_rgn_codes, by = "area_code") %>% 
+  dplyr::select(value, iso3c, item_code) %>% 
+  unique()
+FAO_data
+```
+
+## Allocate production data to Serbia and Kosovo
+```{r}
+SRB_XKO <- MapSPAM_production_raw %>% 
+  filter(iso3c %in% c("XKO", "SRB") & prod_system %in% "A") %>% 
+  group_by(iso3c) %>% 
+  summarize(country_production = sum(country_production)) %>% 
+  mutate(relative_proportion = country_production / sum(country_production))
+SRB_XKO
+
+FAO_data$value[FAO_data$iso3c %in% "SRB"] <- 
+  FAO_data$value[FAO_data$iso3c %in% "SRB"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "SRB"]
+
+FAO_data$value[FAO_data$iso3c %in% "XKO"] <- 
+  FAO_data$value[FAO_data$iso3c %in% "XKO"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "XKO"]
+```
+
+# Match country names across datasets
+```{r}
+setdiff(unique(FAO_data$iso3c), unique(MapSPAM_production_prop$iso3c))
+
+# Pivot longer
+proportion_df <- left_join(FAO_data, MapSPAM_production_prop) %>% 
+  pivot_longer(cols      = ends_with("proportion"),
+               names_to  = "source",
+               values_to = "proportion")
+proportion_df$source <- str_replace_all(proportion_df$source, "_proportion", "")
+```
+
+## Add SPAM crop names
+```{r}
+SPAM_names <- vroom::vroom(here("crop_farm/data/MapSPAM_names.csv")) %>% 
+  dplyr::select(SPAM_short_name, item_code)
+
+FAO_data <- left_join(FAO_data, 
+          SPAM_names,
+          by = "item_code") %>% 
+  group_by(SPAM_short_name, iso3c) %>% 
+  summarize(value = sum(value, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(iso3c) %>% 
+  mutate(FAO_proportion = value / sum(value, na.rm = TRUE))
+head(FAO_data)
+```
+
+## Compare SPAM and FAO proportions
+
+### Total production
+```{r}
+SPAM_sum <- sum(MapSPAM_production$country_production, na.rm = TRUE)
+FAO_sum <- sum(FAO_data$value, na.rm = TRUE)
+SPAM_sum / FAO_sum
+(SPAM_sum - unaccounted_SPAM_production) / FAO_sum
+
+# Proportion of production that isn't assigned to iso3c (0.002%)
+unaccounted_SPAM_production / (SPAM_sum + unaccounted_SPAM_production) 
+```
+
+-------------------------------------------------------------------------------
+
+# Compare proportions
+
+## 1. Do the proportions all add up to 1?
+```{r}
+sum_prop <- proportion_df %>% 
+  group_by(iso3c, SPAM_short_name, source) %>% 
+  summarize(sum = sum(proportion, na.rm = TRUE))
+```
+
+This country has 60% proportion??
+BRN	SPAM	0.6061477
+
+## 2. See if we get zeros in places that have production.
+```{r} 
+tabyl(proportion_df$proportion)
+```
+
+## 3. Compare to FAO production proportions
+```{r}
+ggplot(proportion_df, aes(y = proportion, colour = source)) +
+  geom_histogram(stat = "count", binwidth = 0.1) +
+  theme_classic()
+```
+
+## 4. How much data is I and H
+```{r}
+proportion_df %>% 
+  filter(prod_system %in% c("I", "H")) %>%
+  group_by()
+  summarize(sum =  sum(country_production))
+  
+```
+

@@ -1,0 +1,89 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "07/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+
+```
+
+# Dominant pressure
+
+```{r}
+broilers <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/rescaled/system_stressor", pattern="broiler", full=TRUE)
+broiler_stack<-stack(broilers)
+broiler_df<-rasterToPoints(broiler_stack)
+
+broiler_prop<-broiler_df %>% 
+  as.data.frame() %>% 
+  rename(disturbance = broiler_disturbance_rescaled_w_total_chi,
+         ghg = broiler_ghg_rescaled_w_total_chi,
+         nutrient = broiler_nutrient_rescaled_w_total_chi,
+         water = broiler_water_rescaled_w_total_chi) %>% 
+  mutate(total_chi = disturbance + ghg+ nutrient+water,
+         prop_dist = disturbance/total_chi,
+         prop_ghg = ghg/total_chi,
+         prop_nutri = nutrient/total_chi,
+         prop_water = water/total_chi) %>% 
+  filter(!total_chi == 0)
+```
+
+```{r}
+salmon <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/rescaled/system_stressor", pattern="salmon", full=TRUE)
+salmon_stack <- stack(salmon)
+salmon_df<-rasterToPoints(salmon_stack)
+
+salmon_prop<-salmon_df %>% 
+  as.data.frame() %>% 
+  rename(disturbance = salmon_disturbance_rescaled_w_total_chi,
+         ghg = salmon_ghg_rescaled_w_total_chi,
+         nutrient = salmon_nutrient_rescaled_w_total_chi,
+         water = salmon_water_rescaled_w_total_chi) %>% 
+  mutate(total_chi = disturbance + ghg+ nutrient+water,
+         prop_dist = disturbance/total_chi,
+         prop_ghg = ghg/total_chi,
+         prop_nutri = nutrient/total_chi,
+         prop_water = water/total_chi) %>% 
+  filter(!total_chi == 0)
+```
+
+# Look into what is driving most cells
+
+```{r}
+salmon_max<-salmon_prop %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val)
+
+salmon_max_ras<-rasterFromXYZ(salmon_max)
+
+# 1 = disturbance, 2 = ghg, 3 = nutrients, 4 = water
+plot(salmon_max_ras,
+     breaks = c(0,1,2,3,4),
+     col = rev(terrain.colors(4)))
+```
+
+```{r}
+broiler_max<-broiler_prop %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val)
+
+broiler_max_ras<-rasterFromXYZ(broiler_max)
+
+# 1 = disturbance, 2 = ghg, 3 = nutrients, 4 = water
+plot(broiler_max_ras,
+     breaks = c(0,1,2,3,4),
+     col = rev(terrain.colors(4)))
+```

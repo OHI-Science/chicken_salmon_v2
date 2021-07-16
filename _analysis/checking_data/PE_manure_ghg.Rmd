@@ -1,0 +1,221 @@
+---
+title: "ghg_manure_check"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Preamble
+```{r}
+library(readr)
+library(tidyverse)
+library(raster)
+library(rgdal)
+library(janitor)
+library(here)
+
+# File paths
+prep <- "/home/shares/food-systems/Food_footprint/dataprep/"
+final <- "/home/shares/food-systems/Food_footprint/final_data/" 
+raw <- "/home/shares/food-systems/Food_footprint/_raw_data/" 
+
+# Master regions 
+rgns <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns.tif")
+rgn_master <- read_csv(here("_spatial/output/master_rgns.csv"))
+master_rgns <- read_csv(file.path(prep, "spatial/master_rgns_xy.csv"), 
+                        col_types = "ddddcc") %>% 
+  dplyr::select(x, y, iso3c)
+FAO_rgn_codes <- read_csv(here("_spatial/output/FAO_rgn_codes.csv"))
+```
+
+
+> Proposed method
+1. Download the appropriate FAO datasets (Remove the overall China value, keeping the mainland China, Taiwan, etc.)
+2. Sum the global CO2eq
+3. Figure out from @j-verstaen which raster calculates manure chicken GHG emissions.
+4. Sum this raster and make sure the values match. They should be nearly identical because the number of chickens matches (we used a more complex mathematical approach because the chicken count was previously different from FAO...but now it should be the same.)
+
+Progress status:
+1. Complete: See PE_data
+2. Complete: Only difference is from gapfilling (~13K relative to 60M)
+3. Complete
+4. Complete: Values match
+
+-------------------------------------------------------------------------------
+# Checking final products
+
+## Final CSV product check
+```{r}
+# Read final product
+chicken_manure_emissions <- 
+  read_csv(file.path(prep, "chicken_ghg/chicken_manure_emissions.csv"), 
+                                     col_types = "ddd") 
+
+# Calculate total emissions
+post_analysis_sum <- chicken_manure_emissions %>% 
+  summarize(tonnes_CO2eq = sum(manure_tonnes_CO2eq, na.rm = TRUE))
+
+# Sum emissions by country for csv version
+post_analysis_country_sum <- left_join(master_rgns, chicken_manure_emissions) %>% 
+  group_by(iso3c) %>% 
+  summarize(tonnes_CO2eq_post = sum(manure_tonnes_CO2eq, na.rm = TRUE)) %>% 
+  na.omit()
+
+# Check countries of interest - Guernsey has no chickens?
+post_analysis_country_sum %>% 
+  filter(iso3c %in% c("USA", "BRA", "SRB", "SDN", "TWN", "ALA", 
+                      "XMI", "XKO", "PRT", "GBR", "GGY"))
+```
+
+# Final raster product check
+```{r}
+# Map and zonal extract values to see if it maps correctly.
+chicken_manure_emissions_raster <- rasterFromXYZ(chicken_manure_emissions) 
+chicken_manure_emissions_raster 
+
+# Does it look right?
+plot(chicken_manure_emissions_raster)
+plot(log(chicken_manure_emissions_raster + 1))
+
+# Raster sum
+sum_raster <- cellStats(chicken_manure_emissions_raster, "sum", na.rm = TRUE)
+
+# Investigate if FALSE
+setequal(sum_raster, post_analysis_sum)
+
+# Break down raster map to country 
+zonal_ghg <- zonal(chicken_manure_emissions_raster, 
+                   rgns, 
+                   fun = "sum", 
+                   progress = "text", 
+                   na.rm = TRUE)
+sum(zonal_ghg) # We are losing emissions somewhere
+
+zonal_ghg_tbl <- tbl_df(zonal_ghg) %>% 
+  rename(ID_0 = zone) %>% 
+  left_join(rgn_master) %>% 
+  dplyr::select(-c(ID_0, Country))
+zonal_ghg_tbl
+
+post_analysis_zonal_sum <- zonal_ghg_tbl %>% 
+  summarize(tonnes_CO2eq_post = sum(sum)) %>% 
+  .[[1]]
+
+# Must be TRUE
+setequal(post_analysis_zonal_sum, sum_raster)
+```
+
+-------------------------------------------------------------------------------
+
+Check whether the approach is correct
+
+# Import and tidy
+```{r}
+# Import manure data using data imported on 05/29/2020
+manage <- read_csv(here("_analysis/checking_data/PE_data/FAOSTAT_manure_management.csv")) %>% 
+  clean_names %>% 
+  filter(element %in% "Emissions (CO2eq) (Manure management)") %>% 
+  dplyr::select(area, value, area_code) %>% 
+  mutate(source = "manure_management")
+
+soil <- read_csv(here("_analysis/checking_data/PE_data/FAOSTAT_manure_soils.csv")) %>% 
+  clean_names %>% 
+  filter(element %in% "Emissions (CO2eq) (Manure applied)") %>% 
+  dplyr::select(area, value, area_code) %>% 
+  mutate(source = "soil")
+
+pasture <- read_csv(here("_analysis/checking_data/PE_data/FAOSTAT_manure_pasture.csv")) %>% 
+  clean_names %>% 
+  filter(element %in% "Emissions (CO2eq) (Manure on pasture)") %>% 
+  dplyr::select(area, value, area_code) %>% 
+  mutate(source = "pasture")
+
+# Merge
+manure <- rbind(manage, soil, pasture) %>% 
+  group_by(area) %>% 
+  mutate(tonnes_CO2eq = value * 1000) %>% # gigagrams to tonne conversion
+  ungroup()
+```
+
+# Region check [Potential modification to method - discuss with team]
+
+```{r} 
+missing_codes <- setdiff(manure$area_code, FAO_rgn_codes$area_code)
+manure %>% filter(area_code %in% missing_codes)
+
+# Re-allocate Serbia data to Kosovo and Serbia
+manure <- manure %>%   # SRB without XKO
+  mutate(area_code = if_else(area_code %in% 272, 275, area_code)) %>%  # XKO
+  bind_rows(manure) %>%
+  mutate(area_code = if_else(area_code %in% 272, 286, area_code)) %>%
+  unique() %>% 
+  # Remove wider China and Netherlands Antilles
+  filter(!area_code %in% c(151, 351))
+
+manure <- manure %>% 
+  left_join(FAO_rgn_codes) %>% 
+  right_join(rgn_master) %>% 
+  dplyr::select(-c(area, country, Country, ID_0))
+n_distinct(manure$iso3c) # must be 244
+
+# Allocate fertilizer data to Serbia and Kosovo
+SRB_XKO <- read_csv(here("crop_farm/data/prod_crop_rgns.csv")) %>% 
+  filter(iso3c %in% c("XKO", "SRB") & prod_system %in% "A") %>% 
+  group_by(iso3c) %>% 
+  summarize(country_production = sum(country_production)) %>% 
+  mutate(relative_proportion = country_production / sum(country_production))
+
+manure$tonnes_CO2eq[manure$iso3c %in% "SRB"] <- 
+  manure$tonnes_CO2eq[manure$iso3c %in% "SRB"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "SRB"]
+
+manure$tonnes_CO2eq[manure$iso3c %in% "XKO"] <- 
+  manure$tonnes_CO2eq[manure$iso3c %in% "XKO"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "XKO"]
+
+# I gave these autonomous regions the same area_codes as POR and GBR respectively.
+manure$tonnes_CO2eq[manure$iso3c %in% c("XMI", "GGY")] <- 0
+
+# Calculate sum at national level and compare
+pre_analysis_sum <- manure %>% 
+  summarize(tonnes_CO2eq = sum(tonnes_CO2eq, na.rm = TRUE))
+
+pre_analysis_country_sum <- manure %>% 
+  group_by(iso3c) %>% 
+  summarize(tonnes_CO2eq_pre = sum(tonnes_CO2eq, na.rm = TRUE)) %>% 
+  ungroup() 
+
+verdict <- setequal(pre_analysis_sum, post_analysis_sum)
+
+if (isFALSE(verdict)) { 
+  
+  total_sum_difference <- pre_analysis_sum - post_analysis_sum
+  country_sum_difference <- left_join(pre_analysis_country_sum, post_analysis_country_sum) %>% 
+    group_by(iso3c) %>% 
+    mutate(tonnes_CO2eq_diff = tonnes_CO2eq_pre - tonnes_CO2eq_post)
+  
+}
+
+# Identifying differences
+country_sum_difference %>% filter(tonnes_CO2eq_pre %in% 0 | iso3c %in% c("XKO", "SRB")) %>% 
+  summarize(sum = sum(tonnes_CO2eq_post)) # 11.9k from gapfilling, 1.1k from serbia issue
+total_sum_difference #13K, adds up correctly.
+
+# Check for anomalies - Expect a difference in countries that have been gapfilled.
+view(country_sum_difference)
+```
+
+# Check gapfilling process ----------------------------------------------------
+```{r}
+un <- read_csv(here("_spatial/output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+manure_emissions_rgns_gf <- read_csv(here("chicken_ghg/data/manure_emissions_rgns_gf.csv")) %>%
+  left_join(un)
+
+manure_emissions_rgns_gf %>%
+  ggplot(., aes(x = Region_Name, y = tonnes_per_chicken)) +
+  geom_point() +
+  theme_light()
+```
+
+Latvia, Liechtenstein, North Korea, French Guiana and Iceland have no ghg emissions reported by FAOSTAT.

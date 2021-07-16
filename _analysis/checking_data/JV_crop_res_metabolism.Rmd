@@ -1,0 +1,181 @@
+---
+title: "grab parameters"
+author: "Juliette"
+date: "6/3/2020"
+output: html_document
+---
+Results from this markdown:
+
+Total dry mass crop production from corn in the USA = 364598471663 kg
+Total dry mass crop residue from corn in the USA = 328138624497 kg
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+prep <- "/home/shares/food-systems/Food_footprint/dataprep/"
+
+rgns_tif <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns.tif")
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+rgn_info <- read_csv(here("_spatial/output/master_rgns.csv"))
+rgns <- read_csv(here("_spatial/output/master_rgns.csv"))
+
+```
+
+### Corn in the USA
+```{r}
+gr <- read_csv(file.path(prep,"crop_ghg/crop_residue_N2O/dm_gross/dm_gross_maiz.csv"), col_types = "ddn")
+
+gr_raster <- gr %>% 
+  raster::rasterFromXYZ(crs = food_crs)
+
+gr_com <- stack(gr_raster, rgns_tif)
+gr_df <- as.data.frame(gr_com, xy=TRUE)  
+
+gr_usa <- gr_df %>% 
+  rename(ID_0 = master_rgns) %>%
+  group_by(ID_0) %>% 
+  dplyr::summarise(gross_kg = sum(dm_gross_kg, na.rm = TRUE)) %>% 
+  filter(ID_0 == 	243)
+
+res <- read_csv(file.path(prep,"crop_ghg/crop_residue_N2O/dm_res/dm_res_maiz.csv"), col_types = "ddn")       
+res_raster <- res %>% 
+  raster::rasterFromXYZ(crs = food_crs)
+res_com <- stack(res_raster, rgns_tif)
+res_df <- as.data.frame(res_com, xy=TRUE)  
+res_usa <- res_df %>% 
+  rename(ID_0 = master_rgns) %>%
+  group_by(ID_0) %>% 
+  dplyr::summarise(res_kg = sum(dm_res_kg, na.rm = TRUE)) %>% 
+  filter(ID_0 == 	243)
+
+```
+
+## Map nitrogen compared to FAO
+
+```{r}
+library(countrycode)
+'%notin%' <- Negate('%in%')
+
+nitrogen_comp_raw <- read_csv(here("_analysis/checking_data/JV_data/nitrogen_crop_res_check.csv"))
+
+## wrangle the FAO data
+nitrogen_comp <- nitrogen_comp_raw %>% 
+  dplyr::select(Area, Item, Value) %>% 
+  mutate(iso3c = countrycode(Area, origin="country.name", destination = "iso3c")) %>% 
+  filter(Area != "China")%>% 
+  filter(Item %notin% c("Millet", "Beans, dry", "Oats", "Rye")) %>% 
+  mutate(SPAM_short_name = case_when(Item == "Barley" ~ "barl",
+                                     Item == "Maize" ~ "maiz",
+                                     Item == "Potatoes" ~ "pota",
+                                     Item == "Rice, paddy" ~ "rice",
+                                     Item == "Wheat" ~ "whea",
+                                     Item == "Sorghum" ~ "sorg",
+                                     Item == "Soybeans" ~ "soyb"))
+
+countries <- unique(nitrogen_comp$iso3c)
+```
+
+
+Grab the data for the crops that we care about 
+```{r}
+
+all_crops <- substring(list.files(file.path(prep, "crop_ghg/crop_residue_N2O/crop_res_nitrogen")), first = 12, last = 15)
+
+nitrogen_crop_res <- data.frame(iso3c = NA, SPAM_short_name = NA, total_nitrogen_kg = NA)
+
+for(i in 1:length(all_crops)) {
+  #crop_name = "maiz"
+
+  ## prep the crop rasters
+    crop_name <- all_crops[i]
+
+    file <- read_csv((file.path(prep, paste0("crop_ghg/crop_residue_N2O/crop_res_nitrogen/crop_res_N_", crop_name, ".csv", sep = ""))), col_type = "ddn")
+    
+    raster <- file %>% raster::rasterFromXYZ(crs = food_crs)
+
+    stack <- stack(raster, rgns_tif)
+    df <- as.data.frame(stack, xy=TRUE)  
+
+    summary <- df %>% 
+      rename(ID_0 = master_rgns) %>%
+      group_by(ID_0) %>% 
+      dplyr::summarise(total_nitrogen_kg = sum(crop_res_N_kg, na.rm = TRUE)) %>% 
+      left_join(rgns, by = "ID_0") %>% 
+      mutate(SPAM_short_name = crop_name) %>% 
+      dplyr::select(iso3c, SPAM_short_name, total_nitrogen_kg)
+      
+      nitrogen_crop_res <- rbind(nitrogen_crop_res, summary)
+  }
+
+
+```
+
+Keep the countries and crops we want and combine to FAO for comparison
+
+```{r}
+crops <- c("barl", "maiz", "pota", "rice", "whea", "sorg", "soyb")
+
+compare <- nitrogen_crop_res %>% 
+  filter(SPAM_short_name %in% crops,
+         iso3c %in% countries,
+         total_nitrogen_kg != 0) %>% 
+  left_join(nitrogen_comp, by = c("iso3c", "SPAM_short_name")) %>% 
+  filter(!is.na(Value))## there are some fao countries that report values but not many and not much is missing
+```
+
+
+Total nitrogen for FAO and ours
+```{r}
+fao_sum <- compare %>% 
+  dplyr::summarise(fao_total = sum(Value),
+                   our_total = sum(total_nitrogen_kg))
+```
+
+
+Plot
+```{r}
+plot <- ggplot(compare, aes(x = total_nitrogen_kg, y = Value, color = SPAM_short_name)) +
+  geom_point() +
+  xlab("Total Nitrogen (kg) our maps")+
+  ylab("Total Nitrogen (kg) FAO reported")+
+  theme_bw()+
+    geom_abline(intercept=0, slope=1, color="red")
+plot
+```
+
+
+Pulling out Maize, Wheat, Sugarcane, and Rice paddy for crop burning comparisons
+
+```{r}
+short <- compare %>% 
+  filter(SPAM_short_name %in% c("whea", "maiz", "rice", "sugc"))%>% 
+  dplyr::summarise(fao_total = sum(Value),
+                   our_total = sum(total_nitrogen_kg))
+
+burn_crop <- read_csv(here("_analysis/checking_data/JV_data/burn_crop.csv"))
+
+burn <- burn_crop %>% 
+  dplyr::summarise(fao_total = sum(fao_tonnes_co2eq),
+                   our_total = sum(tonnes_co2eq))
+
+fao_total <-27666661794	 +30700197	
+  
+our_total <- 17007592086	+ 49107030	
+
+16135637491/16627472994
+```
+fao crop burning and res = 27,697,361,991
+our crop burning and res = 17056699116
+
+before: 16,135,637,491
+
+
+
+
+
+
+
+
+
+

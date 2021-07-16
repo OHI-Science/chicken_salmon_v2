@@ -1,0 +1,626 @@
+---
+title: "Results_Summary_Stats"
+author: "Caitie"
+date: "09/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(here)
+
+options(scipen = 999)
+```
+
+# Zonal extract GLOBAL
+
+```{r}
+global<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_combined_eez_land_global.csv"))
+```
+
+```{r}
+global %>% 
+  group_by(animal_system) %>% 
+  summarise(sum(value, na.rm = T))
+```
+```{r}
+chicken_feed<-global %>% 
+  filter(animal_system == "broiler",
+         source == "feed")%>% 
+  group_by(subsource) %>% 
+  summarise(feed = sum(value, na.rm = T))
+
+chicken_farm<-global %>% 
+  filter(animal_system == "broiler",
+         source == "farm")
+  
+```
+
+
+```{r}
+salmon_feed<-global %>% 
+  filter(animal_system == "salmon",
+         source == "feed") %>% 
+  group_by(subsource) %>% 
+  summarise(feed = sum(value, na.rm = T))
+
+salmon_farm<-global %>% 
+  filter(animal_system == "salmon",
+         source == "farm")
+```
+
+# Zonal extract data by country
+
+```{r}
+rescaled<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_country.csv"))
+```
+
+This data can only be summarised by country - have to group by country
+
+## Total cumulative pressure by country
+
+```{r}
+rescaled %>% 
+  group_by(Country, iso3c) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total))
+
+iso3_total<-rescaled %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  ungroup() 
+
+```
+
+
+
+```{r}
+rescaled %>% 
+  group_by(iso3c,stressor) %>% 
+  summarise(Total = sum(value, na.rm = T))
+
+iso3_stressors<-rescaled %>% 
+  group_by(iso3c,stressor) %>% 
+  summarise(Total_stressor = sum(value, na.rm = T)) %>% 
+  left_join(iso3_total, by = "iso3c") %>% 
+  rename(cum_total = Total) %>% 
+  mutate(prop = Total_stressor/cum_total) %>% 
+  mutate(Country = countrycode::countrycode(iso3c, "iso3c", "country.name")) %>% 
+  filter(!cum_total == 0)
+
+iso3_water <- iso3_stressors %>% 
+  filter(stressor == "water")
+
+iso3_ghg<-iso3_stressors %>% 
+  filter(stressor == "ghg")
+
+iso3_disturb<-iso3_stressors %>% 
+  filter(stressor == "disturbance")
+
+iso3_nutri<-iso3_stressors %>% 
+  filter(stressor == "nutrient")
+```
+
+```{r}
+iso3_stressors_animal<-rescaled %>% 
+  group_by(iso3c,animal_system, stressor) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  left_join(iso3_total, by = "iso3c") %>% 
+  rename(cum_total = Total.y) %>% 
+  mutate(prop = Total.x/cum_total) %>% 
+  filter(!cum_total == 0)
+
+
+broiler_iso3_water <- iso3_stressors_animal %>% 
+  filter(stressor == "water", animal_system == "broiler")
+
+broiler_iso3_ghg<-iso3_stressors_animal  %>% 
+  filter(stressor == "ghg", animal_system == "broiler") %>% 
+  left_join(iso3_ghg, by = "iso3c") %>% 
+  mutate(prop_ghg = Total.x/cum_total)
+
+broiler_iso3_disturb<-iso3_stressors_animal  %>% 
+  filter(stressor == "disturbance", animal_system == "broiler")
+
+broiler_iso3_nutri<-iso3_stressors_animal  %>% 
+  filter(stressor == "nutrient", animal_system == "broiler")
+
+salmon_iso3_water <- iso3_stressors_animal %>% 
+  filter(stressor == "water", animal_system == "salmon") %>% 
+  left_join(iso3_water, by = "iso3c") #%>% 
+  mutate(prop_water = Total.x/cum_total)
+
+salmon_iso3_ghg<-iso3_stressors_animal  %>% 
+  filter(stressor == "ghg", animal_system == "salmon") %>% 
+  left_join(iso3_ghg, by = "iso3c") %>% 
+  mutate(prop_ghg = Total.x.x/Total.x.y)
+
+salmon_iso3_disturb<-iso3_stressors_animal  %>% 
+  filter(stressor == "disturbance", animal_system == "salmon")
+
+salmon_iso3_nutri<-iso3_stressors_animal  %>% 
+  filter(stressor == "nutrient", animal_system == "salmon")
+```
+
+
+```{r}
+rescaled %>% 
+  group_by(iso3c, animal_system, stressor) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "broiler") %>% 
+  mutate(prop = ifelse(animal_system == "broiler", Total/total_broiler, Total/total_salmon))
+```
+
+
+```{r}
+rescaled %>% 
+  group_by(animal_system, iso3c, Country) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "broiler") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total))%>% 
+  mutate(prop_pressure = Total/total_broiler)
+
+broiler_iso3<-rescaled %>% 
+  group_by(animal_system, iso3c) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "broiler") %>% 
+  ungroup() #%>% 
+  #mutate(prop_pressure = Total/total_broiler)
+
+
+```
+
+```{r}
+rescaled%>% 
+  group_by(animal_system, iso3c) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "salmon") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total)) #%>% 
+  #mutate(prop_pressure = Total/total_salmon)
+
+salmon_iso3<-rescaled %>% 
+  group_by(animal_system, iso3c) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "salmon") %>% 
+  ungroup() #%>% 
+  #mutate(prop_pressure = Total/total_salmon)
+```
+
+```{r}
+test<-full_join(broiler_iso3, salmon_iso3, by = "iso3c") %>% 
+  rename(broiler = Total.x,
+         salmon = Total.y) %>% 
+  mutate(iso3_total = broiler + salmon,
+         prop_broiler = broiler/iso3_total,
+         prop_salmon = salmon/iso3_total)
+```
+
+```{r}
+iso3_broiler_salmon<- test %>% 
+  pivot_longer(., c("prop_broiler", "prop_salmon")) %>% 
+  mutate(prop_plot = prop_pressure.x/iso3_total) %>% 
+  filter(!iso3_total == 0) %>% 
+  mutate(name = as.factor(name), 
+         name = factor(name, levels=sort(levels(name), decreasing=TRUE)))
+  
+
+ggplot(iso3_broiler_salmon, aes(x =value, y = reorder(iso3c, -prop_plot), fill = name)) +
+  geom_bar(position = "stack", stat = "identity")
+
+
+```
+## Total pressures marine vs land
+
+Marine vs. Land
+```{r}
+rescaled %>% 
+  group_by(location, animal_system) %>% 
+  summarise(Total = sum(value, na.rm = T))
+```
+```{r}
+rescaled %>% 
+  group_by(location, animal_system, stressor) %>% 
+  summarise(Total = sum(value, na.rm = T))
+```
+
+By country
+
+```{r}
+rescaled %>% 
+  group_by(location, animal_system, iso3c) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(location == "land", animal_system == "broiler") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total))
+
+broiler_land_iso3<-rescaled %>% 
+  group_by(location, animal_system, iso3c) %>% 
+  summarise(Land = sum(value, na.rm = T)) %>% 
+  filter(location == "land", animal_system == "broiler") %>% 
+  ungroup() #%>% 
+  #mutate(prop = Total/total_broiler)
+
+broiler_marine_iso3<-rescaled %>% 
+  group_by(location, animal_system, iso3c) %>% 
+  summarise(Marine = sum(value, na.rm = T)) %>% 
+  filter(location == "marine", animal_system == "broiler") %>% 
+  ungroup() #%>% 
+  #mutate(prop = Total/total_broiler)
+
+broiler_land_sea<-full_join(broiler_land_iso3, broiler_marine_iso3, by = c("animal_system", "iso3c"))
+
+ggplot(broiler_land_sea, aes(x= Marine, y= Land)) +
+  geom_point()
+
+summary.lm(lm(Land~Marine, data = broiler_land_sea))
+```
+
+```{r}
+rescaled %>% 
+  group_by(location, animal_system, iso3c) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(location == "land", animal_system == "salmon") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total))
+
+salmon_land_iso3<-rescaled%>% 
+  group_by(location, animal_system, iso3c) %>% 
+  summarise(Land = sum(value, na.rm = T)) %>% 
+  filter(location == "land", animal_system == "salmon") %>% 
+  ungroup() #%>% 
+  #mutate(prop = Total/total_salmon)
+
+salmon_marine_iso3<-rescaled %>% 
+  group_by(location, animal_system, iso3c) %>% 
+  summarise(Marine = sum(value, na.rm = T)) %>% 
+  filter(location == "marine", animal_system == "salmon") %>% 
+  ungroup() #%>% 
+  #mutate(prop = Total/total_salmon)
+
+
+salmon_land_sea<-full_join(salmon_land_iso3, salmon_marine_iso3, by = c("animal_system", "iso3c"))
+
+ggplot(salmon_land_sea, aes(x= Marine, y= Land)) +
+  geom_point()
+
+summary.lm(lm(Marine~Land, data = salmon_land_sea))
+```
+```{r}
+b_s_land<-full_join(broiler_land_iso3, salmon_land_iso3, by = "iso3c") %>% 
+  rename(broiler = Total.x,
+         salmon = Total.y) %>% 
+  mutate(iso3_total = broiler + salmon,
+         prop_broiler = broiler/iso3_total,
+         prop_salmon = salmon/iso3_total,
+         Country = countrycode::countrycode(iso3c, "iso3c", "country.name"))
+```
+
+```{r}
+b_s_land_long<- b_s_land %>% 
+  pivot_longer(., c("prop_broiler", "prop_salmon")) %>% 
+  mutate(prop_plot = prop.x/iso3_total) %>% 
+  filter(!iso3_total == 0) %>% 
+  mutate(name = as.factor(name), 
+         name = factor(name, levels=sort(levels(name), decreasing=TRUE))) 
+  
+
+ggplot(b_s_land_long, aes(x =value, y = reorder(iso3c, -prop_plot), fill = name)) +
+  geom_bar(position = "stack", stat = "identity")
+
+
+```
+
+```{r}
+b_s_marine<-full_join(broiler_marine_iso3, salmon_marine_iso3, by = "iso3c") %>% 
+  rename(broiler = Total.x,
+         salmon = Total.y) %>% 
+  mutate(iso3_total = broiler + salmon,
+         prop_broiler = broiler/iso3_total,
+         prop_salmon = salmon/iso3_total,
+         Country = countrycode::countrycode(iso3c, "iso3c", "country.name"))
+```
+
+```{r}
+b_s_marine_long<- b_s_marine %>% 
+  pivot_longer(., c("prop_broiler", "prop_salmon")) %>% 
+  mutate(prop_plot = prop.x/iso3_total) %>% 
+  filter(!iso3_total == 0) %>% 
+  mutate(name = as.factor(name), 
+         name = factor(name, levels=sort(levels(name), decreasing=TRUE)))
+  
+
+ggplot(b_s_marine_long, aes(x =value, y = reorder(iso3c, -prop_plot), fill = name)) +
+  geom_bar(position = "stack", stat = "identity")
+
+
+```
+## Total feed vs. farm
+
+```{r}
+rescaled %>% 
+  group_by(animal_system, source) %>% 
+  summarise(Total = sum(value, na.rm = T))
+```
+
+```{r}
+rescaled%>% 
+  group_by(animal_system, source, subsource) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(!source == "farm")
+```
+
+
+```{r}
+rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "broiler", source == "feed") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total)) %>% 
+  mutate(prop = Total/total_broiler)
+
+broiler_feed<-rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "broiler", source == "feed") %>% 
+  ungroup() %>% 
+  mutate(prop = Total/total_broiler) %>% 
+  pivot_wider(.,names_from = source, values_from = Total)
+```
+
+```{r}
+rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "broiler", source == "farm") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total)) %>% 
+  mutate(prop = Total/total_broiler)
+
+broiler_farm<-rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "broiler", source == "farm") %>% 
+  ungroup() %>% 
+  mutate(prop = Total/total_broiler) %>% 
+  pivot_wider(.,names_from = source, values_from = Total)
+
+broiler_feed_farm<-full_join(broiler_feed, broiler_farm, by = "iso3c") %>% 
+  mutate(total = feed + farm,
+         prop_feed = feed/total,
+         Country = countrycode::countrycode(iso3c, "iso3c", "country.name")) 
+```
+
+```{r}
+ggplot(broiler_feed_farm, aes(x = feed, y = farm)) +
+  geom_point()
+
+cor.test(broiler_feed_farm$feed, broiler_feed_farm$farm, method = "spearman")
+```
+```{r}
+broiler_feed_farm_long<- broiler_feed_farm %>% 
+  pivot_longer(., c("feed", "farm")) %>% 
+  mutate(prop_plot = value/total) %>% 
+  filter(!total == 0) %>% 
+  mutate(name = as.factor(name), 
+         name = factor(name, levels=sort(levels(name), decreasing=TRUE)))
+  
+
+ggplot(broiler_feed_farm_long, aes(x =prop_plot, y = reorder(iso3c, -prop_feed), fill = name)) +
+  geom_bar(position = "stack", stat = "identity") + 
+  labs(fill = "Source",x = "Proportion of\ncumulative environmental pressures", y = "Country")
+
+```
+
+```{r}
+rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "salmon", source == "feed") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total)) %>% 
+  mutate(prop = Total/total_salmon)
+
+salmon_feed<-rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "salmon", source == "feed") %>% 
+  ungroup() %>% 
+  mutate(prop = Total/total_salmon) %>% 
+  pivot_wider(.,names_from = source, values_from = Total)
+```
+
+```{r}
+rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "salmon", source == "farm") %>% 
+  ungroup() %>% 
+  top_n(., 10, Total) %>% 
+  arrange(., desc(Total)) %>% 
+  mutate(prop = Total/total_salmon)
+
+salmon_farm<-rescaled %>% 
+  group_by(animal_system, iso3c, source) %>% 
+  summarise(Total = sum(value, na.rm = T)) %>% 
+  filter(animal_system == "salmon", source == "farm") %>% 
+  ungroup() %>% 
+  mutate(prop = Total/total_salmon) %>% 
+  pivot_wider(.,names_from = source, values_from = Total)
+
+salmon_feed_farm<-full_join(salmon_feed, salmon_farm, by = "iso3c") %>% 
+  mutate(total = feed + farm,
+         prop_feed = feed/total)
+```
+
+```{r}
+ggplot(salmon_feed_farm, aes(x = feed, y = farm)) +
+  geom_point()
+
+cor.test(salmon_feed_farm$feed,salmon_feed_farm$farm, method = "spearman")
+```
+
+```{r}
+salmon_feed_farm_long<- salmon_feed_farm %>% 
+  pivot_longer(., c("feed", "farm")) %>% 
+  mutate(prop_plot = value/total) %>% 
+  filter(!total == 0) %>% 
+  mutate(name = as.factor(name), 
+         name = factor(name, levels=sort(levels(name), decreasing=TRUE)))
+  
+
+ggplot(salmon_feed_farm_long, aes(x =prop_plot, y = reorder(iso3c, -prop_feed), fill = name)) +
+  geom_bar(position = "stack", stat = "identity")
+
+
+```
+
+
+# Zonal extract by land vs. sea
+
+```{r}
+land_sea<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_global.csv"))
+```
+
+## Broiler chickens
+
+Land
+
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  group_by(animal_system) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+land_sea%>% 
+  filter(ID_0 == "global eezs") %>% 
+  group_by(animal_system) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+animal_land<-land_sea%>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  group_by(animal_system) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+animal_sea<-land_sea%>% 
+  filter(ID_0 == "global eezs") %>% 
+  group_by(animal_system) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+```
+
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  group_by(animal_system, stressor) %>% 
+  summarise(stressor_stress = sum(value, na.rm = T)) %>% 
+  left_join(., animal_land, by = "animal_system") %>% 
+  mutate(prop = stressor_stress/cum_stress)
+
+land_sea%>% 
+  filter(ID_0 == "global eezs") %>% 
+  group_by(animal_system, stressor) %>% 
+  summarise(stressor_stress = sum(value, na.rm = T))  %>% 
+  left_join(., animal_sea, by = "animal_system") %>% 
+  mutate(prop = stressor_stress/cum_stress)
+```
+
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica",
+         stressor == "disturbance") %>% 
+  group_by(animal_system) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+land_sea %>% 
+  filter(ID_0 == "global eezs",
+         stressor == "disturbance") %>% 
+  group_by(animal_system) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+```
+
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  group_by(source) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+land_sea %>% 
+  filter(ID_0 == "global eezs") %>% 
+  group_by(source) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+```
+
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  group_by(animal_system, source) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+land_sea %>% 
+  filter(ID_0 == "global eezs") %>% 
+  group_by(animal_system, source) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+```
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  filter(source == "feed") %>% 
+  group_by(animal_system, source, subsource) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+
+land_sea %>% 
+  filter(ID_0 == "global eezs") %>% 
+  filter(source == "feed") %>% 
+  group_by(animal_system, source, subsource) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+```
+
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  group_by(stressor) %>% 
+  summarise(cum_stress = sum(value, na.rm = T)) %>% 
+  mutate(prop = cum_stress/(0.03632788	+0.02942881+0.02120815	+0.02549024))
+
+land_sea %>% 
+  filter(ID_0 == "global eezs") %>% 
+  group_by(stressor) %>% 
+  summarise(cum_stress = sum(value, na.rm = T)) %>% 
+  mutate(prop = cum_stress/(0.0100608893+0.0005284456+0.0004517413+0.0000000000))
+```
+
+```{r}
+land_sea %>% 
+  filter(ID_0 == "global_land_minus_Antarctica") %>% 
+  group_by(animal_system,stressor) %>% 
+  summarise(cum_stress = sum(value, na.rm = T)) 
+
+land_sea %>% 
+  filter(ID_0 == "global eezs") %>% 
+  group_by(animal_system,stressor) %>% 
+  summarise(cum_stress = sum(value, na.rm = T))
+```
+# Production data
+
+## Chicken production
+
+FAO reports carcass wt 
+```{r}
+broiler_prod<-read.csv(here("_analysis/data/broiler_production.csv"))
+```

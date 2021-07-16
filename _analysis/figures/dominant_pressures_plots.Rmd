@@ -1,0 +1,267 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "07/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(patchwork)
+library(tidyverse)
+library(rnaturalearth)
+
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+```
+# Rescale values
+
+```{r}
+rescaling_values <- read_csv(here("_analysis/step4_stressor_rescaling.csv")) 
+ghg_rescale<-as.numeric(rescaling_values[1,2])
+water_rescale<-as.numeric(rescaling_values[2,2])
+dist_rescale<-as.numeric(rescaling_values[4,2])
+nutri_rescale<-as.numeric(rescaling_values[3,2])
+```
+
+# Dominant pressure
+
+```{r}
+broilers <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor", pattern="broiler", full=TRUE)
+broiler_stack<-stack(broilers)
+broiler_df<-rasterToPoints(broiler_stack)
+
+
+broiler_prop<-broiler_df %>% 
+  as.data.frame() %>% 
+  rename(disturbance = broiler_disturbance_per_cell,
+         ghg = broiler_ghg_per_cell,
+         nutrient = broiler_nutrient_per_cell,
+         water = broiler_water_per_cell) %>% 
+  mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+```
+
+```{r}
+salmon <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor", pattern="salmon", full=TRUE)
+salmon_stack <- stack(salmon)
+salmon_df<-rasterToPoints(salmon_stack)
+
+salmon_prop<-salmon_df %>% 
+  as.data.frame() %>% 
+  rename(disturbance = salmon_disturbance_per_cell,
+         ghg = salmon_ghg_per_cell,
+         nutrient = salmon_nutrient_per_cell,
+         water = salmon_water_per_cell) %>% 
+   mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+```
+
+# Look into what is driving most cells
+
+```{r}
+salmon_max<-salmon_prop %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val) %>% 
+  mutate(cat = ifelse(max_val == 1, "disturbance",
+                      ifelse(max_val == 2,"ghg",
+                             ifelse(max_val == 3, "nutrients",
+                                    ifelse(max_val == 4, "water", NA)))))
+
+write.csv(salmon_max, here("_analysis/figures/dominant_pressure_map/salmon_dominant_pressure.csv"))
+
+salmon_max_ras<-rasterFromXYZ(salmon_max)
+
+## reclassify to 4 bins
+matrix <-c(0, 0, 0,
+           0, 1, 1,
+           1 , 2 , 2, 
+           2, 3, 3,
+           3,4,4)
+
+
+matrix_salmon <- matrix(matrix, ncol=3, byrow=TRUE)
+
+recl_salmon <- reclassify(salmon_max_ras, matrix_salmon)
+
+## what dothese look like binned
+plot(recl_salmon, breaks = c(0,1,2,3,4),
+     col = rev(terrain.colors(4)))
+
+col_cont <- c("#D0EBE5", "#561276", "#DA4C93", "#048481")
+
+
+```
+
+Map the raster with the color palette
+```{r}
+cuts <- c(0:4) #set breaks
+
+recl_salmon2 <- recl_salmon[[1]]
+par(mar=c(1,1,1,1))
+plot_salmon <- raster::plot(recl_salmon2, breaks= cuts, col=col_cont)
+```
+
+```{r}
+# 1 = disturbance, 2 = ghg, 3 = nutrients, 4 = water
+table(salmon_max$max_val)
+```
+
+```{r}
+broiler_max<-broiler_prop %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val) %>% 
+  mutate(cat = ifelse(max_val == 1, "disturbance",
+                      ifelse(max_val == 2,"ghg",
+                             ifelse(max_val == 3, "nutrients",
+                                    ifelse(max_val == 4, "water", NA)))))
+
+#write.csv(broiler_max, here("_analysis/figures/dominant_pressure_map/chicken_dominant_pressure.csv"))
+
+broiler_max_ras<-rasterFromXYZ(broiler_max)
+
+## reclassify to 4 bins
+matrix <-c(0, 0, 0,
+           0, 1, 1,
+           1 , 2 , 2, 
+           2, 3, 3,
+           3,4,4)
+
+
+matrix_chicken <- matrix(matrix, ncol=3, byrow=TRUE)
+
+recl_chicken <- reclassify(broiler_max_ras, matrix_chicken)
+
+## what dothese look like binned
+plot(recl_chicken, breaks = c(0,1,2,3,4),
+     col = rev(terrain.colors(4)))
+unique(recl_chicken)
+
+# 1 = disturbance, 2 = ghg, 3 = nutrients, 4 = water
+ table(broiler_max$max_val)
+```
+
+```{r}
+cuts <- c(0:4) #set breaks
+  
+recl_chicken2<-recl_chicken[[1]]
+par(mar=c(1,1,1,1))
+plot_chicken <- raster::plot(recl_chicken2, breaks=cuts, col=col_cont)
+```
+
+```{r}
+land <- ne_countries(scale = "medium", returnclass = "sp") 
+land <- land[!land$sov_a3 == "ATA",]
+land <- st_as_sf(land)
+land <- st_transform(land, crs=gall_peters)
+land <- as(land, "Spatial")
+#plot(land)
+
+grDevices::png(here("_analysis/figures/dominant_pressure_map/chicken_dominant_pressure.png"), res=500, width=6, height=3, units = "in")
+par(oma=c(1,1,1,0)) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 0), new=TRUE)
+
+plot(recl_chicken2, 
+     breaks=cuts, 
+     col=col_cont,
+     axes=FALSE,
+     box=FALSE,
+    # add=TRUE,
+     legend=FALSE,
+     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1))
+
+plot(land, border="#2F4F4F" , lwd=0.3, add=TRUE)
+
+grDevices::dev.off()
+```
+
+```{r}
+grDevices::png(here("_analysis/figures/dominant_pressure_map/salmon_dominant_pressure.png"), res=500, width=6, height=3, units = "in")
+par(oma=c(1,1,1,0)) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 0), new=TRUE)
+
+plot(recl_salmon2, 
+     breaks=cuts, 
+     col=col_cont,
+     axes=FALSE,
+     box=FALSE,
+    # add=TRUE,
+     legend=TRUE,
+     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1))
+
+plot(land, border="#2F4F4F" , lwd=0.3, add=TRUE)
+
+grDevices::dev.off()
+```
+
+# Highest 10% of cells for each pressures
+
+```{r}
+# Chicken
+chicken_quant <- broiler_prop
+
+
+b_quant_90_water <- quantile(chicken_quant$water_cell_prop, 0.90, na.rm = T) 
+b_quant_90_ghg <- quantile(chicken_quant$ghg_cell_prop, 0.90, na.rm = T) 
+b_quant_90_disturb <- quantile(chicken_quant$disturbance_cell_prop, 0.90, na.rm = T) 
+b_quant_90_nutri <- quantile(chicken_quant$nutrient_cell_prop, 0.90,na.rm = T) 
+```
+
+```{r}
+# Chicken
+salmon_quant <- salmon_prop
+s_quant_90_water <- quantile(salmon_quant, 0.90,na.rm = T) 
+s_quant_90_ghg <- quantile(salmon_quant, 0.90,na.rm = T) 
+s_quant_90_disturb <- quantile(salmon_quant, 0.90,na.rm = T) 
+s_quant_90_nutri <- quantile(salmon_quant, 0.90,na.rm = T) 
+```
+
+```{r}
+broiler_quant<-broiler_prop %>% 
+  mutate(water_cell_prop2 = ifelse(water_cell_prop<b_quant_90_water, NA, water_cell_prop),
+        ghg_cell_prop2= ifelse(ghg_cell_prop<b_quant_90_ghg, NA, ghg_cell_prop),
+         disturbance_cell_prop2 = ifelse(disturbance_cell_prop<b_quant_90_disturb, NA, disturbance_cell_prop),
+        nutrient_cell_prop2 = ifelse(nutrient_cell_prop<b_quant_90_nutri, NA, nutrient_cell_prop)) %>% 
+  dplyr::select(x,y,water_cell_prop2, ghg_cell_prop2, disturbance_cell_prop2, nutrient_cell_prop2)
+
+broiler_quant_ras<-rasterFromXYZ(broiler_quant)
+
+```
+
+```{r}
+salmon_quant<-salmon_prop %>% 
+  mutate(water_cell_prop2 = ifelse(water_cell_prop<s_quant_90_water, NA, water_cell_prop),
+        ghg_cell_prop2= ifelse(ghg_cell_prop<s_quant_90_ghg, NA, ghg_cell_prop),
+         disturbance_cell_prop2 = ifelse(disturbance_cell_prop<s_quant_90_disturb, NA, disturbance_cell_prop),
+        nutrient_cell_prop2 = ifelse(nutrient_cell_prop<s_quant_90_nutri, NA, nutrient_cell_prop)) %>% 
+  dplyr::select(x,y,water_cell_prop2, ghg_cell_prop2, disturbance_cell_prop2, nutrient_cell_prop2)
+
+salmon_quant_ras<-rasterFromXYZ(salmon_quant)
+```
+

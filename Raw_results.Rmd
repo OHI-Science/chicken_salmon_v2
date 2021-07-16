@@ -1,0 +1,246 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "14/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(here)
+
+options(scipen = 999)
+```
+
+# Load raw data
+
+This is the raw data in native units for each stressor - stressors cannot be added together
+
+```{r}
+raw<-read.csv(here("_analysis", "data", "zonal_extract", "sum_pressures_country.csv")) # Raw values
+```
+
+
+# Total stressors
+
+```{r}
+raw %>% 
+  group_by(stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+stressors<-raw %>% 
+  group_by(stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+```
+
+## Total stressors by system
+
+```{r}
+raw %>% 
+  group_by(animal_system, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+system_stressor<-raw %>% 
+  group_by(animal_system, stressor) %>% 
+  summarise(system_stress = sum(value, na.rm = T)) %>% 
+  left_join(.,stressors, by = "stressor") %>% 
+  mutate(prop = system_stress/total_stress)
+```
+
+## Total stressors by locatoin
+```{r}
+raw %>% 
+  group_by(location, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+location_stressor<-raw %>% 
+  group_by(location, stressor) %>% 
+  summarise(location_stress = sum(value, na.rm = T)) %>% 
+  left_join(.,stressors, by = "stressor") %>% 
+  mutate(prop = location_stress/total_stress)
+```
+
+## Total stressors by source
+```{r}
+raw %>% 
+  group_by(source, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+source_stressor<-raw %>% 
+  group_by(source, stressor) %>% 
+  summarise(source_stress = sum(value, na.rm = T)) %>% 
+  left_join(.,stressors, by = "stressor") %>% 
+  mutate(prop = source_stress/total_stress)
+```
+
+## Total stressors by subsource
+```{r}
+raw %>% 
+  filter(!source == "farm") %>% 
+  group_by(subsource, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+subsource_stressor<-raw %>% 
+  filter(!source == "farm") %>% 
+  group_by(subsource, source, stressor) %>% 
+  summarise(subsource_stress = sum(value, na.rm = T)) %>% 
+  left_join(.,source_stressor, by = c("stressor", "source")) %>% 
+  mutate(prop = subsource_stress/source_stress)
+```
+
+## Total stressors by location and source
+```{r}
+raw %>% 
+  group_by(location, source, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+loc_source_stressor<-raw %>% 
+  group_by(location, source, stressor) %>% 
+  summarise(loc_source_stress = sum(value, na.rm = T)) %>% 
+  left_join(.,location_stressor, by = c("stressor", "location")) %>% 
+  mutate(prop = loc_source_stress/location_stress)
+```
+
+## Total stressor by animal system and source
+```{r}
+raw %>% 
+  group_by(animal_system, source, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+an_source_stressor<-raw %>% 
+  group_by(animal_system, source, stressor) %>% 
+  summarise(an_source_stress = sum(value, na.rm = T)) %>% 
+  left_join(.,system_stressor, by = c("stressor", "animal_system")) %>% 
+  mutate(prop = an_source_stress/system_stress)
+```
+
+## Total stressor by animal system and location
+```{r}
+raw %>% 
+  group_by(animal_system, location, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+an_location_stressor<-raw %>% 
+  group_by(animal_system, location, stressor) %>% 
+  summarise(an_loc_stress = sum(value, na.rm = T)) %>% 
+  left_join(.,system_stressor, by = c("stressor", "animal_system")) %>% 
+  mutate(prop = an_loc_stress/system_stress)
+```
+# Total stressors by country
+
+```{r}
+raw %>% 
+  group_by(iso3c, Country, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+country_stressors<-raw %>% 
+  group_by(iso3c, Country, stressor) %>% 
+  summarise(country_stress = sum(value, na.rm = T)) %>% 
+  left_join(., stressors, by = c("stressor")) %>% 
+  mutate(prop = country_stress/total_stress)
+```
+
+## By country and system
+
+```{r}
+raw %>% 
+  group_by(iso3c, Country, animal_system, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+country_system_stressors<-raw %>% 
+  group_by(iso3c, Country, animal_system, stressor) %>% 
+  summarise(country_system_stress = sum(value, na.rm = T)) %>% 
+  left_join(., country_stressors, by = c("iso3c", "Country", "stressor")) %>% 
+  mutate(prop = country_system_stress/country_stress)
+```
+
+GHG
+
+```{r}
+ghg_country_system_stressors<-country_system_stressors %>% 
+  filter(stressor == "ghg",
+         animal_system == "salmon")
+```
+
+
+Water
+
+```{r}
+water_country_system_stressors<-country_system_stressors %>% 
+  filter(stressor == "water",
+         animal_system == "broiler")
+```
+
+Disturbance
+
+```{r}
+disturb_country_system_stressors<-country_system_stressors %>% 
+  filter(stressor == "disturbance",
+         animal_system == "broiler")
+```
+
+Nutrient
+
+```{r}
+nutri_country_system_stressors<-country_system_stressors %>% 
+  filter(stressor == "nutrient",
+         animal_system == "broiler")
+```
+# Total stressors by land vs sea
+
+```{r}
+raw %>% 
+  group_by(location, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+land_sea<-raw %>% 
+  group_by(location, stressor) %>% 
+  summarise(location_stress = sum(value, na.rm = T)) %>% 
+  left_join(., stressors, by = "stressor") %>% 
+  mutate(prop = location_stress/total_stress)
+```
+
+```{r}
+raw %>% 
+  group_by(iso3c, Country,location, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+```
+# Total stressors by feed vs. farm
+
+```{r}
+raw %>% 
+  group_by(source, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+feed_farm<-raw %>% 
+  group_by(source, stressor) %>% 
+  summarise(source_stress = sum(value, na.rm = T)) %>% 
+  left_join(., stressors, by = "stressor") %>% 
+  mutate(prop = source_stress/total_stress)
+```
+
+```{r}
+raw %>% 
+  group_by(location, source, stressor) %>% 
+  summarise(total_stress = sum(value, na.rm = T))
+
+feed_farm_location<-raw %>% 
+  group_by(location, source, stressor) %>% 
+  summarise(source_stress = sum(value, na.rm = T)) %>% 
+  left_join(., land_sea, by = c("location", "stressor")) %>% 
+  mutate(prop = source_stress/location_stress)
+```
+
+# Production data
+
+## Chicken production
+
+FAO reports carcass wt 
+```{r}
+broiler_prod<-read.csv(here("_analysis/data/broiler_production.csv"))
+```
+

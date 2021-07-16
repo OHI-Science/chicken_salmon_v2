@@ -1,0 +1,107 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "08/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(raster)
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(RColorBrewer)
+library(rgdal)
+library(here)
+library(doParallel)
+library(tmap)
+
+water <- readOGR(here("_analysis/raw/rgn_all_gcs_med_res.shp"))
+water<-water[!water$rgn_nam == "Antarctica",]
+
+land <- ne_countries(scale = "medium", returnclass = "sp")
+land<-land[!land$sov_a3 == "ATA",]
+
+stress <-  "/home/shares/food-systems/Food_footprint/stressors/"
+
+stressor_df <- data.frame(stressor = c("ghg", "nutrient", "disturbance", "water"),
+                          stressor_unit = c("tonnes CO2eq", "tonnes", "proportion", "m3"),
+                          by_break = c(0.075, 0.005, 0.00005, 0.3))
+
+animal_list <- c("broiler", "salmon")
+stressor_list <- c("ghg", "nutrient", "disturbance", "water")
+
+```
+
+Write it as a function
+add run parallel
+```{r}
+
+#cumulative_stress<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/res#caled/cumulative_stress/cumulative_stress.tif")
+
+colors_main <-rev(c("#A50026", "#EF2A00", "#F59804", "#FACC00", "#FFFF65", "#FFF1CC"))
+colors_all <- colorRampPalette(colors_main)(10) 
+
+c<-c("ghg", "water", "nutrient", "disturbance")
+
+data(World)
+
+for(i in 1:length(c)){
+  
+stress<-c[[i]]
+print(stress)
+
+files <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/", pattern = stress, full=TRUE)
+  #files <- grep(stressor, files, value=TRUE)
+  
+broiler_ras <- raster(grep("broiler", files, value=TRUE))
+salmon_ras <- raster(grep("salmon", files, value=TRUE))
+
+broiler_ras[broiler_ras==0]<-NA
+salmon_ras[salmon_ras==0]<-NA
+  
+#b_r<-broiler_ras/cumulative_stress
+#s_r<-salmon_ras/cumulative_stress
+
+broiler<-st_as_stars(broiler_ras)
+salmon<-st_as_stars(salmon_ras)
+
+# Chicken
+
+png(here(paste0("_analysis/figures/maps_same_scale/broiler_", stress, ".png", sep="")), res=500, width=6, height=5, units="in")
+
+tm_shape(broiler) +
+  tm_raster(paste0("broiler_",stress,"_per_cell"),
+            style = "order",
+           # breaks=seq(0,max(broiler$broiler_ghg_per_cell, na.rm = T),10000),
+           # palette = colors_all,
+            title = "")+
+tm_shape(World) +
+  tm_borders("black", lwd = .5) +
+  tm_layout(legend.outside = TRUE)
+
+ grDevices::dev.off()
+ 
+ # Salmon
+ 
+png(here(paste0("_analysis/figures/maps_same_scale/salmon_", stress, ".png", sep="")), res=500, width=6, height=5, units="in")
+
+tm_shape(salmon) +
+  tm_raster(paste0("salmon_",stress,"_per_cell"),
+            style = "order",
+            #breaks=seq(0,1,0.1),
+           # palette = colors_all,
+            title = "")+
+tm_shape(World) +
+  tm_borders("black", lwd = .5) +
+  tm_layout(legend.outside = TRUE)
+
+ grDevices::dev.off()
+ 
+}
+``` 

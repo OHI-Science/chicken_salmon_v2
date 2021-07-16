@@ -1,0 +1,278 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "21/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+# Production
+
+```{r}
+chicken_prod<-read.csv(here("_analysis/data/broiler_production.csv"))
+salmon_prod<-read.csv(here("_analysis/data/salmon_production.csv"))
+```
+
+```{r}
+total_chicken<-sum(chicken_prod$broiler_carcass_wt_tonnes)
+
+chicken_prod<-chicken_prod %>% 
+  mutate(prop = broiler_carcass_wt_tonnes/total_chicken)
+
+high_cpi_prod_c<-chicken_prod %>% 
+  filter(iso3c %in% c("USA", "BRA", "CHN", "ARG", "IDN"))
+```
+
+```{r}
+total_salmon<-2413786
+
+salmon_prod<-salmon_prod %>% 
+  mutate(prop = fao_tonnes_production/total_salmon)
+
+high_cpi_prod_s<-salmon_prod %>% 
+  filter(iso3c %in% c("NOR", "ISL", "CHL", "GBR", "CAN"))
+```
+
+# Global summary of chicken and salmon
+
+Land and EEZ combined
+```{r}
+global<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_combined_eez_land_global.csv"))
+
+global_chicken_salmon<- global %>% 
+  group_by(animal_system) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+global_chicken_salmon
+
+global_chicken_salmon[1,2]/global_chicken_salmon[2,2]
+```
+
+Land and all ocean
+
+```{r}
+all<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_all_global.csv"))
+```
+
+
+# Country summary of chicken and salmon
+
+High pressures cells
+
+```{r}
+cell_count<-read.csv(here("_analysis/figures/overlap_map/data/cell_count.csv"))
+```
+
+```{r}
+high_chicken<- cell_count %>% 
+   filter(category %in% as.factor(c("high chicken\nzero salmon", "high chicken\nmedium salmon", "high chicken\nlow salmon", "high chicken\nhigh salmon"))) 
+
+sum(high_chicken$prop_cells, na.rm = T)
+```
+
+```{r}
+high_salmon<- cell_count %>% 
+   filter(category %in% as.factor(c("zero chicken\nhigh salmon", "low chicken\nhigh salmon", "medium chicken\nhigh salmon", "high chicken\nhigh salmon"))) 
+
+sum(high_salmon$prop_cells, na.rm = T)
+```
+
+Average country and EEZ
+
+```{r}
+country_average<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_country.csv"))
+```
+
+```{r}
+country_chicken<- country_average %>% 
+  filter(animal_system == "broiler") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_chicken
+```
+
+```{r}
+country_salmon<- country_average %>% 
+  filter(animal_system == "salmon") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_salmon
+```
+# Overlap summary of chicken and salmon
+
+Total footprint
+
+```{r}
+total_footprint<-cell_count %>% 
+  filter(!category %in% as.factor(c("zero chicken\nzero salmon")))
+
+sum(total_footprint$prop_cells, na.rm = T)
+
+```
+
+Chicken footprint
+```{r}
+total_footprint_chicken<-cell_count %>% 
+  filter(!category %in% as.factor(c("zero chicken\nzero salmon", "zero chicken\nlow salmon", "zero chicken\nmedium salmon", "zero chicken\nhigh salmon")))
+
+sum(total_footprint_chicken$prop_cells, na.rm = T)
+```
+Salmon footprint
+```{r}
+total_footprint_salmon<-cell_count %>% 
+  filter(!category %in% as.factor(c("zero chicken\nzero salmon", "low chicken\nzero salmon", "medium chicken\nzero salmon", "high chicken\nzero salmon")))
+
+sum(total_footprint_salmon$prop_cells, na.rm = T)
+```
+Amount of overlap
+
+```{r}
+overlap<-cell_count %>% 
+  filter(!category %in% c("zero chicken\nzero salmon", "high chicken\nzero salmon", "medium chicken\nzero salmon", "low chicken\nzero salmon", "zero chicken\nlow salmon","zero chicken\nmedium salmon","zero chicken\nhigh salmon"))
+
+overlap2<-cell_count %>% 
+  filter(!category %in% c("zero chicken\nzero salmon"))
+
+sum(overlap$prop_cells)
+sum(cell_count$prop_cells)
+
+sum(overlap$number_cells)/((sum(total_footprint_chicken$number_cells) + sum(total_footprint_salmon$number_cells)))
+
+```
+
+Greatest overlap
+
+```{r}
+overlap %>% 
+  arrange(desc(prop_cells))
+```
+# Land vs. sea footprint
+
+```{r}
+land_sea<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_global.csv"))
+
+land_sea_animal<- land_sea %>% 
+  group_by(animal_system, location) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+land_sea_animal
+```
+
+Entire ocean
+
+```{r}
+ocean<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_ocean_global.csv")) %>% 
+  group_by(animal_system) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+ocean
+```
+
+
+# Feed/on-farm summary of chicken and salmon
+
+```{r}
+global_feed<-global %>% 
+    filter(!source == "farm") %>% #,
+#           animal_system == "salmon") %>% 
+  group_by(animal_system, source, subsource, stressor) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+global_farm<-global %>% 
+    filter(!source == "feed") %>% 
+  group_by(animal_system,source, stressor) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+global_feed
+
+#Chicken proportion feed
+global_feed[2,3]/(global_feed[2,3]+global_feed[1,3])
+
+# Salmon proportion feed
+global_feed[4,3]/(global_feed[3,3]+global_feed[4,3])
+
+#Chicken feed vs. salmon feed
+global_feed[2,3]/global_feed[4,3]
+
+#Chicken farm vs. salmon farm
+global_feed[1,3]/global_feed[3,3]
+
+#Salmon feed vs. farm
+global_feed[4,3]/global_feed[3,3]
+
+# Chicken farm vs. feed
+global_feed[1,3]/global_feed[2,3]
+
+
+```
+
+```{r}
+global_feed_source<-global %>% 
+  filter(!source == "farm") %>% 
+  group_by(animal_system, subsource) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+global_feed_source
+
+# Salmon source
+
+global_feed_source[4,3]/(global_feed_source[3,3]+global_feed_source[4,3])
+
+# Chicken source
+global_feed_source[1,3]/(global_feed_source[1,3]+global_feed_source[2,3])
+```
+
+# Dominant pressures chicken vs salmon
+
+```{r}
+dom_chicken<-read.csv(here("_analysis/figures/dominant_pressure_map/chicken_dominant_pressure.csv")) %>% 
+  filter(!is.na(max_val) == T)
+
+length(which(dom_chicken$cat == "disturbance"))/nrow(dom_chicken)
+length(which(dom_chicken$cat == "ghg"))/nrow(dom_chicken)
+length(which(dom_chicken$cat == "nutrients"))/nrow(dom_chicken)
+length(which(dom_chicken$cat == "water"))/nrow(dom_chicken)
+
+```
+
+```{r}
+dom_salmon<-read.csv(here("_analysis/figures/dominant_pressure_map/salmon_dominant_pressure.csv"))%>% 
+  filter(!is.na(max_val) == T)
+
+length(which(dom_salmon$cat == "disturbance"))/nrow(dom_salmon)
+length(which(dom_salmon$cat == "ghg"))/nrow(dom_salmon)
+length(which(dom_salmon$cat == "nutrients"))/nrow(dom_salmon)
+length(which(dom_salmon$cat == "water"))/nrow(dom_salmon)
+```
+
+```{r}
+global_stress<- global %>% 
+  group_by(animal_system, stressor, ) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+land_sea_stress<- land_sea %>% 
+  group_by(animal_system, stressor, location) %>% 
+  summarise(total = sum(value, na.rm = T))
+
+land_sea_stress
+
+marine_stress<-land_sea_stress %>% 
+  filter(location == "marine",
+         animal_system == "salmon")
+
+marine_stress %>% 
+  mutate(prop = total/sum(marine_stress$total))
+```
+

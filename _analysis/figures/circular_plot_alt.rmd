@@ -1,0 +1,294 @@
+---
+title: "circular_plot"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Load packages
+
+```{r}
+# Load packages
+library(tidyverse)
+library(here)
+library(scales)
+library(viridis)
+```
+
+# Function
+
+```{r}
+plot_circular <- function(negative_pattern, # Pattern within stressor_df$stressor
+                          system,           # Either both/salmon/broiler
+                          plot_name) {      # Filename
+  
+  # Import stressor_df
+  stressor_df <- read_csv(here("_analysis/raw/stressor_df.csv"))
+  
+  # Convert salmon proportions into negative values
+  
+  system_of_interest <- system
+  
+  if (system_of_interest == "both") {  
+
+    stressor_df <- stressor_df %>% 
+    mutate(prop = if_else(str_detect(stressor, pattern = negative_pattern), 
+                          prop * -1, prop))
+    
+    rep_number <- 2
+    
+  } else {
+      
+    stressor_df <- stressor_df %>% 
+      filter(str_detect(stressor, pattern = system)) %>% 
+      mutate(prop = if_else(str_detect(stressor, pattern = negative_pattern), 
+                            prop * -1, prop))
+    
+    rep_number <- 1
+    
+  }
+  
+  # Produce df with total proportions for each country
+  country_stressor <- stressor_df %>% 
+    group_by(ID_0, continent, country) %>% 
+    summarize(prop = sum(prop))
+  
+  # Rank continent by total proportion
+  rank_cont <- country_stressor %>%
+    group_by(continent) %>%
+    summarize(mean_prop = mean(prop),
+              count     = length(prop)) %>%
+    arrange(mean_prop)
+  
+  country_stressor$continent <- factor(country_stressor$continent,
+                                       levels = rank_cont$continent)
+  
+  rank_country <- country_stressor %>% arrange(continent, prop)
+  
+  # Creating a gap where we'll place the scale bar in the plot
+  empty_bar <- nrow(rank_cont) - 1 
+  
+  to_add    <- data.frame(
+    matrix(NA, empty_bar, 
+           ncol(rank_country)))
+  
+  colnames(to_add) <- colnames(rank_country)
+  to_add$country   <- as.character(1:empty_bar)
+  rank_country     <- bind_rows(to_add, rank_country)
+  
+  # Shorten country names
+  rank_country <- rank_country %>%
+    mutate(country_short = country,
+           country_short = gsub("Islands", "Isl",                                               country_short),
+           country_short = gsub("Island", "Isl",                                                country_short),
+           country_short = gsub("Democratic", "Dem",                                            country_short),
+           country_short = gsub("Republic", "Rep",                                              country_short),
+           country_short = gsub("South", "S",                                                   country_short),
+           country_short = gsub("American", "Am",                                               country_short),
+           country_short = gsub("the United States", "US",                                      country_short),
+           country_short = gsub("Territory", "Terr",                                            country_short),
+           country_short = gsub("Saint", "St",                                                  country_short),
+           country_short = gsub(" and ", " & ",                                                 country_short),
+           country_short = gsub("Republique", "Rep",                                            country_short),
+           country_short = gsub("Dem Rep of the", "Dem Rep of",                                 country_short),
+           country_short = gsub("St Vincent and the", "St Vincent and",                         country_short),
+           country_short = gsub("Northern", "N",                                                country_short),
+           country_short = gsub("United Kingdom of Great Britain & N Ireland", "United Kingdom",country_short))
+  
+  # Orient country labels
+  sequence_length = length(unique(rank_country$country))
+  first_sequence  = c(1:(sequence_length %/% 2)) 
+  second_sequence = c((sequence_length %/% 2 + 1):sequence_length) 
+  first_angles    = c(90 - 180 / length(first_sequence) * first_sequence)
+  second_angles   = c(-90 - 180 / length(second_sequence) * second_sequence)
+  
+  rank_country$angle <- c(first_angles, second_angles)
+  rank_country$hjust <- c(rep(0, length(first_sequence)),
+                          rep(1, length(second_sequence)))
+  
+  # Color for region labels
+  rank_country <- rank_country %>%
+    mutate(country   = factor(country, unique(country))) %>%
+    mutate(continent = factor(continent, unique(continent))) %>%
+    mutate(color     = "black") %>%
+    mutate(color     = ifelse(is.na(prop), "white", color))
+  
+  # Add column to identify when georegion changes
+  country_shift <- rank_country %>%
+    mutate(continent  = ifelse(is.na(continent), "tmp", continent)) %>%
+    mutate(continent  = as.factor(continent)) %>%
+    mutate(ctry_shift = as.numeric(continent) - lag(as.numeric(continent)), 
+           default    = first(as.numeric(continent)))
+  
+  # Defining positions of continent labels in the plot
+  country_shift <- which(country_shift$ctry_shift > 0)
+  country_shift <- c(1, country_shift) - 0.5
+  
+  country_shift <- data.frame(
+    country_shift_x = country_shift,
+    continent       = rank_cont$continent,
+    name_x = c(country_shift[1] + country_shift[2] / 2, 
+               country_shift[2] + (country_shift[3] - country_shift[2]) / 2,
+               country_shift[3] + (country_shift[4] - country_shift[3]) / 2,
+               country_shift[4] + (country_shift[5] - country_shift[4]) / 2,
+               country_shift[5] + (180 - country_shift[5]) / 2),
+    name_y = rep(max(country_stressor$prop), 
+                 length(levels(country_stressor$continent))))
+  
+  country_shift <- country_shift %>% 
+    mutate(continent = as.character(continent))
+  
+  # Input data for geom_segment
+  segment_data <- data.frame(
+    xstart        = 5,
+    xend          = dim(rank_country)[1] + 1,
+    ystart        = c(0,  ifelse(min(country_stressor$prop) > -1, -0.5, -1)),
+    yend          = c(0,  ifelse(min(country_stressor$prop) > -1, -0.5, -1)),
+    circle_colors = c("black", "darkgray"))
+  
+  # Input data for annotation()
+  scale_labels <- c(
+    segment_data$yend,
+    seq(-(segment_data$yend[2]), 
+        max(country_stressor$prop),
+        -(segment_data$yend[2])))
+
+  # Add gaps between continent grouping
+  to_add <- data.frame(
+    matrix(NA, 
+           empty_bar * nlevels(as.factor(stressor_df$stressor)), 
+           ncol(stressor_df)))
+  
+  colnames(to_add) <- colnames(stressor_df)
+  
+  to_add$stressor <- rep(levels(as.factor(stressor_df$stressor)), 
+                         each = empty_bar)
+  
+  to_add$prop <- 0
+  
+  to_add$country <- as.character(rep(1:empty_bar, 
+                                     nlevels(as.factor(stressor_df$stressor)))) 
+  
+  stressor_df <- rbind(to_add, stressor_df, to_add)
+  
+  # Define our list of stressors and convert into factors ---------------------
+  unique(stressor_df$stressor)
+  
+  stressor_name <- data.frame(
+    stressor = unique(stressor_df$stressor),
+    stressor_name = c(rep(c("land_disturbance", "land_ghg", 
+                            "land_nutrient", "land_water"),
+                          rep_number), 
+                      rep(c("ocean_disturbance", "ocean_ghg", 
+                            "ocean_nutrient", "ocean_water"), 
+                          rep_number)))
+  
+  stressor_df <- stressor_df %>% left_join(stressor_name, by = "stressor")
+  
+  stressor_df$stressor_name <- factor(stressor_df$stressor_name, 
+                                      levels = rev(unique(stressor_name$stressor_name)))
+  
+  stressor_df$country       <- factor(stressor_df$country, 
+                                levels = unique(rank_country$country))
+
+  circle_theme <- theme(axis.line        = element_blank(),
+                        axis.text.y      = element_blank(),
+                        axis.ticks       = element_blank(),
+                        axis.title.x     = element_blank(),
+                        axis.title.y     = element_blank(),
+                        panel.background = element_blank(),
+                        legend.position  = "none", # important
+                        panel.border     = element_blank(),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        plot.background  = element_blank(),
+                        axis.text.x      = element_blank(),
+                        plot.margin      = unit(rep(-2.5,5), "cm"))
+
+  # ggplot
+ circular_plot <- ggplot(stressor_df, aes(x = country, y = prop, fill = stressor_name)) + 
+   
+    geom_bar(stat = "identity") +
+   
+    geom_errorbar(aes(
+      x     = 1, 
+      ymin  = floor(min(country_stressor$prop)),   
+      ymax  = ceiling(max(country_stressor$prop))), 
+      alpha = 0) +
+    
+    # Country name text placement
+    geom_text(
+      data = rank_country,  
+      aes(x     = country,  
+          y     = max(country_stressor$prop) + (max(country_stressor$prop)/10), 
+          label = country_short, 
+          angle = angle, 
+          hjust = hjust),
+      inherit.aes = FALSE, 
+      fontface = "bold", 
+      alpha = 0.9, 
+      size = 2.5, 
+      color = rank_country$color) +
+  
+    # Scale bar circles
+    geom_segment(
+      data = segment_data,
+      aes(x = xstart, y = ystart, xend = xend, yend = yend, fill = NULL),
+      alpha = 1, color = segment_data$circle_colors, size = 0.3) +
+    
+    # Scale bar annotation
+    annotate(
+      "text", 
+      x     = rep(3, length(scale_labels)), 
+      y     = scale_labels,
+      label = abs(scale_labels), 
+      color = "darkgray", angle = -4, size = 4) +
+    
+    # color palette
+    scale_fill_viridis(discrete = TRUE, option = "viridis") +
+   
+    # Convert graph to circular
+    coord_polar() +
+    
+    # Segments separating continent groups
+    geom_segment(
+      data = country_shift, 
+      aes(x    = country_shift_x, 
+          xend = country_shift_x,   
+          y    = rep(segment_data$ystart[2], 
+                     length(continent)), 
+          yend = name_y * 1.2),
+      color = "gray", size = 0.5, inherit.aes = FALSE) +
+  
+    # Continent text
+    geom_text(
+      data = country_shift,   
+      aes(x     = name_x,   
+          y     = name_y * 0.75, 
+          label = continent), 
+      inherit.aes = FALSE, 
+      size = 8) +
+    
+    # Theme
+    circle_theme
+  
+  # Save 
+  ggsave(here(paste("_analysis/figures/circular_plots/", plot_name, ".png", sep = "")),
+         plot = circular_plot, height = 20, width = 20, units = c("in"))
+}
+```
+
+# Plots
+
+Future ideas:
+- Adjusting for production
+- Comparing internal vs external stressor impacts
+ 
+```{r}
+plot_circular("salmon", "both", "chicken_vs_salmon")
+plot_circular("salmon", "both", "land_vs_ocean")
+plot_circular("ocean", "salmon", "salmon")
+plot_circular("ocean", "broiler", "broiler")
+```
+
+

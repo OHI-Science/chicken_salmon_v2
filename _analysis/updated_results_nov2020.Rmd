@@ -1,0 +1,999 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "01/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(here)
+library(data.table)
+library(raster)
+
+un_geopolitical <- read_csv(here("_spatial/output/UNSD_Methodology.csv")) %>%
+  dplyr::select(iso3c, georegion=Region_Name)
+
+rgn_names <- read_csv(here("_spatial/output/master_rgns.csv")) %>%
+  rename(land_area_km2 = area_km2)
+eez_rgns <- read_csv(here("_spatial/output/eez_rgns.csv")) %>%
+  rename(eez_area_km2 = area_km2)
+
+rescaling_values <- read_csv(here("_analysis/step4_stressor_rescaling.csv")) 
+
+options(scipen = 999)
+```
+
+```{r}
+results<-read.csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv"))
+```
+
+```{r}
+pressures <- results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   #group_by(iso3c, Country, source, subsource, animal_system, location, stressor) %>%
+  group_by(iso3c, Country, animal_system) %>% 
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  left_join(rgn_names) %>%
+  left_join(eez_rgns) %>%
+  rowwise() %>%
+  mutate(avg_cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
+  ungroup() %>%
+   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2), 0, avg_cum_stress_km2)) #%>%
+
+   # mutate(source = ifelse(is.na(subsource), paste(animal_system, source, sep="-"), 
+  #                       paste(animal_system, source, subsource, sep="-"))) %>%
+#left_join(un_geopolitical, by="iso3c")
+```
+
+# Comparing cumulative pressures of farmed chicken and salmon
+
+Absolute pressure comparison
+
+```{r}
+chicken_disturb<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/broiler_disturbance_per_cell.tif")
+
+salmon_disturb<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/salmon_disturbance_per_cell.tif")
+
+chicken_disturb_df<-rasterToPoints(chicken_disturb) %>% 
+  as.data.frame()
+
+salmon_disturb_df<-rasterToPoints(salmon_disturb) %>% 
+  as.data.frame()
+
+all_chick_dist<-sum(chicken_disturb_df$broiler_disturbance_per_cell)
+all_salmon_dist<-sum(salmon_disturb_df$salmon_disturbance_per_cell)
+
+land_area<-sum(rgn_names$land_area_km2,na.rm = T)
+eez_area<-sum(eez_rgns$eez_area_km2, na.rm = T)
+
+```
+
+```{r}
+chicken_fw<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/broiler_water_per_cell.tif")
+
+salmon_fw<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/salmon_water_per_cell.tif")
+
+chicken_nutri<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/broiler_nutrient_per_cell.tif")
+
+salmon_nutri<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/salmon_nutrient_per_cell.tif")
+
+chicken_ghg<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/broiler_ghg_per_cell.tif")
+
+salmon_ghg<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/salmon_ghg_per_cell.tif")
+```
+
+```{r}
+chicken_fw_df<-rasterToPoints(chicken_fw) %>% 
+  as.data.frame()
+
+salmon_fw_df<-rasterToPoints(salmon_fw) %>% 
+  as.data.frame()
+
+chicken_nutri_df<-rasterToPoints(chicken_nutri) %>% 
+  as.data.frame()
+
+salmon_nutri_df<-rasterToPoints(salmon_nutri) %>% 
+  as.data.frame()
+
+chicken_ghg_df<-rasterToPoints(chicken_ghg) %>% 
+  as.data.frame()
+
+salmon_ghg_df<-rasterToPoints(salmon_ghg) %>% 
+  as.data.frame()
+
+all_c_fw<-sum(chicken_fw_df$broiler_water_per_cell,na.rm = T)
+all_s_fw<-sum(salmon_fw_df$salmon_water_per_cell,na.rm = T)
+all_c_nutri<-sum(chicken_nutri_df$broiler_nutrient_per_cell,na.rm = T)
+all_s_nutri<-sum(salmon_nutri_df$salmon_nutrient_per_cell,na.rm = T)
+all_c_ghg<-sum(chicken_ghg_df$broiler_ghg_per_cell,na.rm = T)
+all_s_ghg<-sum(salmon_ghg_df$salmon_ghg_per_cell,na.rm = T)
+
+all_chick_dist/all_salmon_dist
+all_c_fw/all_s_fw
+all_c_nutri/all_s_nutri
+all_c_ghg/all_s_ghg
+all_chick_dist/all_salmon_dist
+```
+
+```{r}
+chick_df<-data.frame(type = "chicken", stressor = c("Disturbance", "Freshwater use", "Nutrients", "GHG emissions"), value = c(all_chick_dist, all_c_fw, all_c_nutri, all_c_ghg))
+
+salmon_df<-data.frame(type = "salmon", stressor = c("Disturbance", "Freshwater use", "Nutrients", "GHG emissions"), value = c(all_salmon_dist, all_s_fw, all_s_nutri, all_s_ghg))
+
+all<-rbind(chick_df, salmon_df)
+
+ggplot(all, aes(x = stressor, y = log10(value), fill = type)) +
+  geom_bar(positio = "dodge", stat = "identity")
+```
+
+```{r}
+
+animal_stressor<-results %>% 
+  group_by(animal_system, stressor) %>% 
+  summarise(total_dist = sum(value, na.rm = T))
+
+animal_stressor_location<-results %>% 
+  group_by(animal_system, stressor, location) %>% 
+  summarise(total_pressure = sum(value, na.rm = T)) %>% 
+  mutate(perc_area = ifelse(location == "land" & stressor == "disturbance", (total_pressure/land_area)*100,
+                       ifelse(location == "marine" & stressor == "disturbance", (total_pressure/eez_area)*100, NA)))
+
+#Total disturbance
+broiler_dist<-animal_stressor %>% filter(animal_system == "broiler", stressor == "disturbance")
+salmon_dist<-animal_stressor %>% filter(animal_system == "salmon", stressor == "disturbance")
+
+broiler_dist #EEZ and land
+salmon_dist #EEZ and Land
+
+open_ocean_chicken <- all_chick_dist- as.numeric(broiler_dist$total_dist) # 14620.27
+open_ocean_salmon <- all_salmon_dist- as.numeric(salmon_dist$total_dist) # 4270.533
+
+
+
+
+#Total disturbance by location
+animal_stressor_location %>% filter(animal_system == "broiler", stressor == "disturbance")
+animal_stressor_location %>% filter(animal_system == "salmon", stressor == "disturbance")
+
+#Chicken percent land including open ocean
+767479.40/(767479.40+26784.77	+14620.27)
+
+#Salmon percent ocean including open ocean
+(117980.061+4270.533)/(4270.533+7003.237+117980.061)  
+
+# GHG location
+animal_stressor_location %>% filter(animal_system == "broiler", stressor == "ghg") #99.9% on land
+animal_stressor_location %>% filter(animal_system == "salmon", stressor == "ghg") # 76% in marine
+
+# Freshwater location
+animal_stressor_location %>% filter(animal_system == "broiler", stressor == "water") #100% on land
+animal_stressor_location %>% filter(animal_system == "salmon", stressor == "water") #100% on land
+
+# Nutrient location
+animal_stressor_location %>% filter(animal_system == "broiler", stressor == "nutrient") #100% on land
+animal_stressor_location %>% filter(animal_system == "salmon", stressor == "nutrient") # 96.1% in marine
+```
+
+```{r}
+# How much times greater chicken vs. salmon
+chicken_dist<- animal_stressor%>% filter(animal_system == "broiler", stressor == "disturbance") %>% ungroup() %>% dplyr::select(total_dist)
+salmon_dist<- animal_stressor%>% filter(animal_system == "salmon", stressor == "disturbance") %>% ungroup() %>% dplyr::select(total_dist)
+chicken_ghg<-animal_stressor%>% filter(animal_system == "broiler", stressor == "ghg") %>% ungroup() %>% dplyr::select(total_dist)
+salmon_ghg<-animal_stressor%>% filter(animal_system == "salmon", stressor == "ghg") %>% ungroup %>% dplyr::select(total_dist)
+chicken_water<-animal_stressor%>% filter(animal_system == "broiler", stressor == "water") %>% ungroup() %>% dplyr::select(total_dist)
+salmon_water<-animal_stressor%>% filter(animal_system == "salmon", stressor == "water") %>% ungroup() %>% dplyr::select(total_dist)
+chicken_nutrients<-animal_stressor%>% filter(animal_system == "broiler", stressor == "nutrient") %>% ungroup() %>% dplyr::select(total_dist)
+salmon_nutrients<-animal_stressor%>% filter(animal_system == "salmon", stressor == "nutrient") %>% ungroup() %>% dplyr::select(total_dist)
+  
+# Disturbance
+(chicken_dist - salmon_dist)/salmon_dist
+(chicken_ghg - salmon_ghg)/salmon_ghg
+(chicken_water - salmon_water)/salmon_water
+(chicken_nutrients - salmon_nutrients)/salmon_nutrients
+```
+
+```{r}
+chicken <- raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/rescaled/cumulative_stress/broilers_cumulative_stress.tif")
+
+
+chicken_df<-rasterToPoints(chicken) %>% 
+  as.data.frame()
+
+chicken_quant <- chicken
+values(chicken_quant)[values(chicken_quant) <=0 ] = NA
+
+quant_0 <- quantile(chicken_quant, 0) #7.132593e-20  
+quant_45 <- quantile(chicken_quant, 0.45) #1.62261e-05 
+quant_90 <- quantile(chicken_quant, 0.90) #0.3265311
+
+length(which(chicken_df$broilers_cumulative_stress==0))/nrow(chicken_df)
+length(which(chicken_df$broilers_cumulative_stress<quant_45))/nrow(chicken_df)
+length(which(chicken_df$broilers_cumulative_stress>quant_90))/nrow(chicken_df)
+```
+
+
+```{r}
+salmon <- raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/rescaled/cumulative_stress/salmon_cumulative_stress.tif")
+
+salmon_df<-rasterToPoints(salmon) %>% 
+  as.data.frame()
+
+
+##remove NAs just for quantiles
+salmon_quant <- salmon
+values(salmon_quant)[values(salmon_quant) <=0 ] = NA
+
+quant_0 <- quantile(salmon_quant, 0) # 1.463664e-12 
+quant_45 <- quantile(salmon_quant, 0.45) #2.30123e-05 
+quant_90 <- quantile(salmon_quant, 0.90) #0.008480698
+
+length(which(salmon_df$salmon_cumulative_stress==0))/nrow(salmon_df)
+length(which(salmon_df$salmon_cumulative_stress<quant_45))/nrow(salmon_df)
+
+length(which(salmon_df$salmon_cumulative_stress>quant_90))/nrow(salmon_df)
+```
+
+```{r}
+cell_count<-read.csv(here("_analysis/figures/overlap_map/data/cell_count.csv")) 
+
+low_chicken<-cell_count %>% 
+  filter(category %in% as.factor(c("low chicken\nzero salmon", "low chicken\nlow salmon","low chicken\nmedium salmon","low chicken\nhigh salmon")))
+
+zero_chicken<-cell_count %>% 
+  filter(category %in% as.factor(c("zero chicken\nzero salmon", "zero chicken\nlow salmon","zero chicken\nmedium salmon","zero chicken\nhigh salmon")))
+
+
+low_salmon<-cell_count %>% 
+  filter(category %in% as.factor(c("high chicken\nlow salmon","medium chicken\nlow salmon", "low chicken\nlow salmon","zero chicken\nlow salmon")))
+
+zero_salmon<-cell_count %>% 
+  filter(category %in% as.factor(c("high chicken\nzero salmon", "zero chicken\nzero salmon", "low chicken\nzero salmon", "medium chicken\nzero salmon")))
+
+high_overlap<-cell_count %>% 
+  filter(category %in% as.factor(c("high chicken\nhigh salmon")))
+
+med_high_overlap<-cell_count %>% 
+  filter(category %in% as.factor(c("high chicken\nmedium salmon", "medium chicken\nhigh salmon", "medium chicken\nmedium salmon")))
+
+sum(med_high_overlap$prop_cells)
+
+sum(zero_chicken$prop_cells)
+sum(zero_salmon$prop_cells)
+sum(low_chicken$prop_cells)
+sum(low_salmon$prop_cells)
+```
+
+```{r}
+test<-chicken_df %>% 
+  filter(!is.na(broilers_cumulative_stress) == T,
+         broilers_cumulative_stress>0) %>% 
+  arrange(desc(broilers_cumulative_stress))
+
+all_chick<-sum(test$broilers_cumulative_stress)
+
+test<-test %>% 
+  mutate(cum = cumsum(broilers_cumulative_stress))
+
+sub_test<-test %>% 
+  filter(cum<=(all_chick*0.9))
+
+nrow(sub_test)/nrow(test)
+nrow(sub_test)/nrow(chicken_df)
+```
+
+
+```{r}
+test2<-salmon_df %>% 
+  filter(!is.na(salmon_cumulative_stress) == T,
+         salmon_cumulative_stress>0) %>% 
+  arrange(desc(salmon_cumulative_stress))
+
+all_salmon<-sum(test2$salmon_cumulative_stress)
+
+test2<-test2 %>% 
+  mutate(cum = cumsum(salmon_cumulative_stress))
+
+sub_test2<-test2 %>% 
+  filter(cum<=(all_salmon*0.9))
+
+nrow(sub_test2)/nrow(test2)
+nrow(sub_test2)/nrow(salmon_df)
+```
+# Max and min chicken and salmon values
+
+```{r}
+broilers <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor", pattern="broiler", full=TRUE)
+broiler_stack<-stack(broilers)
+broiler_df<-rasterToPoints(broiler_stack)
+
+ghg_rescale<-as.numeric(rescaling_values[1,2])
+water_rescale<-as.numeric(rescaling_values[2,2])
+dist_rescale<-as.numeric(rescaling_values[4,2])
+nutri_rescale<-as.numeric(rescaling_values[3,2])
+
+broiler_prop<-broiler_df %>% 
+  as.data.frame() %>% 
+  rename(disturbance = broiler_disturbance_per_cell,
+         ghg = broiler_ghg_per_cell,
+         nutrient = broiler_nutrient_per_cell,
+         water = broiler_water_per_cell) %>% 
+  mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+
+max(broiler_prop$total_chi)
+sum(broiler_prop$total_chi)
+```
+
+```{r}
+salmon <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor", pattern="salmon", full=TRUE)
+salmon_stack <- stack(salmon)
+salmon_df<-rasterToPoints(salmon_stack)
+
+salmon_prop<-salmon_df %>% 
+  as.data.frame() %>% 
+  rename(disturbance = salmon_disturbance_per_cell,
+         ghg = salmon_ghg_per_cell,
+         nutrient = salmon_nutrient_per_cell,
+         water = salmon_water_per_cell) %>% 
+   mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+
+max(salmon_prop$total_chi)
+sum(salmon_prop$total_chi)
+```
+
+# Country CPI
+
+```{r}
+broiler_cpi<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "broiler")
+
+
+# Salmon CPI
+salmon_cpi<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "salmon") %>% 
+  arrange(desc(country_farm_feed_chi)) %>% 
+  mutate(prop_total = country_farm_feed_chi/0.1771553)
+
+write.csv(broiler_cpi, here("_analysis/figures/Country_results/Broiler_country_cpi.csv"))
+write.csv(salmon_cpi, here("_analysis/figures/Country_results/Salmon_country_cpi.csv"))
+
+```
+
+
+# Countries with CPI and not production
+
+```{r}
+broiler_prod<-read.csv("/home/kuempel/food_chicken_salmon/_analysis/data/broiler_production.csv")
+salmon_prod<-read.csv("/home/kuempel/food_chicken_salmon/_analysis/data/salmon_production.csv")
+```
+
+```{r}
+broiler_cpi_prod<-full_join(broiler_cpi, broiler_prod, by = c("iso3c", "Country"))
+
+salmon_cpi_prod<-full_join(salmon_cpi, salmon_prod, by = c("iso3c")) %>% 
+  mutate(fao_tonnes_production = ifelse(is.na(fao_tonnes_production) == T, 0 , as.numeric(fao_tonnes_production)))
+
+length(which(broiler_cpi_prod$country_farm_feed_chi>0 & broiler_cpi_prod$broiler_count<=0))
+length(which(salmon_cpi_prod$country_farm_feed_chi>0))
+
+cor.test(broiler_cpi_prod$country_farm_feed_chi, broiler_cpi_prod$broiler_carcass_wt_tonnes, method = "pearson")
+cor.test(salmon_cpi_prod$country_farm_feed_chi, salmon_cpi_prod$fao_tonnes_production, method = "pearson")
+
+
+b_mod<-lm(country_farm_feed_chi~broiler_carcass_wt_tonnes, data = broiler_cpi_prod)
+s_mod<-lm(country_farm_feed_chi~fao_tonnes_production, data = salmon_cpi_prod)
+
+summary(b_mod)
+summary(s_mod)
+
+sub_broiler<-broiler_cpi_prod %>% 
+  arrange(desc(country_farm_feed_chi)) %>% 
+  filter(iso3c %in% c("USA", "CHN", "BRA", "IDN"))
+
+sub_salmon<-salmon_cpi_prod %>% 
+  arrange(desc(country_farm_feed_chi)) %>% 
+  filter(iso3c %in% c("NOR", "GBR", "CHL", "PER"))
+```
+
+```{r}
+broiler_cpi_location<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system, location) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "broiler")
+
+
+# Salmon CPI
+salmon_cpi_location<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system, location) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "salmon") %>% 
+  arrange(desc(country_farm_feed_chi)) %>% 
+  mutate(prop_total = country_farm_feed_chi/0.1771553)
+```
+
+```{r}
+broiler_cpi_prod_loc<-full_join(broiler_cpi_location, broiler_prod, by = c("iso3c", "Country"))
+
+broiler_cpi_prod_loc_marine<-full_join(broiler_cpi_location, broiler_prod, by = c("iso3c", "Country")) %>% 
+  filter(location == "marine") %>% 
+  pivot_wider(., names_from = "location", values_from = "country_farm_feed_chi") 
+
+broiler_cpi_prod_loc_land<-full_join(broiler_cpi_location, broiler_prod, by = c("iso3c", "Country")) %>% 
+  filter(location == "land") %>% 
+  pivot_wider(., names_from = "location", values_from = "country_farm_feed_chi") 
+
+broiler_cpi_prod_loc<-full_join(broiler_cpi_prod_loc_marine, broiler_cpi_prod_loc_land, by = c("iso3c", "Country")) %>% 
+  dplyr::select(iso3c, Country, marine, land)
+
+salmon_cpi_prod_loc_marine<-full_join(salmon_cpi_location, salmon_prod, by = c("iso3c", "Country" = "country")) %>% 
+  filter(location == "marine") %>% 
+  pivot_wider(., names_from = "location", values_from = "country_farm_feed_chi") 
+
+salmon_cpi_prod_loc_land<-full_join(salmon_cpi_location, salmon_prod, by = c("iso3c", "Country" = "country")) %>% 
+  filter(location == "land") %>% 
+  pivot_wider(., names_from = "location", values_from = "country_farm_feed_chi") 
+
+salmon_cpi_prod_loc<-full_join(salmon_cpi_prod_loc_marine, salmon_cpi_prod_loc_land, by = c("iso3c", "Country")) %>% 
+  dplyr::select(iso3c, Country, marine, land)
+
+length(which(broiler_cpi_prod_loc$marine>0 & broiler_cpi_prod_loc$land<=0))
+length(which(broiler_cpi_prod_loc$marine<=0 & broiler_cpi_prod_loc$land>0))
+length(which(broiler_cpi_prod_loc$marine>0 & broiler_cpi_prod_loc$land>0))
+length(which(broiler_cpi_prod_loc$marine<=0 & broiler_cpi_prod_loc$land<=0))
+
+length(which(salmon_cpi_prod_loc$marine>0 & salmon_cpi_prod_loc$land<=0))
+length(which(salmon_cpi_prod_loc$marine<=0 & salmon_cpi_prod_loc$land>0))
+length(which(salmon_cpi_prod_loc$marine>0 & salmon_cpi_prod_loc$land>0))
+length(which(salmon_cpi_prod_loc$marine<=0 & salmon_cpi_prod_loc$land<=0))
+```
+
+# CPI per km2 by country
+
+```{r}
+broiler_cpi_km2<-full_join(broiler_cpi, rgn_names) %>%
+  left_join(eez_rgns) %>%
+  rowwise() %>%
+  mutate(eez_area_km2 = ifelse(is.na(eez_area_km2) == T, 0, as.numeric(eez_area_km2)),
+    avg_cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
+  ungroup() %>%
+   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2), 0, avg_cum_stress_km2))
+
+salmon_cpi_km2<-full_join(salmon_cpi, rgn_names) %>%
+  left_join(eez_rgns) %>%
+  rowwise() %>%
+  mutate(eez_area_km2 = ifelse(is.na(eez_area_km2) == T, 0, as.numeric(eez_area_km2)),
+    avg_cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
+  ungroup() %>%
+   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2), 0, avg_cum_stress_km2))
+
+write.csv(broiler_cpi_km2, here("_analysis/figures/Country_results/Broiler_country_cpi_km2.csv"))
+write.csv(salmon_cpi_km2, here("_analysis/figures/Country_results/Salmon_country_cpi_km2.csv"))
+```
+
+```{r}
+broiler_cpi_km2_prod<-full_join(broiler_cpi_km2, broiler_prod) %>% 
+  mutate(prop_prod = broiler_carcass_wt_tonnes/sum(broiler_cpi_prod$broiler_carcass_wt_tonnes)) #%>% 
+  #filter(prop_prod >0.03)
+
+salmon_cpi_km2_prod<-full_join(salmon_cpi_km2, salmon_prod)%>% 
+  mutate(prop_prod = fao_tonnes_production/sum(salmon_cpi_prod$fao_tonnes_production)) #%>% 
+  #filter(prop_prod >0.05)
+```
+
+```{r}
+broiler_cpi_km2_loc<-full_join(broiler_cpi_prod_loc, rgn_names) %>%
+  left_join(eez_rgns) %>%
+  rowwise() %>%
+  mutate(eez_area_km2 = ifelse(is.na(eez_area_km2) == T, 0, as.numeric(eez_area_km2)),
+    marine_cpi_km2= marine/(eez_area_km2),
+    land_cpi_km2 = land/(land_area_km2)) %>%
+  ungroup() 
+
+salmon_cpi_km2_loc<-full_join(salmon_cpi_prod_loc, rgn_names) %>%
+  left_join(eez_rgns) %>%
+  rowwise() %>%
+  mutate(eez_area_km2 = ifelse(is.na(eez_area_km2) == T, 0, as.numeric(eez_area_km2)),
+    marine_cpi_km2= marine/(eez_area_km2),
+    land_cpi_km2 = land/(land_area_km2)) %>%
+  ungroup() 
+  
+```
+
+# Overlap
+
+```{r}
+overlap <- cell_count %>% 
+  filter(!category %in% c("zero chicken\nzero salmon", "high chicken\nzero salmon","low chicken\nzero salmon","zero chicken\nlow salmon","zero chicken\nmedium salmon","zero chicken\nhigh salmon","medium chicken\nzero salmon"  ))
+
+no_zero_zero<-cell_count %>% 
+  filter(!category %in% c("zero chicken\nzero salmon"))
+
+sum(overlap$number_cells)/sum(no_zero_zero$number_cells) #83% overlap
+
+test<-overlap %>% 
+  mutate(prop_cell2=number_cells/sum(no_zero_zero$number_cells)) %>% 
+  filter(category %in% c("medium chicken\nlow salmon","medium chicken\nmedium salmon", "low chicken\nlow salmon" , "low chicken\nmedium salmon"  ))
+
+sum(test$prop_cell2)
+sum(test$prop_cells)
+
+overlap %>% 
+  arrange(desc(prop_cells))
+
+(2750412+2076081)/sum(no_zero_zero$number_cells)
+```
+
+
+# Feed stats
+
+
+```{r}
+animal_stressor_feed<-results %>% 
+  group_by(animal_system, stressor, source) %>% 
+  summarise(total_pressure = sum(value, na.rm = T)) 
+
+animal_stressor_feed_location<-results %>% 
+  group_by(animal_system, stressor, source, location) %>% 
+  summarise(total_pressure = sum(value, na.rm = T)) %>% 
+  filter(source == "feed")
+
+# Disturbance  feed/farm
+animal_stressor_feed %>% filter(animal_system == "broiler", stressor == "disturbance") #99.7% feed
+animal_stressor_feed %>% filter(animal_system == "salmon", stressor == "disturbance") # 99.9% feed
+
+animal_stressor_feed_location %>% filter(animal_system == "broiler", stressor == "disturbance") #99.7% feed
+animal_stressor_feed_location %>% filter(animal_system == "salmon", stressor == "disturbance") # 99.9% feed
+
+# GHG feed/farm
+animal_stressor_feed %>% filter(animal_system == "broiler", stressor == "ghg") #46.5% feed
+animal_stressor_feed %>% filter(animal_system == "salmon", stressor == "ghg") #40.8% feed
+
+# Freshwater  feed/farm
+animal_stressor_feed %>% filter(animal_system == "broiler", stressor == "water") #99.7% feed
+animal_stressor_feed %>% filter(animal_system == "salmon", stressor == "water") #100% feed
+
+# Nutrient  feed/farm
+animal_stressor_feed %>% filter(animal_system == "broiler", stressor == "nutrient") #11.3% feed
+animal_stressor_feed %>% filter(animal_system == "salmon", stressor == "nutrient") #3.8% feed
+```
+
+# Feed CPI?
+
+```{r}
+broiler_cpi_feed<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(animal_system, source) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "broiler")
+
+
+# Salmon CPI
+salmon_cpi_feed<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(animal_system, source) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "salmon") #%>% 
+  #arrange(desc(country_farm_feed_chi)) %>% 
+  #mutate(prop_total = country_farm_feed_chi/0.1771553)
+```
+
+```{r}
+broiler_cpi_km2_feed<-broiler_cpi_feed %>%
+  mutate(cpi_km2 = country_farm_feed_chi/(land_area + eez_area))
+
+
+salmon_cpi_km2_feed<-salmon_cpi_feed %>% 
+  mutate(cpi_km2 = country_farm_feed_chi/(land_area + eez_area))
+```
+
+```{r}
+broiler_cpi_feed_iso3<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system, source) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "broiler",
+         source == "feed") 
+
+broiler_cpi_farm_iso3<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system, source) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "broiler",
+         source == "farm") 
+
+
+# Salmon CPI
+salmon_cpi_feed_iso3<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country,animal_system, source) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "salmon",
+         source == "feed") 
+
+salmon_cpi_farm_iso3<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country,animal_system, source) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(animal_system == "salmon",
+         source == "farm") 
+```
+
+```{r}
+feed_location<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(source, stressor, location) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  filter(#animal_system == "salmon",
+         source == "feed") %>% 
+  mutate(cpi_km2 = ifelse(location == "land", country_farm_feed_chi/(land_area),
+                               country_farm_feed_chi/(eez_area)))
+
+feed_location
+
+test<-results %>% 
+ filter(stressor == "disturbance") %>% 
+  group_by(source, location) %>% 
+  summarise(total_dist = sum(value)) %>% 
+  filter(source == "feed")
+
+test
+```
+# Dominant pressures
+
+```{r}
+# 1 = disturbance, 2 = ghg, 3 = nutrients, 4 = water
+dom_chicken<-fread(here("_analysis/figures/dominant_pressure_map/chicken_dominant_pressure.csv"))
+
+dom_salmon<-fread(here("_analysis/figures/dominant_pressure_map/salmon_dominant_pressure.csv"))
+
+```
+
+```{r}
+#Total cells = 14208000
+n_cells_chicken_cpi<-length(which(is.na(dom_chicken$cat) == F))
+n_cells_salmon_cpi<-length(which(is.na(dom_salmon$cat) == F))
+```
+
+Chicken
+```{r}
+#Disturbance
+length(which(dom_chicken$cat == "disturbance"))/n_cells_chicken_cpi
+
+#Nutrients
+length(which(dom_chicken$cat == "nutrients"))/n_cells_chicken_cpi
+
+#FW
+length(which(dom_chicken$cat == "water"))/n_cells_chicken_cpi
+
+#GHG
+length(which(dom_chicken$cat == "ghg"))/n_cells_chicken_cpi
+```
+
+```{r}
+chicken_cpi_stressor<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   #group_by(iso3c, Country, source, subsource, animal_system, location, stressor) %>%
+  group_by(animal_system, stressor) %>% 
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>% 
+  filter(animal_system == "broiler")
+
+chicken_cpi_stressor <-chicken_cpi_stressor %>% 
+  mutate(prop = country_farm_feed_chi/sum(chicken_cpi_stressor$country_farm_feed_chi))
+
+chicken_cpi_stressor
+```
+
+salmon
+```{r}
+#Disturbance
+length(which(dom_salmon$cat == "disturbance"))/n_cells_salmon_cpi
+
+#Nutrients
+length(which(dom_salmon$cat == "nutrients"))/n_cells_salmon_cpi
+
+#FW
+length(which(dom_salmon$cat == "water"))/n_cells_salmon_cpi
+
+#GHG
+length(which(dom_salmon$cat == "ghg"))/n_cells_salmon_cpi
+```
+
+```{r}
+salmon_cpi_stressor<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by="stressor") %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   #group_by(iso3c, Country, source, subsource, animal_system, location, stressor) %>%
+  group_by(animal_system, stressor) %>% 
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>% 
+  filter(animal_system == "salmon")
+
+salmon_cpi_stressor <-salmon_cpi_stressor %>% 
+  mutate(prop = country_farm_feed_chi/sum(salmon_cpi_stressor$country_farm_feed_chi))
+
+salmon_cpi_stressor
+```
+
+```{r}
+rgns <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/land_eez_rgns.tif")
+plot(rgns)
+
+rgs2<-raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns_gall_peters.tif")
+
+rgs2[rgs2>0]<-1
+
+eez<-rgs2
+eez[eez == 1]<-0
+eez[is.na(eez) == T]<-1
+
+salmon <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor", pattern="salmon", full=TRUE)
+salmon_stack <- stack(salmon)
+```
+
+Salmon ocean dominant pressures
+```{r}
+dom_salmon_ocean<-salmon_stack * eez
+
+
+salmon_df<-rasterToPoints(dom_salmon_ocean)
+
+salmon_prop_ocean<-salmon_df %>% 
+  as.data.frame() %>%
+  rename(disturbance = layer.1,
+         ghg = layer.2,
+         nutrient = layer.3,
+         water = layer.4) %>% 
+  mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+
+salmon_max_ocean<-salmon_prop_ocean %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val) %>% 
+  mutate(cat = ifelse(max_val == 1, "disturbance",
+                      ifelse(max_val == 2,"ghg",
+                             ifelse(max_val == 3, "nutrients",
+                                    ifelse(max_val == 4, "water", NA)))))
+```
+
+Salmon land dominant pressure
+
+```{r}
+dom_salmon_land<-salmon_stack * rgs2
+
+salmon_df<-rasterToPoints(dom_salmon_land)
+
+salmon_prop_land<-salmon_df %>% 
+  as.data.frame() %>%
+  rename(disturbance = layer.1,
+         ghg = layer.2,
+         nutrient = layer.3,
+         water = layer.4) %>% 
+  mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+
+salmon_max_land<-salmon_prop_land %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val) %>% 
+  mutate(cat = ifelse(max_val == 1, "disturbance",
+                      ifelse(max_val == 2,"ghg",
+                             ifelse(max_val == 3, "nutrients",
+                                    ifelse(max_val == 4, "water", NA)))))
+```
+
+
+```{r}
+#Disturbance
+length(which(dom_salmon$cat == "disturbance"))/n_cells_salmon_cpi
+length(which(salmon_max_ocean$cat == "disturbance"))/n_cells_salmon_cpi 
+length(which(salmon_max_land$cat == "disturbance"))/n_cells_salmon_cpi
+
+
+#Nutrients
+length(which(dom_salmon$cat == "nutrients"))/n_cells_salmon_cpi
+length(which(salmon_max_ocean$cat == "nutrients"))/n_cells_salmon_cpi
+length(which(salmon_max_land$cat == "nutrients"))/n_cells_salmon_cpi
+
+
+#FW
+length(which(dom_salmon$cat == "water"))/n_cells_salmon_cpi
+length(which(salmon_max_ocean$cat == "water"))/n_cells_salmon_cpi
+length(which(salmon_max_land$cat == "water"))/n_cells_salmon_cpi
+
+#GHG
+length(which(dom_salmon$cat == "ghg"))/n_cells_salmon_cpi
+length(which(salmon_max_ocean$cat == "ghg"))/n_cells_salmon_cpi
+length(which(salmon_max_land$cat == "ghg"))/n_cells_salmon_cpi
+
+```
+
+Chicken ocean dominant pressures
+```{r}
+broilers <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor", pattern="broiler", full=TRUE)
+broiler_stack<-stack(broilers)
+
+dom_chicken_ocean<-broiler_stack * eez
+
+
+chicken_df<-rasterToPoints(dom_chicken_ocean)
+
+chicken_prop_ocean<-chicken_df %>% 
+  as.data.frame() %>%
+  rename(disturbance = layer.1,
+         ghg = layer.2,
+         nutrient = layer.3,
+         water = layer.4) %>% 
+  mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+
+chicken_max_ocean<-chicken_prop_ocean %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val) %>% 
+  mutate(cat = ifelse(max_val == 1, "disturbance",
+                      ifelse(max_val == 2,"ghg",
+                             ifelse(max_val == 3, "nutrients",
+                                    ifelse(max_val == 4, "water", NA)))))
+```
+
+Chicken land dominant pressure
+
+```{r}
+dom_chicken_land<-broiler_stack * rgs2
+
+chicken_df<-rasterToPoints(dom_chicken_land)
+
+chicken_prop_land<-chicken_df %>% 
+  as.data.frame() %>%
+  rename(disturbance = layer.1,
+         ghg = layer.2,
+         nutrient = layer.3,
+         water = layer.4) %>% 
+  mutate(disturbance_cell_prop = disturbance/dist_rescale,
+         water_cell_prop = water/water_rescale,
+         ghg_cell_prop = ghg/ghg_rescale,
+         nutrient_cell_prop = nutrient/nutri_rescale) %>% 
+  mutate(total_chi = disturbance_cell_prop + ghg_cell_prop+ nutrient_cell_prop+water_cell_prop,
+         prop_dist = disturbance_cell_prop/total_chi,
+         prop_ghg = ghg_cell_prop/total_chi,
+         prop_nutri = nutrient_cell_prop/total_chi,
+         prop_water = water_cell_prop/total_chi) %>% 
+  filter(!total_chi == 0)
+
+chicken_max_land<-chicken_prop_land %>% 
+  mutate(max_val = ifelse(prop_dist > prop_ghg & prop_dist > prop_nutri & prop_dist > prop_water, 1,
+                          ifelse(prop_ghg > prop_dist & prop_ghg > prop_nutri & prop_ghg > prop_water, 2,
+                                 ifelse(prop_nutri > prop_dist & prop_nutri > prop_ghg & prop_nutri > prop_water,3,
+                                        ifelse(prop_water > prop_dist & prop_water > prop_ghg & prop_water > prop_nutri, 4, NA))))) %>% 
+  dplyr::select(x,y,max_val) %>% 
+  mutate(cat = ifelse(max_val == 1, "disturbance",
+                      ifelse(max_val == 2,"ghg",
+                             ifelse(max_val == 3, "nutrients",
+                                    ifelse(max_val == 4, "water", NA)))))
+```
+
+```{r}
+#Disturbance
+length(which(dom_chicken$cat == "disturbance"))/n_cells_chicken_cpi
+length(which(chicken_max_ocean$cat == "disturbance"))/n_cells_chicken_cpi 
+length(which(chicken_max_land$cat == "disturbance"))/n_cells_chicken_cpi
+
+
+#Nutrients
+length(which(dom_chicken$cat == "nutrients"))/n_cells_chicken_cpi
+length(which(chicken_max_ocean$cat == "nutrients"))/n_cells_chicken_cpi
+length(which(chicken_max_land$cat == "nutrients"))/n_cells_chicken_cpi
+
+
+#FW
+length(which(dom_chicken$cat == "water"))/n_cells_chicken_cpi
+length(which(chicken_max_ocean$cat == "water"))/n_cells_chicken_cpi
+length(which(chicken_max_land$cat == "water"))/n_cells_chicken_cpi
+
+#GHG
+length(which(dom_chicken$cat == "ghg"))/n_cells_chicken_cpi
+length(which(chicken_max_ocean$cat == "ghg"))/n_cells_chicken_cpi
+length(which(chicken_max_land$cat == "ghg"))/n_cells_chicken_cpi
+
+```

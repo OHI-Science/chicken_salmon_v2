@@ -1,0 +1,670 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "08/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(tidyverse)
+library(ggplot2)
+library(here)
+library(ggrepel)
+library(png)
+library(grid)
+library(RCurl)
+library(patchwork)
+library(countrycode)
+```
+
+# Consumption data by country
+
+Data from: http://www.fao.org/faostat/en/#data/FBS
+
+Food is in 1000 tonnes
+Data refer to the total amount of the commodity available as human food during the reference period. Data include the commodity in question, as well as any commodity derived therefrom as a result of further processing. Food from maize, for example, comprises the amount of maize, maize meal and any other products derived therefrom available for human consumption. Food from milk relates to the amounts of milk as such, as well as the fresh milk equivalent of dairy products. Source: FAO. 1986. The ICS users' manual. Interlinked computer strorage and processing system of food and agricultural commodity data. Rome.
+
+
+Food supply is in kg
+Production + imports - exports + changes in stocks (decrease or increase) = food supply for domestic utilization.There are various ways of defining supply and, in fact, various concepts are in use. The elements involved are production, imports, exports and changes in stocks (increase or decrease). There is no doubt that production, imports and stock changes (either decrease or increase in stocks) are genuine supply elements. Source: FAO Statistics Division
+
+```{r}
+consump<-read.csv(here("consumption_data/consumption_2016.csv")) %>% 
+  mutate(iso3c = countrycode(Area, "country.name", "iso3c"))
+```
+
+Chicken
+
+```{r}
+chick_consump<-consump %>% 
+  filter(Item == "Poultry Meat",
+         !Area == "China, mainland") %>% 
+  dplyr::select(iso3c, Value, Element) %>% 
+  pivot_wider(., names_from = Element, values_from = Value) %>% 
+  rename(food = Food,
+         food_supply = 'Food supply quantity (kg/capita/yr)') %>% 
+  mutate(food = food * 1000)
+
+```
+
+
+Marine fish
+
+```{r}
+
+salmon_consump<-consump %>% 
+  filter(Item ==  "Marine Fish, Other",
+         !Area == "China, mainland") %>% 
+  dplyr::select(iso3c, Value, Element) %>% 
+  pivot_wider(., names_from = Element, values_from = Value) %>% 
+  rename(food = Food,
+         food_supply = 'Food supply quantity (kg/capita/yr)') %>% 
+  mutate(food = food * 1000)
+
+```
+
+# CHI data by country
+
+```{r}
+country_average<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_country.csv"))
+country_average_nozeros<-read.csv(here("_analysis/data/zonal_extract/average_rescaled_pressures_country_nozeros.csv"))
+country_sum<-read.csv(here("_analysis/data/zonal_extract/sum_rescaled_pressures_country.csv"))
+```
+
+Chicken
+
+```{r}
+country_chicken<- country_average %>% 
+  filter(animal_system == "broiler") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_chicken
+
+country_chicken_nozeros<- country_average_nozeros %>% 
+  filter(animal_system == "broiler") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_chicken_nozeros
+
+country_chicken_sum<- country_sum %>% 
+  filter(animal_system == "broiler") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_chicken_sum
+```
+
+
+```{r}
+country_chicken_feed<- country_average %>% 
+  filter(animal_system == "broiler", source == "feed") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(feed = total)
+
+country_chicken_feed
+
+country_chicken_feed_nozeros<- country_average_nozeros %>% 
+  filter(animal_system == "broiler", source == "feed") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(feed = total)
+
+country_chicken_feed_nozeros
+
+country_chicken_feed_sum<- country_sum %>% 
+  filter(animal_system == "broiler", source == "feed") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(feed = total)
+
+country_chicken_feed_sum
+```
+
+```{r}
+country_chicken_farm<- country_average %>% 
+  filter(animal_system == "broiler", source == "farm") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(farm = total)
+
+country_chicken_farm
+
+country_chicken_farm_nozeros<- country_average_nozeros %>% 
+  filter(animal_system == "broiler", source == "farm") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(farm = total)
+
+country_chicken_farm_nozeros
+
+country_chicken_farm_sum<- country_sum %>% 
+  filter(animal_system == "broiler", source == "farm") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(farm = total)
+
+
+country_chicken_farm_sum
+```
+
+Salmon
+
+```{r}
+country_salmon<- country_average %>% 
+  filter(animal_system == "salmon") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_salmon
+
+country_salmon_nozeros<- country_average_nozeros %>% 
+  filter(animal_system == "salmon") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_salmon_nozeros
+
+country_salmon_sum<- country_sum %>% 
+  filter(animal_system == "salmon") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total))
+
+country_salmon_sum
+```
+
+```{r}
+country_salmon_feed<- country_average %>% 
+  filter(animal_system == "salmon", source == "feed") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(feed = total)
+
+country_salmon_feed
+
+country_salmon_feed_nozeros<- country_average_nozeros %>% 
+  filter(animal_system == "salmon", source == "feed") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(feed = total)
+
+country_salmon_feed_nozeros
+
+country_salmon_feed_sum<- country_sum %>% 
+  filter(animal_system == "salmon", source == "feed") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(feed = total)
+
+
+country_salmon_feed_sum
+```
+
+```{r}
+country_salmon_farm<- country_average %>% 
+  filter(animal_system == "salmon", source == "farm") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(farm = total)
+
+country_salmon_farm
+
+country_salmon_farm_nozeros<- country_average_nozeros %>% 
+  filter(animal_system == "salmon", source == "farm") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(farm = total)
+
+country_salmon_farm_nozeros
+
+
+country_salmon_farm_sum<- country_sum %>% 
+  filter(animal_system == "salmon", source == "farm") %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(total = sum(value, na.rm = T)) %>% 
+  arrange(desc(total)) %>% 
+  rename(farm = total)
+
+country_salmon_farm_sum
+```
+
+# Join data
+
+Chicken
+
+```{r}
+chick_dat<-full_join(country_chicken, chick_consump, by = "iso3c") %>% 
+  full_join(., country_chicken_feed, by = "iso3c") %>% 
+  full_join(., country_chicken_farm, by = "iso3c")
+
+chick_dat_nozeros<-full_join(country_chicken_nozeros, chick_consump, by = "iso3c") %>% 
+  full_join(., country_chicken_feed_nozeros, by = "iso3c") %>% 
+  full_join(., country_chicken_farm_nozeros, by = "iso3c")
+
+chick_dat_sum<-full_join(country_chicken_sum, chick_consump, by = "iso3c") %>% 
+  full_join(., country_chicken_feed_sum, by = "iso3c") %>% 
+  full_join(., country_chicken_farm_sum, by = "iso3c")
+```
+
+
+Salmon
+```{r}
+salmon_dat<-full_join(country_salmon, salmon_consump, by = "iso3c") %>% 
+  full_join(., country_salmon_feed, by = "iso3c") %>% 
+  full_join(., country_salmon_farm,by = "iso3c") 
+
+salmon_dat_nozeros<-full_join(country_salmon_nozeros, salmon_consump, by = "iso3c") %>% 
+  full_join(., country_salmon_feed_nozeros, by = "iso3c") %>% 
+  full_join(., country_salmon_farm_nozeros,by = "iso3c") 
+
+salmon_dat_sum<-full_join(country_salmon_sum, salmon_consump, by = "iso3c") %>% 
+  full_join(., country_salmon_feed_sum, by = "iso3c") %>% 
+  full_join(., country_salmon_farm_sum,by = "iso3c") 
+```
+
+# Plotting function
+
+```{r}
+consump_plot<-function(data, x, y){
+  ggplot(data, aes(y = y, x= x, label = labels))+
+  geom_point() +
+  geom_smooth(formula = y~x, method = "lm") +
+  #annotation_custom(, ymin = 2.5, ymax = 3, xmin = 15, xmax=18) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+  #xlab(xlabel) +
+  #ylab(ylabel) +
+  geom_text_repel()
+  
+}
+```
+
+
+# Chicken plots of food vs. CHI
+
+Chicken
+
+```{r}
+chick_dat<-chick_dat %>% 
+  mutate(labels = ifelse(total>0.5|food>3000000, iso3c, NA))
+
+consump_plot(chick_dat, chick_dat$food/1000000, chick_dat$total)
+```
+
+```{r}
+cor.test(chick_dat$total, chick_dat$food, method = "pearson")
+```
+```{r}
+chick_dat_nozeros<-chick_dat_nozeros %>% 
+  mutate(labels = ifelse(total>0.5|food>3000000, iso3c, NA))
+
+consump_plot(chick_dat_nozeros, chick_dat_nozeros$food/1000000, chick_dat_nozeros$total)
+```
+
+```{r}
+chick_dat_sum<-chick_dat_sum %>% 
+  mutate(labels = ifelse(total>5000|food>2000000, iso3c, NA))
+
+consump_plot(chick_dat_sum, chick_dat_sum$food/1000000, chick_dat_sum$total/10000)
+```
+
+```{r}
+cor.test(chick_dat_sum$total, chick_dat_sum$food, type = "pearson")
+```
+# Chicken feed pressures vs food
+
+```{r}
+chick_dat<-chick_dat %>% 
+  mutate(labels = ifelse(feed>0.1|food>3000000, iso3c, NA))
+
+consump_plot(chick_dat, chick_dat$food/1000000, chick_dat$feed)
+
+```
+```{r}
+chick_dat_nozeros<-chick_dat_nozeros %>% 
+  mutate(labels = ifelse(feed>0.1|food>3000000, iso3c, NA))
+
+consump_plot(chick_dat_nozeros, chick_dat_nozeros$food/1000000, chick_dat_nozeros$feed)
+```
+
+```{r}
+chick_dat_sum<-chick_dat_sum %>% 
+  mutate(labels = ifelse(feed>5000|food>1000000, iso3c, NA))
+
+consump_plot(chick_dat_sum, chick_dat_sum$food/1000000, chick_dat_sum$feed/10000)
+```
+
+```{r}
+cor.test(chick_dat$feed, chick_dat$food, type = "pearson")
+cor.test(chick_dat_sum$feed, chick_dat_sum$food, type = "pearson")
+```
+
+# Chicken farm pressures vs food
+
+```{r}
+chick_dat<-chick_dat %>% 
+  mutate(labels = ifelse(farm>0.5|food>3000000, iso3c, NA))
+
+consump_plot(chick_dat, chick_dat$food/1000000, chick_dat$farm)
+
+```
+```{r}
+chick_dat_nozeros<-chick_dat_nozeros %>% 
+  mutate(labels = ifelse(farm>0.5|food>3000000, iso3c, NA))
+
+consump_plot(chick_dat_nozeros, chick_dat_nozeros$food/1000000, chick_dat_nozeros$farm)
+
+```
+
+```{r}
+chick_dat_sum<-chick_dat_sum %>% 
+  mutate(labels = ifelse(farm>5000|food>1000000, iso3c, NA))
+
+consump_plot(chick_dat_sum, chick_dat_sum$food/1000000, chick_dat_sum$farm/1000)
+```
+
+```{r}
+cor.test(chick_dat$farm, chick_dat$food, type = "pearson")
+cor.test(chick_dat_sum$farm, chick_dat_sum$food, type = "pearson")
+```
+
+# Chicken CHI vs food supply
+Chicken
+
+```{r}
+chick_dat<-chick_dat %>% 
+  mutate(labels = ifelse(total>0.5|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat, chick_dat$food_supply, chick_dat$total)
+
+```
+
+```{r}
+cor.test(chick_dat$total, chick_dat$food_supply, method = "pearson")
+```
+```{r}
+chick_dat_nozeros<-chick_dat_nozeros %>% 
+  mutate(labels = ifelse(total>0.5|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat_nozeros, chick_dat_nozeros$food_supply, chick_dat_nozeros$total)
+
+```
+
+```{r}
+chick_dat_sum<-chick_dat_sum %>% 
+  mutate(labels = ifelse(total>5000|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat_sum, chick_dat_sum$food_supply, chick_dat_sum$total/10000)
+
+```
+
+```{r}
+cor.test(chick_dat_sum$total, chick_dat_sum$food_supply, type = "pearson")
+```
+# Chicken feed pressures vs food
+
+```{r}
+chick_dat<-chick_dat %>% 
+  mutate(labels = ifelse(feed>0.1|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat, chick_dat$food_supply, chick_dat$feed)
+
+```
+
+```{r}
+chick_dat_nozeros<-chick_dat_nozeros %>% 
+  mutate(labels = ifelse(feed>0.1|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat_nozeros, chick_dat_nozeros$food_supply, chick_dat_nozeros$feed)
+
+```
+
+```{r}
+chick_dat_sum<-chick_dat_sum %>% 
+  mutate(labels = ifelse(feed>5000|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat_sum, chick_dat_sum$food_supply, chick_dat_sum$feed/10000)
+
+```
+
+```{r}
+cor.test(chick_dat$feed, chick_dat$food_supply, type = "pearson")
+cor.test(chick_dat_sum$feed, chick_dat_sum$food_supply, type = "pearson")
+```
+
+# Chicken farm pressures vs food
+
+```{r}
+chick_dat<-chick_dat %>% 
+  mutate(labels = ifelse(farm>0.5|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat, chick_dat$food_supply, chick_dat$farm)
+
+```
+```{r}
+chick_dat_nozeros<-chick_dat_nozeros %>% 
+  mutate(labels = ifelse(farm>0.5|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat_nozeros, chick_dat_nozeros$food_supply, chick_dat_nozeros$farm)
+
+```
+
+```{r}
+chick_dat_sum<-chick_dat_sum %>% 
+  mutate(labels = ifelse(farm>5000|food_supply>50, iso3c, NA))
+
+consump_plot(chick_dat_sum, chick_dat_sum$food_supply, chick_dat_sum$farm/1000)
+```
+
+```{r}
+cor.test(chick_dat$farm, chick_dat$food_supply, type = "pearson")
+cor.test(chick_dat_sum$farm, chick_dat_sum$food_supply, type = "pearson")
+```
+
+
+# Salmon CHI vs food
+
+```{r}
+salmon_dat <- salmon_dat %>% 
+  mutate(labels = ifelse(total>0.03|food>1000000, iso3c, NA))
+
+consump_plot(salmon_dat, salmon_dat$food/1000000, salmon_dat$total)
+
+```
+
+```{r}
+salmon_dat_nozeros <- salmon_dat_nozeros %>% 
+  mutate(labels = ifelse(total>0.03|food>1000000, iso3c, NA))
+
+consump_plot(salmon_dat_nozeros, salmon_dat_nozeros$food/1000000, salmon_dat_nozeros$total)
+
+```
+
+```{r}
+salmon_dat_sum <- salmon_dat_sum %>% 
+  mutate(labels = ifelse(total>300|food>200000, iso3c, NA))
+
+consump_plot(salmon_dat_sum, salmon_dat_sum$food/100000, salmon_dat_sum$total/1000)
+
+```
+
+```{r}
+cor.test(salmon_dat$total, salmon_dat$food, type = "pearson")
+cor.test(salmon_dat_sum$total, salmon_dat_sum$food, type = "pearson")
+```
+
+# Salmon feed CHI vs. food 
+
+```{r}
+salmon_dat <- salmon_dat %>% 
+  mutate(labels = ifelse(feed>0.03|food>200000, iso3c, NA))
+
+consump_plot(salmon_dat, salmon_dat$food/1000000, salmon_dat$feed)
+
+```
+```{r}
+salmon_dat_nozeros <- salmon_dat_nozeros %>% 
+  mutate(labels = ifelse(feed>0.03|food>200000, iso3c, NA))
+
+consump_plot(salmon_dat_nozeros, salmon_dat_nozeros$food/1000000, salmon_dat_nozeros$feed)
+
+```
+
+```{r}
+salmon_dat_sum <- salmon_dat_sum %>% 
+  mutate(labels = ifelse(feed>1000|food>20000, iso3c, NA))
+
+consump_plot(salmon_dat_sum, salmon_dat_sum$food/100000, salmon_dat_sum$feed/1000)
+
+```
+
+
+```{r}
+cor.test(salmon_dat$food, salmon_dat$feed, type = "pearson")
+cor.test(salmon_dat_sum$food, salmon_dat_sum$feed, type = "pearson")
+```
+# Salmon farm CHI vs. food 
+
+```{r}
+salmon_dat <- salmon_dat %>% 
+  mutate(labels = ifelse(farm>0.01|food>200000, iso3c, NA))
+
+consump_plot(salmon_dat, salmon_dat$food/1000000, salmon_dat$farm)
+
+```
+```{r}
+salmon_dat_nozeros <- salmon_dat_nozeros %>% 
+  mutate(labels = ifelse(farm>0.01|food>200000, iso3c, NA))
+
+consump_plot(salmon_dat_nozeros, salmon_dat_nozeros$food/1000000, salmon_dat_nozeros$farm)
+
+```
+
+
+```{r}
+salmon_dat_sum <- salmon_dat_sum %>% 
+  mutate(labels = ifelse(farm>50|food>200000, iso3c, NA))
+
+consump_plot(salmon_dat_sum, salmon_dat_sum$food/100000, salmon_dat_sum$farm/100)
+
+```
+
+```{r}
+cor.test(salmon_dat$food, salmon_dat$farm, type = "pearson")
+cor.test(salmon_dat_sum$food, salmon_dat_sum$farm, type = "pearson")
+```
+
+# Salmon CHI vs. Food supply
+
+```{r}
+salmon_dat <- salmon_dat %>% 
+  mutate(labels = ifelse(total>0.03|food_supply>5, iso3c, NA))
+
+consump_plot(salmon_dat, salmon_dat$food_supply, salmon_dat$total)
+
+```
+```{r}
+salmon_dat_nozeros <- salmon_dat_nozeros %>% 
+  mutate(labels = ifelse(total>0.03|food_supply>5, iso3c, NA))
+
+consump_plot(salmon_dat_nozeros, salmon_dat_nozeros$food_supply, salmon_dat_nozeros$total)
+
+```
+
+```{r}
+salmon_dat_sum <- salmon_dat_sum %>% 
+  mutate(labels = ifelse(total>300|food_supply>5, iso3c, NA))
+
+consump_plot(salmon_dat_sum, salmon_dat_sum$food_supply, salmon_dat_sum$total/1000)
+
+```
+
+```{r}
+cor.test(salmon_dat$total, salmon_dat$food_supply, type = "pearson")
+cor.test(salmon_dat_sum$total, salmon_dat_sum$food_supply, type = "pearson")
+```
+
+# Salmon feed CHI vs. food 
+
+```{r}
+salmon_dat <- salmon_dat %>% 
+  mutate(labels = ifelse(feed>0.03|food_supply>10, iso3c, NA))
+
+consump_plot(salmon_dat, salmon_dat$food_supply, salmon_dat$feed)
+```
+
+```{r}
+salmon_dat_nozeros <- salmon_dat_nozeros %>% 
+  mutate(labels = ifelse(feed>0.03|food_supply>10, iso3c, NA))
+
+consump_plot(salmon_dat_nozeros, salmon_dat_nozeros$food_supply, salmon_dat_nozeros$feed)
+```
+
+
+```{r}
+salmon_dat_sum <- salmon_dat_sum %>% 
+  mutate(labels = ifelse(feed>100|food_supply>10, iso3c, NA))
+
+consump_plot(salmon_dat_sum, salmon_dat_sum$food_supply, salmon_dat_sum$feed/1000)
+
+```
+
+
+```{r}
+cor.test(salmon_dat$food_supply, salmon_dat$feed, type = "pearson")
+cor.test(salmon_dat_sum$food_supply, salmon_dat_sum$feed, type = "pearson")
+```
+# Salmon farm CHI vs. food 
+
+```{r}
+salmon_dat <- salmon_dat %>% 
+  mutate(labels = ifelse(farm>0.01|food_supply>5, iso3c, NA))
+
+consump_plot(salmon_dat, salmon_dat$food_supply, salmon_dat$farm)
+
+```
+```{r}
+salmon_dat_nozeros <- salmon_dat_nozeros  %>% 
+  mutate(labels = ifelse(farm>0.01|food_supply>5, iso3c, NA))
+
+consump_plot(salmon_dat_nozeros , salmon_dat_nozeros $food_supply, salmon_dat_nozeros $farm)
+
+```
+
+
+```{r}
+salmon_dat_sum <- salmon_dat_sum %>% 
+  mutate(labels = ifelse(farm>50|food_supply>5, iso3c, NA))
+
+consump_plot(salmon_dat_sum, salmon_dat_sum$food_supply, salmon_dat_sum$farm/100)
+```
+
+```{r}
+cor.test(salmon_dat$farm, salmon_dat$food_supply, type = "pearson")
+cor.test(salmon_dat_sum$food_supply, salmon_dat_sum$farm, type = "pearson")
+```

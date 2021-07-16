@@ -1,0 +1,97 @@
+---
+title: "Paper summary stats"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+
+library(tidyverse)
+library(here)
+library(raster)
+library(sp)
+```
+
+
+## sum of pressures
+```{r}
+
+read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv")) %>%
+filter(iso3c == "USA" & animal_system=="broiler", stressor=="disturbance")
+
+read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv")) %>%
+  filter(source != "marinefish") %>%
+  group_by(animal_system, source, stressor) %>%
+  summarize(total = sum(value)) %>%
+  ungroup()
+
+```
+
+
+# production summary
+broilers
+```{r}
+
+chicken_location <- read_csv("/home/shares/food-systems/Food_footprint/dataprep/chicken_farm/chickens_spatial_df_gf.csv", col_types = "ddcccddddccc") 
+conversions <- read_csv(here("chicken_farm/data/chicken_conversion_values.csv"))
+
+chicken_production <- chicken_location %>%
+  group_by(iso3c, Country) %>%
+  summarize(broiler_count = sum(broiler_count, na.rm=TRUE),
+            broiler_slaughter_wt_tonnes = sum(tonnes_broiler_production, na.rm=TRUE)) %>%
+  ungroup() %>%
+  mutate(broiler_carcass_wt_tonnes = broiler_slaughter_wt_tonnes * conversions$value[conversions$name=="live_to_carcass_wt"]) %>%
+  mutate(protein_tonnes = broiler_carcass_wt_tonnes * conversions$value[conversions$name=="carcass_to_protein"]) %>%
+  mutate(kcal = broiler_carcass_wt_tonnes * conversions$value[conversions$name=="kcal_per_tonne_carcass_wt"]) %>%
+  filter(!is.na(Country))
+
+summary(chicken_production)
+filter(chicken_production, broiler_slaughter_wt_tonnes>0 & protein_tonnes==0)
+filter(chicken_production, is.na(Country))
+
+write_csv(chicken_production, here("_analysis/data/broiler_production.csv"))
+
+check <- read_csv(here("_analysis/data/broiler_production.csv")) 
+sum(check$broiler_carcass_wt_tonnes)
+
+fao_meat <- read_csv(here("chicken_farm/data/FAOSTAT_data_9-23-2019_meat_chickens_standardized.csv")) %>%
+  filter(Year==2016)
+sum(fao_meat$tonnes_slaughtered)
+```
+
+
+
+## Salmon production
+```{r}
+salmon <- read_csv(here("salmon_farm/data/fao_mariculture_salmon.csv")) %>%
+  filter(year == 2016) %>%
+  mutate(salmon_edible_wt_tonnes = fao_tonnes_production * conversions$value[conversions$name=="salmon_live_wt_raw_edible_wt"]) %>%
+  mutate(protein_tonnes = salmon_edible_wt_tonnes * conversions$value[conversions$name=="salmon_edible_wt_to_protein"]) %>%
+  mutate(kcal = salmon_edible_wt_tonnes * conversions$value[conversions$name=="salmon_kcal_per_tonne_edible_wt"])
+  
+write_csv(salmon, here("_analysis/data/salmon_production.csv"))
+```
+
+
+### rescaled
+```{r}
+rescaled <- read_csv("_analysis/data/zonal_extract/average_rescaled_pressures_country.csv") %>%
+  group_by(Country) %>%
+  summarize(total_stress = sum(value, na.rm=TRUE))
+
+```
+
+
+### feed consumption
+```{r}
+broiler <- read_csv(here("feed_consumption/data/broiler_tonnes_consumed_global.csv"))
+sum(broiler$tonnes_crop)
+
+salmon <- read_csv(here("feed_consumption/data/salmon_tonnes_consumed_global.csv"))
+sum(salmon$tonnes_crop)
+
+sum(broiler$tonnes_crop)/sum(salmon$tonnes_crop)
+
+```

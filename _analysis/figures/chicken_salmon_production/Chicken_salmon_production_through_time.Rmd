@@ -1,0 +1,122 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "12/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(png)
+library(grid)
+library(RCurl)
+library(here)
+```
+
+# Supplementary Figure of chicken vs. salmon production through time
+
+```{r}
+broiler_test<-read.csv("/home/kuempel/food_chicken_salmon/_analysis/data/broiler_production.csv")
+
+salmon_test<-read.csv("/home/kuempel/food_chicken_salmon/_analysis/data/salmon_production.csv")
+
+sum(broiler_test$broiler_slaughter_wt_tonnes,na.rm = T)
+sum(salmon_test$fao_tonnes_production,na.rm = T)
+
+conv<-read.csv(here("chicken_farm/data/chicken_conversion_values.csv"))
+```
+
+
+## Broiler chicken production data
+```{r}
+#chicken<-read.csv("/home/kuempel/food_chicken_salmon/_analysis/figures/chicken_salmon_production/Chicken_meat_num_individuals_all_years.csv", na.strings = "") #%>% 
+
+chicken<-read.csv("/home/kuempel/food_chicken_salmon/_analysis/figures/chicken_salmon_production/chicken-meat-production.csv") %>% 
+  filter(!is.na(Code) == T,
+         !Code == "OWID_USS",
+         !Code == "OWID_WRL",
+         !Code == "OWID_YGS",
+         !Code == "OWID_SRM",
+         !Code == "OWID_PYA",
+         !Code == "OWID_MNS",
+         !Code == "OWID_CZS",
+         !Code == "") %>% 
+  rename(Production = Livestock.Primary...Meat..chicken...1058...Production...5510...tonnes..tonnes.) %>% 
+  group_by(Year) %>% 
+  summarise(Total_prod = sum(Production)) %>% 
+  mutate(animal_type = "chicken",
+         Slaught_tonnes = Total_prod * 1.35) %>% 
+  dplyr::select(Year, Slaught_tonnes, animal_type) %>% 
+  rename(Total_prod = Slaught_tonnes)
+  #filter()
+
+chicken[chicken$Year == 2016,]
+```
+
+
+## Salmon aquaculture production data
+
+```{r}
+salmon<-read.csv("/home/shares/food-systems/Aquaculture_mapping/Data/FAO/Clean_FAO_production_Nov2018.csv", check.names = T, na.strings = "") %>% 
+    dplyr::select(-Unit, -Aquaculture_area) %>% 
+  filter(grepl("salmon",Species)) 
+
+cols.num <- c("X1950","X1951", "X1952", "X1953", "X1954", "X1955", "X1956", "X1957", "X1958", "X1959", "X1960", "X1961", "X1962", "X1963", "X1964","X1965","X1966","X1967","X1968","X1969","X1970","X1971","X1972","X1973","X1974","X1975","X1976","X1977","X1978","X1979","X1980","X1981", "X1982","X1983", "X1984", "X1985","X1986","X1987","X1988","X1989","X1990","X1991","X1992","X1993","X1994","X1995","X1996", "X1997","X1998","X1999","X2000", "X2001","X2002","X2003", "X2004", "X2005","X2006","X2007","X2008","X2009", "X2010","X2011","X2012","X2013","X2014","X2015","X2016")
+salmon[cols.num] <- sapply(salmon[cols.num],as.character)
+salmon[cols.num] <- sapply(salmon[cols.num],as.numeric)
+sapply(salmon, class)
+
+
+salmon<- salmon%>% 
+   pivot_longer(., cols = starts_with("X"), names_to = "Year",values_to = "Production", names_ptypes = list(Year = character())) %>% 
+  mutate(Year = as.numeric(gsub("X", "", Year)),
+         Production = replace_na(Production, 0)) %>% 
+  group_by(Year) %>% 
+  summarise(Total_prod = sum(Production, na.rm = T)) %>% 
+  mutate(animal_type = "salmon")
+```
+
+# PNGs
+
+```{r}
+chickenurl<-"http://phylopic.org/assets/images/submissions/b2de15b4-bcf1-45ad-99ff-c2b9204baa3a.128.png"
+chicken_logo<-readPNG(getURLContent(chickenurl))
+chicken_png <- rasterGrob(chicken_logo)
+```
+
+```{r}
+salmonurl<-"http://phylopic.org/assets/images/submissions/3c098bb8-4158-4777-b567-80e48049409c.512.png"
+salmon_logo <- readPNG(getURLContent(salmonurl))
+salmon_png <- rasterGrob(salmon_logo)
+```
+
+## Plot
+
+```{r}
+all_dat<-rbind(chicken, salmon) %>% 
+  filter(Year >=1961)
+
+chick_salmon<-ggplot(all_dat, aes(x = Year, y = Total_prod/1000000, color = animal_type)) +
+  geom_line(size = 1) +
+  annotation_custom(salmon_png, xmin = 2005, xmax = 2015, ymin = 0, ymax=30) +
+  annotation_custom(chicken_png, xmin = 2007, xmax = 2013, ymin = 125, ymax=155) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"),
+legend.position = "none") +
+  ylab("Production (millions of tonnes)") +
+  labs("") +
+  scale_color_manual(values=c('#EAA146',"#468FEA"))
+
+chick_salmon
+```
+```{r}
+png(here("_analysis", "figures","chicken_salmon_production", "chicken_salmon_production.png"), width = 10, height = 8, units = "in", res = 300)
+chick_salmon
+dev.off()
+```
+

@@ -1,0 +1,381 @@
+---
+title: "stressor_map_binned"
+author: "Juliette"
+date: "4/20/2020"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+```
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(raster)
+library(tidyverse)
+library(sf)
+library("rnaturalearth")
+library(rgdal)
+
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+```
+
+
+Reclassify to 4 categories 
+Chicken
+```{r}
+chicken <- raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/rescaled/cumulative_stress/broilers_cumulative_stress.tif")
+
+chicken_disturb<-raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/system_stressor/broiler_disturbance_per_cell.tif")
+
+chicken_df<-rasterToPoints(chicken) %>% 
+  as.data.frame()
+
+
+
+chicken_disturb_df<-rasterToPoints(chicken_disturb) %>% 
+  as.data.frame()
+
+disturb_quant<-full_join(chicken_df, chicken_disturb_df)
+
+chicken_df_no0<-chicken_df %>% 
+  filter(!broilers_cumulative_stress<=0)
+
+##remove NAs just for quantiles
+chicken_quant <- chicken
+values(chicken_quant)[values(chicken_quant) <=0 ] = NA
+
+quant_0 <- quantile(chicken_quant, 0) #7.132593e-20  
+quant_45 <- quantile(chicken_quant, 0.45) #1.62261e-05 
+quant_90 <- quantile(chicken_quant, 0.90) #0.3265311
+
+length(which(chicken_df$broilers_cumulative_stress==0))/nrow(chicken_df)
+length(which(chicken_df$broilers_cumulative_stress<quant_45))/nrow(chicken_df)
+
+
+sub_disturb_quant<- disturb_quant %>% 
+  filter(broilers_cumulative_stress<quant_45)
+
+test<- disturb_quant %>% 
+  filter(broilers_cumulative_stress>quant_45)
+
+
+max <- maxValue(chicken_quant)
+## reclassify to 4 bins
+matrix <-c(0, 0, 0,
+           0, quant_45, 1,
+           quant_45, quant_90, 2, 
+           quant_90, max, 3)
+
+
+matrix_chicken <- matrix(matrix, ncol=3, byrow=TRUE)
+
+recl_chicken <- reclassify(chicken, matrix_chicken)
+plot(recl_chicken)
+```
+
+# Cell count
+
+```{r}
+recl_chicken_df<-rasterToPoints(recl_chicken) %>% 
+  as.data.frame()
+
+length(which(recl_chicken_df$broilers_cumulative_stress == 3))
+```
+
+Salmon
+```{r}
+salmon <- raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/rescaled/cumulative_stress/salmon_cumulative_stress.tif")
+
+salmon_df<-rasterToPoints(salmon) %>% 
+  as.data.frame()
+
+salmon_df_no0<-salmon_df %>% 
+  filter(!salmon_cumulative_stress<=0)
+
+
+##remove NAs just for quantiles
+salmon_quant <- salmon
+values(salmon_quant)[values(salmon_quant) <=0 ] = NA
+
+quant_0 <- quantile(salmon_quant, 0) # 1.463664e-12 
+quant_45 <- quantile(salmon_quant, 0.45) #2.30123e-05 
+quant_90 <- quantile(salmon_quant, 0.90) #0.008480698
+max <- maxValue(salmon_quant)
+
+## reclassify to 4 bins
+matrix <-c(0, 0, 0,
+           0, quant_45 , 1,
+           quant_45 , quant_90 , 2, 
+           quant_90 , max, 3)
+
+
+matrix_salmon <- matrix(matrix, ncol=3, byrow=TRUE)
+
+recl_salmon <- reclassify(salmon, matrix_salmon)
+
+## what do these look like binned
+plot(recl_salmon)
+plot(recl_chicken)
+unique(recl_salmon)
+
+```
+
+```{r}
+recl_salmon_df<-rasterToPoints(recl_salmon) %>% 
+  as.data.frame()
+
+length(which(recl_salmon_df$salmon_cumulative_stress == 3))
+```
+Combine the two to end up with 16 different categories
+
+```{r}
+
+salmon_df <- as.data.frame(recl_salmon, xy= TRUE)
+chicken_df <- as.data.frame(recl_chicken, xy = TRUE)
+
+combo <- left_join(salmon_df, chicken_df)
+
+combo_assign <- combo %>% 
+  rename(salmon = salmon_cumulative_stress) %>% 
+  rename(chicken = broilers_cumulative_stress) %>% 
+  rowwise() %>% 
+  mutate(color_assign = ifelse(salmon == 0 & chicken == 0, 13,
+                        ifelse(salmon == 0 & chicken == 1, 9,
+                        ifelse(salmon == 0 & chicken == 2, 5,
+                        ifelse(salmon == 0 & chicken == 3, 1,
+
+                        ifelse(salmon == 1 & chicken == 0, 14, 
+                        ifelse(salmon == 1 & chicken == 1, 10,
+                        ifelse(salmon == 1 & chicken == 2, 6,
+                        ifelse(salmon == 1 & chicken == 3, 2,
+
+                        ifelse(salmon == 2 & chicken == 0, 15,
+                        ifelse(salmon == 2 & chicken == 1, 11,
+                        ifelse(salmon == 2 & chicken == 2, 7,
+                        ifelse(salmon == 2 & chicken == 3, 3,
+
+                        ifelse(salmon == 3 & chicken == 0, 16,
+                        ifelse(salmon == 3 & chicken == 1, 12,
+                        ifelse(salmon == 3 & chicken == 2, 8, 
+                        ifelse(salmon == 3 & chicken == 3, 4,
+
+                             NA)))))))))))))))))
+
+rast_combo_assign <- combo_assign %>% 
+  dplyr::select(x,y,color_assign) %>% 
+  rasterFromXYZ(crs = gall_peters)
+
+##look at them as a gut check that it works
+plot(recl_chicken)
+plot(recl_salmon)
+plot(rast_combo_assign)
+#length(unique(combo_assign$color_assign))
+#unique(combo_assign$color_assign))
+
+```
+
+
+```{r}
+col_cont <- c("#E42879", "#DA4C93", "#9F406E", "#561276", 
+         "#F097C9", "#BB6B95", "#8e29bd", "#5e9e90", 
+         "#F6CEE2", "#BF87DA", "#95BFC0", "#4dc4ac",
+         "#F9F9F91A", "#D0EBE5", "#89D8C8", "#048481")
+
+col_discrete <- c("1" = "#E42879",
+                     "2" = "#DA4C93",
+                     "3" = "#9F406E",
+                     "4" = "#561276",
+                     "5" = "#F097C9",
+                     "6" =  "#BB6B95",
+                     "7" = "#8e29bd",
+                     "8" = "#5e9e90",
+                     "9" = "#F6CEE2",
+                     "10" = "#BF87DA",
+                     "11" = "#95BFC0",
+                     "12" = "#4dc4ac", 
+                     "13" = "#F9F9F91A", #white
+                     "14" = "#D0EBE5", 
+                     "15" = "#89D8C8",
+                     "16" = "#048481")  
+
+# Plot only salmon pressures
+#14,15,16
+#col_cont <- c("#F9F9F91A", "#F9F9F91A", "#F9F9F91A", "#F9F9F91A", 
+#         "#F9F9F91A", "#F9F9F91A", "#F9F9F91A", "#F9F9F91A", 
+#         "#F9F9F91A", "#F9F9F91A", "#F9F9F91A", "#F9F9F91A",
+#         "#F9F9F91A", "#D0EBE5", "#89D8C8", "#048481")
+
+# Plot only chicken pressures
+# 9,5,1
+#col_cont <- c("#E42879", "#F9F9F91A", "#F9F9F91A", "#F9F9F91A", 
+#         "#F097C9", "#F9F9F91A", "#F9F9F91A", "#F9F9F91A", 
+#         "#F6CEE2", "#F9F9F91A", "#F9F9F91A", "#F9F9F91A",
+#         "#F9F9F91A","#F9F9F91A","#F9F9F91A", "#F9F9F91A")
+```
+
+
+Map the raster with the color palette
+```{r}
+cuts <- c(0:16) #set breaks
+  
+par(mar=c(1,1,1,1))
+plot <- raster::plot(rast_combo_assign, breaks=cuts, col=col_cont, add = T)
+```
+
+
+Making legend
+```{r}
+legend <- read_csv(here("_analysis/figures/overlap_map/data/legend_values.csv")) %>% 
+  mutate(value = as.character(value))
+
+legend_graph <- ggplot(data = legend, aes(x = salmon, y = chicken)) +
+  geom_tile(aes(fill = value)) +
+  theme_minimal() +
+  scale_fill_manual("value", values=col_discrete)+
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.grid.minor = element_blank(),
+        text = element_text(size=15))
+legend_graph
+ggsave("_analysis/overlap_map/outputs/overlap_legend.jpg", width=5, height=3, dpi=300)
+  
+```
+
+Overlay and save the raster with land outlines
+```{r}
+
+land <- ne_countries(scale = "medium", returnclass = "sp") 
+land <- land[!land$sov_a3 == "ATA",]
+land <- st_as_sf(land)
+land <- st_transform(land, crs=gall_peters)
+land <- as(land, "Spatial")
+plot(land)
+
+grDevices::png(here("_analysis/figures/overlap_map/outputs/overlap_map.png"), res=500, width=6, height=3, units = "in")
+par(oma=c(1,1,1,0)) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 0), new=TRUE)
+
+plot(rast_combo_assign, 
+     breaks=cuts, 
+     col=col_cont,
+     axes=FALSE,
+     box=FALSE,
+    # add=TRUE,
+     legend=FALSE,
+     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1))
+
+plot(land, border="#2F4F4F" , lwd=0.3, add=TRUE)
+
+grDevices::dev.off()
+
+```
+
+Create the bar graph for the total number of cells 
+
+maybe factor order levels with the 3 chicken categories on the left only chicken no salmon, and then the three only salmon categories ont he right and then the mix in the middle
+
+```{r}
+cell_count <- combo_assign %>% 
+  count(color_assign) %>% 
+  rename(number_cells = n) %>% 
+  filter(color_assign != is.na(color_assign)) %>% 
+  mutate(category = case_when(color_assign == 1 ~ "high chicken\nzero salmon",
+                              color_assign == 2 ~ "high chicken\nlow salmon",
+                              color_assign == 3 ~ "high chicken\nmedium salmon",
+                              color_assign == 4 ~ "high chicken\nhigh salmon",
+                              color_assign == 5 ~ "medium chicken\nzero salmon",
+                              color_assign == 6 ~ "medium chicken\nlow salmon",
+                              color_assign == 7 ~ "medium chicken\nmedium salmon",
+                              color_assign == 8 ~ "medium chicken\nhigh salmon",
+                              color_assign == 9 ~ "low chicken\nzero salmon",
+                              color_assign == 10 ~ "low chicken\nlow salmon",
+                              color_assign == 11 ~ "low chicken\nmedium salmon",
+                              color_assign == 12 ~ "low chicken\nhigh salmon",
+                              color_assign == 13 ~ "zero chicken\nzero salmon",
+                              color_assign == 14 ~ "zero chicken\nlow salmon",
+                              color_assign == 15 ~ "zero chicken\nmedium salmon",
+                              color_assign == 16 ~ "zero chicken\nhigh salmon")) %>% 
+  mutate(category = as.factor(category)) %>% 
+  #filter(color_assign != 13) %>% 
+  mutate(color_assign = as.character(color_assign))
+
+cell_count<-cell_count %>% 
+  mutate(prop_cells = number_cells/sum(cell_count$number_cells))
+
+
+bar_graph <- ggplot(cell_count, aes(x = category, y = number_cells/1000000, fill= color_assign))+
+  geom_bar(stat = "identity", colour="black") +
+  theme_minimal()+
+  ylab("Number of cells (millions)")+
+  xlab("")+
+  ylim(c(0,5))+
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        text = element_text(size=8),
+        axis.text.x = element_text(angle = 90, hjust=0))+
+  scale_fill_manual("color_assign", values=col_discrete)
+ 
+bar_graph
+
+ggsave("_analysis/figures/overlap_map/outputs/bar_graph_with_zero.jpg",height = 5, width = 6,  dpi=300) 
+#ggsave("_analysis/int_figs/bar_graph_no_zero.jpg", height = 2, width = 12, dpi=300) 
+ 
+write.csv(cell_count, here("_analysis/figures/overlap_map/data/cell_count.csv"))
+```
+
+```{r}
+# Any overlap of chicken and salmon
+
+prop_overlap<- cell_count %>% 
+  filter(!category %in% as.factor(c("high chicken\nzero salmon", "medium chicken\nzero salmon", "low chicken\nzero salmon", "zero chicken\nzero salmon", "zero chicken\nmedium salmon", "zero chicken\nhigh salmon")))
+```
+
+
+Create a circle grid plot with the circles the size of the proportion of cells 
+**make sure you know what the cell count is including. zero/zero or not
+```{r}
+circle_legend <- legend %>% 
+  rename(color_assign = value) %>% 
+  left_join(cell_count) %>% 
+  mutate(color_assign = as.factor(color_assign))
+
+circle_legend_plot <- ggplot(circle_legend, aes(x= salmon, y=chicken)) +
+  geom_point(aes(size = prop_cells, color=color_assign)) +
+    geom_point(aes(size = prop_cells, color=color_assign), shape=21, color="gray") +
+  theme_minimal() +
+   theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "none",
+        axis.text.x = element_text(angle=360, size=12),
+          axis.text.y = element_text(angle=90, size=12, vjust=-2, hjust=0.4),
+        axis.title.x = element_text(size = 13),
+        axis.title.y = element_text(size = 13)) +
+  scale_size_continuous(range = c(5, 36)) +
+  scale_color_manual("color_assign", values=col_discrete) +
+  scale_x_continuous(breaks=c(0,1,2,3), labels=c("Zero", "0 to 45th",
+                              "45 to 90th", ">90th"), limits=c(-0.5, 3.5), name="Salmon quantile") +
+  scale_y_continuous(breaks=c(0,1,2,3), labels=c("Zero", "0 to 45th",
+                              "45 to 90th", ">90th"), limits=c(-0.5, 3.5), name="Chicken quantile")
+
+circle_legend_plot
+
+ggsave("_analysis/figures/overlap_map/outputs/overlap_circle_legend.jpg", width=6, height=4, dpi=300) 
+```
+
+
+
+
+
+
+
+
+

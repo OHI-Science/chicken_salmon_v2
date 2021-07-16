@@ -1,0 +1,83 @@
+---
+title: "palette_options"
+author: "Juliette"
+date: "4/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+Diagonal purple diverging color pallette
+1. Juliette version 4/20
+```{r}
+jv_pal_contin <- c("#AF0586", "#9D1093", "#A52EAF", "#733EA4", "#A54D90", "#C065B9", "#915BC4", "#3B0580", "#D1A4C6", "#C8B3DB", "#AE87D3", "#0F0580", "#FFFFFF", "#9DA9CD", "#5B6FAC", "#52380")
+
+jv_pal_discrete <- c("1" = "#AF0586",
+                    "2" = "#9D1093",
+                     "3" = "#A52EAF",
+                     "4" = "#733EA4",
+                     "5" = "#A54D90",
+                     "6" =  "#C065B9",
+                     "7" = "#915BC4",
+                     "8" = "#3B0580",
+                     "9" = "#D1A4C6",
+                     "10" = "#C8B3DB",
+                     "11" = "#AE87D3",
+                     "12" = "#0F0580", 
+                     "13" = "#FFFFFF", 
+                     "14" = "#9DA9CD", 
+                     "15" = "#5B6FAC",
+                     "16" = "#052380")  
+
+```
+
+
+2. Mel from 4/21
+```{r}
+mel_pal_contin <- c("#C864A9", "#B064A6", "#9A64A3", "#52295E", "#DA93C7", "#B983BE", "#9773B3", "#8272B0", "#EAC6E0", "#B1A5D4", "#9894CA", "#8083C0", "#F9F9F9", "#CFD8EC", "#A6B7DF", "#7E94D0")
+
+mel_pal_discrete <- c("1" = "#C864A9",
+                     "2" = "#B064A6",
+                     "3" = "#9A64A3",
+                     "4" = "#52295E",
+                     "5" = "#DA93C7",
+                     "6" =  "#B983BE",
+                     "7" = "#9773B3",
+                     "8" = "#8272B0",
+                     "9" = "#EAC6E0",
+                     "10" = "#B1A5D4",
+                     "11" = "#9894CA",
+                     "12" = "#8083C0", 
+                     "13" = "#F9F9F9", 
+                     "14" = "#CFD8EC", 
+                     "15" = "#A6B7DF",
+                     "16" = "#7E94D0")  
+
+```
+
+
+4/22
+
+912459
+
+```{r}
+library(scales) 
+
+col <- c("#E42879", "#DA4C93", "#9F406E", "#561276", 
+         "#F097C9", "#BB6B95", "#8e29bd", "#5e9e90", 
+         "#F6CEE2", "#BF87DA", "#95BFC0", "#4dc4ac",
+         "#FEFEFE", "#D0EBE5", "#89D8C8", "#048481")
+
+
+show_col(col)
+
+```
+
+
+
+
+

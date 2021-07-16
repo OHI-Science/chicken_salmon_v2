@@ -1,0 +1,106 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "27/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(rworldmap)
+library(ggmap)
+library(tidyverse)
+library(RColorBrewer)
+```
+
+# Plotting function
+```{r}
+global_maps<-function(x,y){
+mapDevice<-c()
+sPDF <- getMap()
+sPDF<-sPDF[!sPDF$ISO_A3 == "ATA",]
+merged<- merge(sPDF, x, by = "ISO_A3", all.x = T) #you may need to change the “by” argument here
+numCats <- 100 #set number of categories to use
+palette = colorRampPalette(rev(brewer.pal(n=9, name= 'Spectral')))(numCats)
+mapCountryData(merged,
+               nameColumnToPlot="country_farm_feed_chi",  #change to whatever column name you want to plot
+               catMethod="fixedWidth",
+               numCats=numCats,
+               colourPalette=palette,
+               mapTitle = y,
+               missingCountryCol = "grey", addLegend = T)
+}
+```
+
+# Data to plot
+
+Average
+```{r}
+#country_average<-read.csv(here("_analysis/figures/Country_results/Broiler_country_cpi.csv.csv"))
+
+#country_chicken<- country_average %>% 
+#  filter(animal_system == "broiler") %>% 
+#  group_by(iso3c, Country) %>% 
+#  summarise(CPI = sum(value, na.rm = T)) %>% 
+#  rename(ISO_A3 = iso3c)
+
+#country_salmon<- country_average %>% 
+#  filter(animal_system == "salmon") %>% 
+#  group_by(iso3c, Country) %>% 
+#  summarise(CPI = sum(value, na.rm = T)) %>% 
+#  rename(ISO_A3 = iso3c)
+
+country_chicken<-read.csv(here("_analysis/figures/Country_results/Broiler_country_cpi.csv")) %>% 
+  rename(ISO_A3 = iso3c)
+
+country_salmon<-read.csv(here("_analysis/figures/Country_results/Salmon_country_cpi.csv"))%>% 
+  rename(ISO_A3 = iso3c)
+
+country_chicken_km2<-read.csv(here("_analysis/figures/Country_results/Broiler_country_cpi_km2.csv")) %>% 
+  rename(ISO_A3 = iso3c) %>% 
+  dplyr::select(ISO_A3, avg_cum_stress_km2) %>% 
+  rename(country_farm_feed_chi = avg_cum_stress_km2)
+
+country_salmon_km2<-read.csv(here("_analysis/figures/Country_results/Salmon_country_cpi_km2.csv"))%>% 
+  rename(ISO_A3 = iso3c) %>% 
+  dplyr::select(ISO_A3, avg_cum_stress_km2) %>% 
+  rename(country_farm_feed_chi = avg_cum_stress_km2)
+
+```
+
+
+
+# CPI Plot
+```{r}
+png(here("_analysis", "figures","Country_results", "chicken_cpi.png"), width = 15, height = 8, units = "in", res = 300)
+
+global_maps(country_chicken, "Broiler CPI")
+
+dev.off()
+```
+```{r}
+png(here("_analysis", "figures","Country_results", "salmon_cpi.png"), width = 15, height = 8, units = "in", res = 300)
+global_maps(country_salmon, "Salmon Average")
+
+dev.off()
+```
+
+# CPI/km2 plot
+```{r}
+png(here("_analysis", "figures","Country_results", "chicken_cpi_km2.png"), width = 15, height = 8, units = "in", res = 300)
+
+global_maps(country_chicken_km2, "Broiler CPI/km2")
+
+dev.off()
+```
+
+
+```{r}
+png(here("_analysis", "figures","Country_results", "salmon_cpi_km2.png"), width = 15, height = 8, units = "in", res = 300)
+global_maps(country_salmon_km2, "Salmon CPI/km2")
+dev.off()
+```
+
