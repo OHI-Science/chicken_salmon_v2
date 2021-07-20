@@ -1,0 +1,22 @@
+---
+title: "Transfer file script"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+Copying the relevant scripts to the chicken/salmon folder.
+```{r setup, include=FALSE}
+
+library(tidyverse)
+
+```
+
+Copy raw data layer files over. We only need the broiler and salmon aquaculture ones, but I am moving everything over in case we find we need something extra.
+
+```{r}
+from <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern=".tif")
+to: /home/shares/food-systems/Food_footprint/chicken_salmon/datalayers
+
+
+file.copy(file.path(rawPath, dataFiles), dataPath, overwrite = TRUE)
+```

@@ -6,46 +6,36 @@
 Issues are here: github.com/OHI-Science/global_food_issues
 Raw data here: aurora: shares/food-systems/Food_footprint/_raw_data
 
-*Larger project files (i.e., entire food system)*
-github.com/cdkuempel/Food_footprints_issues
-github.com/cdkuempel/Food_footprints
+*Data source (i.e., entire food system)*
+July 20 2021
+Pulled relevant chicken/salmon data from the larger food system.
+Data taken from these locations:
+
+Copied over *all* starting data layer files, even those unrelated to chicken/salmon (these are the rawest versions of the data):
+from: /home/shares/food-systems/Food_footprint/all_food_systems/datalayers
+to: /home/shares/food-systems/Food_footprint/chicken_salmon/datalayers
 
 
-## Organization: food_chicken_salmon repo
-Here is a proposal (we can deviate as necessary):
+These are data in 5 min lat/long coordinates (feed files are summarized):
+from: /home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw
+to:
+/home/shares/food-systems/Food_footprint/chicken_salmon/raw
 
-*Indirect stressor folders*
-forage_fish_id: Used to identify relevant fish used in feed.
-fish_feed_GHG
-fish_feed_occupancy
-ag_feed_GHG
-ag_feed_occupancy
-ag_feed_water
-ag_feed_nutrients
+These are the equal area mollweide projection:
+from: /home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell
+to: /home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell
 
-*Direct stressor folders* 
-salmon_aquaculture_location
-chicken_location
-salmon_GHG
-salmon_occupancy
-salmon_water
-salmon_nutrients
-chicken_GHG
-chicken_occupancy
-chicken_water
-chicken_nutrients
+Analysis/data taken from this release of the food github repo:
+https://github.com/OHI-Science/food_systems/releases
 
-*Above folders will contain some combination of following*
-(see here for OHI organization: )
+Data are rescaled using total pressures from only broiler chickens and salmon aquaculuture (scripts from new chicken_salmon_v2 Github account), and saved here: /home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell).
 
-* README describing general analysis and file structure
-* Rmds for data analysis
-* functions folder: a place for functions to live (if exist)
-* raw folder: most will not have this, but is good when we compile raw data (in general, it isn't good to serve other people's data)
-* intermediate folder: a place for intermediate data
-* final folder: final data (only for small files, larger raster data will be on the server)
+*Github account*
 
+Github location for rescaling and subsequent analysis/figures:
+https://github.com/OHI-Science/chicken_salmon_v2
+(currently in OHI-Science, but can transfer to you when ready!)
 
-## Coordinate reference system for spatial data
-What resolution and coordinate reference system?
-I like equal area, but probably better to use lat/long and resolution that everyone else uses for consistency (figure out what this is)
+1. Script to transfer relevent data: file_transfer.Rmd
+2. Script to rescale data: rescaled_results.Rmd
+
