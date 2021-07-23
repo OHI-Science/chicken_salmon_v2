@@ -9,6 +9,8 @@ Raw data here: aurora: shares/food-systems/Food_footprint/_raw_data
 *Data source (i.e., entire food system)*
 July 20 2021
 Pulled relevant chicken/salmon data from the larger food system.
+Script to transfer relevent data: mrf_step1_file_transfer.Rmd
+
 Data taken from these locations:
 
 Copied over *all* starting data layer files, even those unrelated to chicken/salmon (these are the rawest versions of the data):
@@ -28,7 +30,6 @@ to: /home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj
 Analysis/data taken from this release of the food github repo:
 https://github.com/OHI-Science/food_systems/releases
 
-Data are rescaled using total pressures from only broiler chickens and salmon aquaculuture (scripts from new chicken_salmon_v2 Github account), and saved here: /home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell).
 
 *Github account*
 
@@ -36,6 +37,10 @@ Github location for rescaling and subsequent analysis/figures:
 https://github.com/OHI-Science/chicken_salmon_v2
 (currently in OHI-Science, but can transfer to you when ready!)
 
-1. Script to transfer relevent data: file_transfer.Rmd
-2. Script to rescale data: rescaled_results.Rmd
+1. Script to rescale data: mrf_step2_rescaled_results.Rmd
+Files saved here: /home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell_rescaled
 
+2. Script to combine stressor rasters in useful ways: mrf_step3_summarize_stressors.Rmd
+
+Files saved here for unscaled stressors: /home/shares/food-systems/Food_footprint/chicken_salmon/raw_pressure_summary
+Files saved here for rescaled stressors:/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure

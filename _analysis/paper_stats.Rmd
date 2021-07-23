@@ -34,7 +34,7 @@ read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv")) %>%
 broilers
 ```{r}
 
-chicken_location <- read_csv("/home/shares/food-systems/Food_footprint/dataprep/chicken_farm/chickens_spatial_df_gf.csv", col_types = "ddcccddddccc") 
+chicken_location <- read_csv("/home/shares/food-systems/Food_footprin t/all_food_systems/dataprep/animal_farm/farm/chickens_industrial_meat_location_df.csv", col_types = "ddnnnccnnccncnnc") 
 conversions <- read_csv(here("chicken_farm/data/chicken_conversion_values.csv"))
 
 chicken_production <- chicken_location %>%

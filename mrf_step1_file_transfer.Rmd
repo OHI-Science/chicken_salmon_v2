@@ -1,0 +1,47 @@
+---
+title: "Transfer file script"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+Copying the relevant data from the food systems location to the chicken/salmon folder.
+```{r setup, include=FALSE}
+
+library(tidyverse)
+
+```
+
+Copy the original raw data layer files over. We only need the broiler and salmon aquaculture ones, but I am moving everything over in case we find we need something extra.
+
+```{r}
+from <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern=".tif", full=TRUE)
+to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/datalayers"
+
+file.copy(from, to)
+```
+
+Next copy over the relevant "raw" data files. These are not the rawest data, despite being in a folder called "raw". They have been manipulated to combine feed category pressures.  But this is the raw resolution of the data.
+
+```{r}
+
+from_raw <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw", full=TRUE)
+from_raw_list <- grep("chickens_industrial_meat|salmon_aquaculture", from_raw, value=TRUE)
+
+to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/raw"
+
+file.copy(from_raw_list, to)
+
+```
+
+
+These are the rasters projected to mollweide. These are used for rescaling and visualization because they are equal area.
+```{r}
+from_mol <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell", full=TRUE)
+
+from_mol_list <- grep("chickens_industrial_meat|salmon_aquaculture", from_mol, value=TRUE)
+
+to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell"
+
+file.copy(from_mol_list, to)
+
+```

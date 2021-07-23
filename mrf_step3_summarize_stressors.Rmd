@@ -1,0 +1,152 @@
+---
+title: "summed_stressor"
+author: "Juliette"
+date: "4/20/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This markdown calculates rasters for 
+
+1. sum of each stressor by system (saved on Aurora: stressor_summary/equal_area/system_stressor)
+2. sum of each stressor across all systems (saved on Aurora: stressor_summary/equal_area/stressor)
+3. sum of all rescaled pressure rasters (i.e., cumulative pressure)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# sum each pressure for each food system
+
+```{r}
+# function
+
+system_sum <- function(system){ #system="salmon"
+
+stressor_list <- c("ghg", "water", "nutrient", "disturbance")
+system_search <- paste0("_", system, "_")
+for(stressor in stressor_list){
+#stressor <- "ghg"
+stressor_files <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", 
+           pattern=stressor,
+           full=TRUE)
+stressor_files <- grep(system_search, stressor_files, value=TRUE)
+
+stressor_stack <- stack(stressor_files)
+stressor_sum <- sum(stressor_stack, na.rm=TRUE)
+#plot(log(stressor_sum + 1))
+writeRaster(stressor_sum, sprintf("/home/shares/food-systems/Food_footprint/chicken_salmon/raw_pressure_summary/system_stressor/%s_%s_per_cell.tif", system, stressor), overwrite=TRUE)
+}
+}
+```
+
+```{r}
+
+system_sum(system="chickens")
+system_sum(system="salmon")
+
+plot(raster("/home/shares/food-systems/Food_footprint/chicken_salmon/raw_pressure_summary/system_stressor/chickens_ghg_per_cell.tif"))
+
+```
+
+# sum each pressure for both food systems
+For each stressor get sum of all inputs across all systems.
+```{r}
+
+stressor_list <- c("ghg", "water", "nutrient", "disturbance")
+
+for(stressor in stressor_list){
+#stressor <- "ghg"
+  
+  stressor_files <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", pattern=stressor,
+           full=TRUE)
+
+stressor_stack <- stack(stressor_files)
+stressor_sum <- sum(stressor_stack, na.rm=TRUE)
+#plot(log(stressor_sum + 1))
+writeRaster(stressor_sum, sprintf("/home/shares/food-systems/Food_footprint/chicken_salmon/raw_pressure_summary/stressor/%s_per_cell.tif", 
+                                  stressor), 
+            overwrite=TRUE)
+}
+
+```
+
+# chi
+Sum all rescaled stressor files to get cumulative pressure.
+```{r}
+
+pressure_files <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell_rescaled", pattern="rescaled", full=TRUE)
+
+chi_stack <- stack(pressure_files)
+chi <- sum(chi_stack, na.rm=TRUE)
+writeRaster(chi, "/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif", overwrite=TRUE)
+
+check <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif")
+cellStats(check, "sum", na.rm=TRUE) # should be 4 x 1000000
+
+
+```
+
+# proportion of total chi for each food system/stressor
+cumulative pressure for each of: chicken and salmon.
+
+```{r}
+
+chi_rescale <- read_csv(here("_analysis/rescale_values.csv"))
+
+## function
+rescale_food_system <- function(chi_rescale, food_system="chickens"){
+  
+for(stressor in chi_rescale$pressure){ #stressor = "ghg"
+
+stressor_system_file <- raster(sprintf("/home/shares/food-systems/Food_footprint/chicken_salmon/raw_pressure_summary/system_stressor/%s_%s_per_cell.tif", food_system, stressor))
+
+resc_num <- chi_rescale$global_total[chi_rescale$pressure==stressor]
+
+rescaled_raster = raster::calc(stressor_system_file, fun=function(x){ifelse(x>0, 
+                                       (x/resc_num)*1000000, 
+                                       0)})
+#plot(rescaled_raster)
+writeRaster(rescaled_raster, sprintf("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/system_stressor/%s_%s_rescaled.tif", food_system, stressor), overwrite=TRUE)
+}
+}
+
+
+rescale_food_system(chi_rescale, food_system="chickens")
+rescale_food_system(chi_rescale, food_system="salmon")
+
+check <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/system_stressor/salmon_ghg_rescaled.tif")
+check
+cellStats(check, sum, na.rm=TRUE)
+```
+
+## Get cumulative for chickens and salmon
+```{r}
+
+broilers <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/system_stressor", pattern="chickens", full=TRUE)
+broilers_stack <- stack(broilers)
+broilers_chi <- sum(broilers_stack, na.rm=TRUE)
+writeRaster(broilers_chi, "/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/chickens_cumulative_stress.tif", overwrite=TRUE)
+
+salmon <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/system_stressor", pattern="salmon", full=TRUE)
+salmon_stack <- stack(salmon)
+salmon_chi <- sum(salmon_stack, na.rm=TRUE)
+writeRaster(salmon_chi, "/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/salmon_cumulative_stress.tif", overwrite=TRUE)
+plot(salmon_chi)
+```
+
+#quick checks
+```{r}
+cum <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif")
+cellStats(cum, "sum", na.rm=TRUE) # should equal 4
+
+
+salmon <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/salmon_cumulative_stress.tif")
+broiler <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/chickens_cumulative_stress.tif")
+
+total <- salmon+broiler
+cellStats(total, "sum", na.rm=TRUE)
+```

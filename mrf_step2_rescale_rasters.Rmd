@@ -1,0 +1,84 @@
+---
+title: "Scaling values"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Scaling is based on the global total of each pressure due to chicken and salmon production.
+
+Here I will calculate the total global total of each pressure.  This will be saved as a csv file and used in subsequent scripts to rescale the rasters.
+
+I use the original lat/long coordinate reference system rasters because these values are the least manipulated and should be the most accurate (although this really will not make a difference).
+
+
+```{r setup, include=FALSE}
+library(rgdal)
+library(sp)
+library(raster)
+library(tidyverse)
+library(here)
+```
+
+```{r}
+pressure_list <- c("ghg", "nutrient", "disturbance", "water")
+
+rescale_data <- data.frame(pressure = pressure_list, global_total = NA)
+
+for(pressure in pressure_list){ # pressure = "water"
+food_files_pressure <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/raw", full=TRUE, pattern = pressure)
+# farm first:
+
+stack_pressure <- stack(food_files_pressure)
+
+total_pressure <- raster::calc(stack_pressure, fun=sum, na.rm=TRUE, progress="text")
+
+sum_stressor <- cellStats(total_pressure, stat='sum', na.rm=TRUE)
+rescale_data$global_total[rescale_data$pressure == pressure] <- sum_stressor
+
+}
+write_csv(rescale_data, here("_analysis/rescale_values.csv"))
+
+raster("/home/shares/food-systems/Food_footprint/chicken_salmon/raw/farm_land_chickens_industrial_meat_ghg.tif")
+raster("/home/shares/food-systems/Food_footprint/chicken_salmon/raw/farm_marine_salmon_aquaculture_meat_ghg.tif")
+```
+
+
+# rescaled for each food system/stressor/feed
+scaling each summed chicken and salmon stressor raster relative to global total stress of both food systems combined.
+
+```{r}
+
+
+chi_rescale <- read_csv(here("_analysis/rescale_values.csv"))
+
+## function
+
+for(stressor in chi_rescale$pressure){ #stressor = "nutrient"
+
+stressor_system_files <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", pattern=stressor, full=TRUE)
+file_names <- basename(stressor_system_files)
+file_names <- gsub("_per_cell.tif", "", file_names)
+file_names <- paste0(file_names, "_rescaled.tif")
+stressor_system_stack <- stack(stressor_system_files)
+
+resc_num <- chi_rescale$global_total[chi_rescale$pressure==stressor]
+
+rescaled_raster_stack = raster::calc(stressor_system_stack, fun=function(x){ifelse(x>0, 
+                                      (x/resc_num) * 1000000, 
+                                       0)})
+names(stressor_system_stack) <- file_names
+
+for(i in 1:length(file_names)) { # i=1
+  single_band <- raster(rescaled_raster_stack, layer = i)
+  
+writeRaster(single_band, sprintf("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell_rescaled/%s", names(single_band)),
+              overwrite=TRUE)
+
+}
+}
+raster("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell_rescaled/gall_peter_feedcrop_land_chickens_industrial_meat_ghg_rescaled.tif")
+raster("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell_rescaled/gall_peter_feedcrop_marine_salmon_aquaculture_meat_ghg_rescaled.tif")
+
+```
+
