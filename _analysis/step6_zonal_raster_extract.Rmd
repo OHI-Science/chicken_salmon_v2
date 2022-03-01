@@ -23,15 +23,16 @@ Use land/eez raster to extract the summed pressures on land in eez areas.
 
 ```{r}
 
-rgns <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/land_eez_rgns.tif")
-plot(rgns)
+rgns <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/land_eez_rgns.tif")
+#plot(rgns)
 
-rgn_names <- read_csv(here("_spatial/output/master_rgns.csv")) %>%
+rgn_names <- read_csv("/home/shares/food-systems/Food_footprint/chicken_salmon/_spatial/master_rgns.csv") %>%
   rename(land_area_km2 = area_km2)
-eez_rgns <- read_csv(here("_spatial/output/eez_rgns.csv")) %>%
+
+eez_rgns <- read_csv("/home/shares/food-systems/Food_footprint/chicken_salmon/_spatial/eez_rgns.csv") %>%
   rename(eez_area_km2 = area_km2)
 
-rescaling_values <- read_csv(here("_analysis/step4_stressor_rescaling.csv")) 
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) 
 ```
 
 
