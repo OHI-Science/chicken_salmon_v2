@@ -45,3 +45,29 @@ to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_p
 file.copy(from_mol_list, to)
 
 ```
+
+These are the spatial layers I need for summarising
+
+```{r}
+
+from_spatial <- list.files("/home/kuempel/food_chicken_salmon/_spatial/output", full=TRUE)
+from_spatial_list <- from_spatial[c(1,4,8)]
+
+from_spatial2<-list.files("/home/kuempel/food_chicken_salmon/_spatial", full = TRUE)
+
+to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/_spatial"
+
+file.copy(from_spatial_list, to)
+
+```
+
+These are the production values
+
+```{r}
+prod_files <- c("/home/kuempel/food_chicken_salmon/_analysis/data/broiler_production.csv", "/home/kuempel/food_chicken_salmon/_analysis/data/salmon_production.csv")
+
+to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/production"
+
+file.copy(prod_files, to)
+```
+
