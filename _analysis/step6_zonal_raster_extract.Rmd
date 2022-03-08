@@ -36,25 +36,44 @@ rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
 ```
 
 
+
 Zonal sum of land-based rasters:
 
 ```{r}
 
-crops <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor", pattern="feed_crop",
+#crops <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor", pattern="feed_crop",
+#           full=TRUE)
+
+crops <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", pattern="feedcrop",
            full=TRUE)
 
-broiler_farms <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor",
-                            pattern = "farm_broiler", full=TRUE)
+#broiler_farms <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor",
+#                            pattern = "farm_broiler", full=TRUE)
+
+
+broiler_farms <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell",
+                            pattern = "farm_land_chickens", full=TRUE)
+
 land_based <- c(crops, broiler_farms)
 land_stack <- stack(land_based)
 
-land_data <- zonal(land_stack, rgns, fun="sum", progress="text", na.rm=TRUE)
+```
+
+```{r}
+rgns_proj<-projectRaster(rgns, crs = crs(land_stack))
+rgns_proj2<-resample(rgns_proj, land_stack)
+
+```
+
+```{r}
+land_data <- zonal(land_stack, rgns_proj2, fun="sum", progress="text", na.rm=TRUE)
 
 land_data_df <- data.frame(land_data) %>%
   rename(ID_0 = zone) %>%
   left_join(rgn_names, by="ID_0") %>%
   tidyr::pivot_longer(-c(ID_0, iso3c, Country), names_to = "source", values_to = "value") %>%
-  separate(source, sep="_", into=c("source", "subsource", "animal_system", "stressor")) %>%
+  mutate(source = gsub("gall_peter_","",as.character(source))) %>% 
+  separate(source, sep="_", into=c("source", "subsource", "animal_system", "type", "type2", "stressor")) %>%
   mutate(stressor = ifelse(is.na(stressor), animal_system, stressor)) %>%
   mutate(animal_system = ifelse(animal_system==stressor, NA, animal_system)) %>%
   mutate(animal_system = ifelse(is.na(animal_system), subsource, animal_system)) %>%
@@ -69,21 +88,22 @@ Zonal sum of marine-based rasters:
 
 ```{r}
 
-fisheries <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor", pattern="feed_marinefish",
+fisheries <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", pattern="feedfofm",
            full=TRUE)
 
-salmon_farms <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/lat_long_per_cell/feed_farm_system_stressor",
-                            pattern = "farm_salmon", full=TRUE)
+salmon_farms <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell",
+                            pattern = "farm_marine_salmon", full=TRUE)
 marine_based <- c(fisheries, salmon_farms)
 marine_stack <- stack(marine_based)
 
-marine_data <- zonal(marine_stack, rgns, fun="sum", progress="text", na.rm=TRUE)
+marine_data <- zonal(marine_stack, rgns_proj2, fun="sum", progress="text", na.rm=TRUE)
 
 marine_data_df <- data.frame(marine_data) %>%
   rename(ID_0 = zone) %>%
   left_join(rgn_names, by="ID_0") %>%
   tidyr::pivot_longer(-c(ID_0, iso3c, Country), names_to = "source", values_to = "value") %>%
-  separate(source, sep="_", into=c("source", "subsource", "animal_system", "stressor")) %>%
+   mutate(source = gsub("gall_peter_","",as.character(source))) %>% 
+  separate(source, sep="_", into=c("source", "subsource", "animal_system", "type", "type2", "stressor")) %>%
   mutate(stressor = ifelse(is.na(stressor), animal_system, stressor)) %>%
   mutate(animal_system = ifelse(animal_system==stressor, NA, animal_system)) %>%
   mutate(animal_system = ifelse(is.na(animal_system), subsource, animal_system)) %>%
@@ -98,7 +118,7 @@ combine data
 
 all_data <- rbind(marine_data_df, land_data_df)
 
-write_csv(all_data, here("_analysis/data/zonal_extract/sum_pressures_country.csv"))
+write_csv(all_data, here("_analysis/output_data/sum_pressures_country.csv"))
 ```
 
 
@@ -106,11 +126,13 @@ write_csv(all_data, here("_analysis/data/zonal_extract/sum_pressures_country.csv
 
 ```{r}
 
-sum_df <- read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv")) %>%
-  left_join(rescaling_values, by="stressor") %>%
+sum_df <- read_csv(here("_analysis/output_data/sum_pressures_country.csv")) 
+
+sum_df2<-sum_df%>%
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
   rowwise() %>%
   mutate(prop_of_global = value/global_total) %>%
-  group_by(iso3c, Country, source, subsource, animal_system, location) %>%
+  group_by(iso3c, Country, source, subsource, type, type2, animal_system, location) %>%
   summarize(country_farm_feed_chi = sum(prop_of_global)) %>%
   left_join(rgn_names) %>%
   left_join(eez_rgns) %>%
@@ -120,6 +142,7 @@ sum_df <- read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv"
                           country_farm_feed_chi/land_area_km2*1000000000)) %>%
   group_by(iso3c, Country) %>%
   mutate(total_avg_chi = sum(avg_chi_km2_1e_9, na.rm=TRUE))
+
 filter(sum_df, iso3c=="USA") %>%
   data.frame()
 arrange(sum_df, -total_avg_chi)
@@ -131,13 +154,13 @@ arrange(sum_df, -total_avg_chi)
 ### Compare cumulative pressures in eez to total ocean
 
 ```{r}
-sum(sum_df$country_farm_feed_chi[sum_df$location == "marine"]) 
-sum(sum_df$country_farm_feed_chi[sum_df$location == "land"]) 
+sum(sum_df2$country_farm_feed_chi[sum_df2$location == "marine"], na.rm = T) 
+sum(sum_df2$country_farm_feed_chi[sum_df2$location == "land"], na.rm = T) 
 
 #compare to total ocean
-marine <- list.files("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/rescaled/feed_farm_system_stressor", full=TRUE)
-feed <- grep("feed_marinefish", marine, value=TRUE)
-farm <- grep("farm_salmon", marine, value=TRUE)
+marine <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif?equal_area_proj_per_cell_rescaled", full=TRUE)
+feed <- grep("feedfofm", marine, value=TRUE)
+farm <- grep("farm_marine_salmon", marine, value=TRUE)
 marine_stack <- stack(c(farm, feed))
 marine_total <- sum(marine_stack, na.rm=TRUE)
 cellStats(marine_total, "sum", na.rm=TRUE)/1000000
@@ -149,8 +172,8 @@ Checking to see what this all means.
 
 ```{r}
 
-rescaled <- raster("/home/shares/food-systems/Food_footprint/stressor_summary/equal_area/rescaled/cumulative_stress/cumulative_stress.tif")
-land <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns_gall_peters.tif")
+rescaled <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif")
+land <- rgns_proj2
 
 zonal_avg <- zonal(rescaled, land, "mean", na.rm=TRUE)
 
@@ -161,19 +184,20 @@ land_pressure_df <- as.data.frame(land_pressure) %>%
 zonal_avg <- data.frame(zonal_avg) %>%
   rename(ID_0 = zone) %>%
   left_join(rgn_names, by="ID_0")
+
 filter(zonal_avg, iso3c=="USA")
 2.625463/4
 
-sum_df <- read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv")) %>%
+sum_df <- read_csv(here("_analysis/output_data/sum_pressures_country.csv")) %>%
   filter(location == "land") %>%
-  left_join(rescaling_values, by="stressor") %>%
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
   rowwise() %>%
   mutate(prop_of_global = value/global_total) %>%
   group_by(iso3c, Country) %>%
   summarize(country_chi = sum(prop_of_global)) %>%
   left_join(rgn_names) %>%
   rowwise() %>%
-  mutate(mean_chi= country_chi/area_km2)
+  mutate(mean_chi= country_chi/land_area_km2)
 filter(sum_df, iso3c=="USA")
 
 ```
