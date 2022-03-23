@@ -121,6 +121,9 @@ rescale_food_system(chi_rescale, food_system="salmon")
 check <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/system_stressor/salmon_ghg_rescaled.tif")
 check
 cellStats(check, sum, na.rm=TRUE)
+check <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/system_stressor/chickens_ghg_rescaled.tif")
+check
+cellStats(check, sum, na.rm=TRUE)
 ```
 
 ## Get cumulative for chickens and salmon
@@ -130,6 +133,10 @@ broilers <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/
 broilers_stack <- stack(broilers)
 broilers_chi <- sum(broilers_stack, na.rm=TRUE)
 writeRaster(broilers_chi, "/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/chickens_cumulative_stress.tif", overwrite=TRUE)
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/chickens_cumulative_stress.tif")/1000000
+tmp[tmp>0.000065] <- 0.000065
+plot(tmp)
 
 salmon <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/system_stressor", pattern="salmon", full=TRUE)
 salmon_stack <- stack(salmon)

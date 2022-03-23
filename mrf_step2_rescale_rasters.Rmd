@@ -67,7 +67,8 @@ resc_num <- chi_rescale$global_total[chi_rescale$pressure==stressor]
 rescaled_raster_stack = raster::calc(stressor_system_stack, fun=function(x){ifelse(x>0, 
                                       (x/resc_num) * 1000000, 
                                        0)})
-names(stressor_system_stack) <- file_names
+
+names(rescaled_raster_stack) <- file_names
 
 for(i in 1:length(file_names)) { # i=1
   single_band <- raster(rescaled_raster_stack, layer = i)
