@@ -70,8 +70,9 @@ land_data <- zonal(land_stack, rgns_proj2, fun="sum", progress="text", na.rm=TRU
 
 land_data_df <- data.frame(land_data) %>%
   rename(ID_0 = zone) %>%
-  left_join(rgn_names, by="ID_0") %>%
-  tidyr::pivot_longer(-c(ID_0, iso3c, Country), names_to = "source", values_to = "value") %>%
+ # left_join(rgn_names, by="ID_0") %>%
+ # tidyr::pivot_longer(-c(ID_0, iso3c, Country), names_to = "source", values_to = "value") %>%  
+  tidyr::pivot_longer(-c(ID_0), names_to = "source", values_to = "value") %>%
   mutate(source = gsub("gall_peter_","",as.character(source))) %>% 
   separate(source, sep="_", into=c("source", "subsource", "animal_system", "type", "type2", "stressor")) %>%
   mutate(stressor = ifelse(is.na(stressor), animal_system, stressor)) %>%
@@ -100,8 +101,9 @@ marine_data <- zonal(marine_stack, rgns_proj2, fun="sum", progress="text", na.rm
 
 marine_data_df <- data.frame(marine_data) %>%
   rename(ID_0 = zone) %>%
-  left_join(rgn_names, by="ID_0") %>%
-  tidyr::pivot_longer(-c(ID_0, iso3c, Country), names_to = "source", values_to = "value") %>%
+#  left_join(rgn_names, by="ID_0") %>%
+#  tidyr::pivot_longer(-c(ID_0, iso3c, Country), names_to = "source", values_to = "value") %>%
+    tidyr::pivot_longer(-c(ID_0), names_to = "source", values_to = "value") %>%
    mutate(source = gsub("gall_peter_","",as.character(source))) %>% 
   separate(source, sep="_", into=c("source", "subsource", "animal_system", "type", "type2", "stressor")) %>%
   mutate(stressor = ifelse(is.na(stressor), animal_system, stressor)) %>%
@@ -116,7 +118,10 @@ marine_data_df <- data.frame(marine_data) %>%
 combine data
 ```{r}
 
-all_data <- rbind(marine_data_df, land_data_df)
+all_data <- rbind(marine_data_df, land_data_df) %>%
+  left_join(rgn_names) %>%
+  left_join(eez_rgns)
+
 
 write_csv(all_data, here("_analysis/output_data/sum_pressures_country.csv"))
 ```
@@ -128,7 +133,7 @@ write_csv(all_data, here("_analysis/output_data/sum_pressures_country.csv"))
 
 sum_df <- read_csv(here("_analysis/output_data/sum_pressures_country.csv")) 
 
-sum_df2<-sum_df%>%
+sum_df2 <- sum_df %>%
   left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
   rowwise() %>%
   mutate(prop_of_global = value/global_total) %>%
@@ -141,11 +146,18 @@ sum_df2<-sum_df%>%
                           country_farm_feed_chi/eez_area_km2*1000000000,
                           country_farm_feed_chi/land_area_km2*1000000000)) %>%
   group_by(iso3c, Country) %>%
+  
+  ### MRF: offhand: I'm not sure it makes sense to sum these (I think it would make sense to sum within a location), although not sure how used:
   mutate(total_avg_chi = sum(avg_chi_km2_1e_9, na.rm=TRUE))
 
-filter(sum_df, iso3c=="USA") %>%
-  data.frame()
+tmp2 <- filter(sum_df2, iso3c=="USA") %>%
+  data.frame() %>%
+  rowwise() %>%
+  mutate(test = country_farm_feed_chi/(land_area_km2 + eez_area_km2)*1000000)
 arrange(sum_df, -total_avg_chi)
+
+sum(tmp2$country_farm_feed_chi)
+0.7850118
 
 
 ```
@@ -158,35 +170,69 @@ sum(sum_df2$country_farm_feed_chi[sum_df2$location == "marine"], na.rm = T)
 sum(sum_df2$country_farm_feed_chi[sum_df2$location == "land"], na.rm = T) 
 
 #compare to total ocean
-marine <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif?equal_area_proj_per_cell_rescaled", full=TRUE)
+marine <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell_rescaled", full=TRUE)
 feed <- grep("feedfofm", marine, value=TRUE)
 farm <- grep("farm_marine_salmon", marine, value=TRUE)
 marine_stack <- stack(c(farm, feed))
 marine_total <- sum(marine_stack, na.rm=TRUE)
 cellStats(marine_total, "sum", na.rm=TRUE)/1000000
 
-0.1874114/0.1940113 ## 0.9659819, proportion of cumulative disturbance accounted for within EEZ areas  vs. open ocean
+0.1690388/0.1749438 ## 0.9662463, proportion of cumulative disturbance accounted for within EEZ areas  vs. open ocean
 ```
 
 Checking to see what this all means.
 
+This sort of checks out (but want to check areas): We get same total chi summed throughout a country.
+
+To get chi per km2 (counting land and water) above, I think we need to change the calculation to calculate total chi across water and land and then divide by total area of land and water.  
+Done this way: Our chi per km2 is lower but that is because our area estimates above are higher.  Probably need to check the areas in above data sheet (these may be based on buffered areas that we used to make sure there were no gaps between the eez and land, may need to calculate areas from original land/eezs).
+
 ```{r}
 
 rescaled <- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif")
+cellStats(rescaled, "sum", na.rm=TRUE)
 land <- rgns_proj2
 
-zonal_avg <- zonal(rescaled, land, "mean", na.rm=TRUE)
 
+cellStats(land, function(x,...) sum(x==243, na.rm=TRUE))
+
+zonal_sum <- zonal(rescaled, land, "sum", na.rm=TRUE)
+## This matches the sum above
+
+## MRF NOTE: not sure what is going on here
 land_pressure <- stack(rescaled, land)
 land_pressure_df <- as.data.frame(land_pressure) %>%
   filter(master_rgns_gall_peters)
+## MRF End
 
+zonal_sum <- data.frame(zonal_sum) %>%
+  rename(ID_0 = zone) %>%
+  left_join(rgn_names, by="ID_0")
+filter(zonal_sum, iso3c=="USA")
+785011.8/505014  ##cumulative divided by number of cells
+1.554436 # same as taking mean
+
+785011.8/(505014*36)  ## cumulative divided by area
+0.04317877 ## cumualative per km2 from raster area
+
+18180504  # area from raster data
+
+#area we have above is larger (not sure why the difference):
+9473015+10578339
+20051354
+785011.8/20051354  
+0.03915006 # smaller chi per km2, but this is due to differences in area estimates
+
+zonal_avg <- zonal(rescaled, land, "mean", na.rm=TRUE)
 zonal_avg <- data.frame(zonal_avg) %>%
   rename(ID_0 = zone) %>%
   left_join(rgn_names, by="ID_0")
 
+# this is mean per cell, cell 36km2
 filter(zonal_avg, iso3c=="USA")
-2.625463/4
+1.55
+
+## I think this would be correct, but I am concerned that the land area may be wrong (9.15 million km2 according to world bank)
 
 sum_df <- read_csv(here("_analysis/output_data/sum_pressures_country.csv")) %>%
   filter(location == "land") %>%
