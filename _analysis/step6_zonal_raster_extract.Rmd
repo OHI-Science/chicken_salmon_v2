@@ -127,6 +127,8 @@ write_csv(all_data, here("_analysis/output_data/sum_pressures_country.csv"))
 ```
 
 
+I think I can remove everything past this line
+
 ## Summarize data: broiler/salmon/farm/feed_crop/feed_marine
 
 ```{r}
@@ -138,18 +140,18 @@ sum_df2 <- sum_df %>%
   rowwise() %>%
   mutate(prop_of_global = value/global_total) %>%
   group_by(iso3c, Country, source, subsource, type, type2, animal_system, location) %>%
-  summarize(country_farm_feed_chi = sum(prop_of_global)) %>%
-  left_join(rgn_names) %>%
-  left_join(eez_rgns) %>%
-  rowwise() %>%
-  mutate(avg_chi_km2_1e_9= ifelse(location=="marine", 
-                          country_farm_feed_chi/eez_area_km2*1000000000,
-                          country_farm_feed_chi/land_area_km2*1000000000)) %>%
-  group_by(iso3c, Country) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global)) #%>%
+ # left_join(rgn_names) %>%
+  #left_join(eez_rgns) %>%
+  #rowwise() %>%
+ # mutate(avg_chi_km2_1e_9= ifelse(location=="marine", 
+#                          country_farm_feed_chi/eez_area_km2*1000000000,
+                          #country_farm_feed_chi/land_area_km2*1000000000)) #%>%
+  #group_by(iso3c, Country) %>%
   
   ### MRF: offhand: I'm not sure it makes sense to sum these (I think it would make sense to sum within a location), although not sure how used:
   ### CDK: Happy to discuss - we currently sum them within Country (group_by argument above) if that makes more sense with what you mean by "within a location"? I looked through the updated_results script and I don't think this variable is used in the results anyways.
-  mutate(total_avg_chi = sum(avg_chi_km2_1e_9, na.rm=TRUE))
+ # mutate(total_avg_chi = sum(avg_chi_km2_1e_9, na.rm=TRUE))
 
 tmp2 <- filter(sum_df2, iso3c=="USA") %>%
   data.frame() %>%
