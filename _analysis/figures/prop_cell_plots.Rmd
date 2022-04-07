@@ -1,0 +1,83 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: "05/04/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(patchwork)
+library(here)
+```
+
+# Load data
+
+```{r}
+un_geopolitical <- read_csv("/home/shares/food-systems/Food_footprint/chicken_salmon/_spatial/UNSD_Methodology.csv") %>%
+  rename(georegion=Region_Name) %>% 
+  dplyr::select(iso3c, georegion) %>% 
+  filter(!iso3c == "ATA")
+```
+
+
+```{r}
+cells<-read.csv(here("_analysis/output_data/CPI_cells_by_country.csv"))
+```
+
+```{r}
+cells2<-full_join(un_geopolitical, cells)
+```
+
+
+```{r}
+ggplot(cells2, aes(x = prop_broiler, y = prop_high_broiler)) +
+  geom_point() +
+  theme_bw()
+```
+
+```{r}
+ggplot(cells2, aes(x = prop_broiler, y = prop_high_broiler)) +
+  facet_wrap(~georegion) +
+  geom_point() +
+  theme_bw()
+```
+
+```{r}
+ggplot(cells2, aes(x = prop_salmon, y = prop_high_salmon)) +
+  geom_point() +
+  theme_bw()
+```
+
+```{r}
+ggplot(cells2, aes(x = prop_salmon, y = prop_high_salmon)) +
+  facet_wrap(~georegion) +
+  geom_point() +
+  theme_bw()
+```
+```{r}
+ggplot(cells2, aes(x = prop_broiler, y = prop_salmon)) +
+  geom_point() +
+  theme_bw()
+```
+```{r}
+ggplot(cells2, aes(x = prop_broiler, y = prop_salmon)) +
+  facet_wrap(~georegion) +
+  geom_point() +
+  theme_bw()
+```
+
+```{r}
+ggplot(cells2, aes(x = prop_high_salmon, y = prop_high_broiler)) +
+  geom_point() +
+  theme_bw()
+```
+
+# Plot prop cells vs. average CPI
+
+# Plot prop cells vs median CPI
