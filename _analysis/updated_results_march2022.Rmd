@@ -14,6 +14,7 @@ library(tidyverse)
 library(here)
 library(data.table)
 library(raster)
+library(tabularaster)
 
 options(scipen = 999)
 ```
@@ -52,9 +53,9 @@ pressures <- results %>%
   left_join(rgn_names) %>%
   left_join(eez_rgns) %>%
   rowwise() %>%
-  mutate(avg_cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
+  mutate(cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
   ungroup() %>%
-   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2), 0, avg_cum_stress_km2)) #%>%
+   mutate(prop_of_global = ifelse(is.na(cum_stress_km2), 0, cum_stress_km2)) #%>%
 ```
 # Land and sea area
 
@@ -151,8 +152,7 @@ salmon_df<-data.frame(type = "salmon", stressor = c("Disturbance", "Freshwater u
 
 all<-rbind(chick_df, salmon_df)
 
-ggplot(all, aes(x = stressor, y = log10(value), fill = type)) +
-  geom_bar(positio = "dodge", stat = "identity")
+write.csv(all, here("_analysis/figures/Pressure_comparison.csv"))
 ```
 
 ```{r}
@@ -336,6 +336,33 @@ length(which(salmon_df$salmon_cumulative_stress==0))/nrow(salmon_df)
 length(which(salmon_df$salmon_cumulative_stress<salmon_quant_45))/nrow(salmon_df)
 length(which(salmon_df$salmon_cumulative_stress>salmon_quant_90))/nrow(salmon_df)
 ```
+90% of CPI in what % of cells?
+
+```{r}
+cumsum_broiler<-broiler_cpi_df %>% 
+  arrange(desc(broiler_cpi)) %>% 
+  mutate(cumsum = cumsum(broiler_cpi),
+         prop_cpi = cumsum/sum(broiler_cpi_df$broiler_cpi,na.rm = T))
+         
+broiler_90<-cumsum_broiler %>% 
+  filter(prop_cpi<=0.95)
+
+nrow(broiler_90)/nrow(broiler_cpi_df)
+max(broiler_90$prop_cpi)
+```
+
+```{r}
+cumsum_salmon<-salmon_cpi_df %>% 
+  arrange(desc(salmon_cpi)) %>% 
+  mutate(cumsum = cumsum(salmon_cpi),
+         prop_cpi = cumsum/sum(salmon_cpi_df$salmon_cpi,na.rm = T))
+         
+salmon_90<-cumsum_salmon %>% 
+  filter(prop_cpi<=0.95)
+
+nrow(salmon_90)/nrow(salmon_cpi_df)
+max(salmon_90$prop_cpi)
+```
 
 # Country CPI
 
@@ -381,11 +408,7 @@ salmon_75<-iso3_salmon_cpi2[which(iso3_salmon_cpi2$prop_cpi<=0.75),]
 
 unique(salmon_75$Country)
 ```
-```{r}
-all_75<-rbind(broiler_75, salmon_75)
 
-length(unique(all_75$Country))
-```
 
 
 ``````{r}
@@ -399,6 +422,14 @@ iso3_broiler_cpi2<-iso3_broiler_cpi %>%
 broiler_75<-iso3_broiler_cpi2[which(iso3_broiler_cpi2$prop_cpi<=0.75),]
 
 unique(broiler_75$Country)
+```
+
+```{r}
+all_75<-rbind(broiler_75, salmon_75)
+
+length(unique(all_75$Country))
+
+which(broiler_75$Country %in% salmon_75$Country)
 ```
 
 ```{r}
@@ -424,17 +455,17 @@ broiler_cpi_km2<-full_join(iso3_broiler_cpi, rgn_names) %>%
   left_join(eez_rgns) %>%
   rowwise() %>%
   mutate(eez_area_km2 = ifelse(is.na(eez_area_km2) == T, 0, as.numeric(eez_area_km2)),
-    avg_cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
+    cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
   ungroup() %>%
-   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2), 0, avg_cum_stress_km2))
+   mutate(prop_of_global = ifelse(is.na(cum_stress_km2), 0, cum_stress_km2))
 
 salmon_cpi_km2<-full_join(iso3_salmon_cpi, rgn_names) %>%
   left_join(eez_rgns) %>%
   rowwise() %>%
   mutate(eez_area_km2 = ifelse(is.na(eez_area_km2) == T, 0, as.numeric(eez_area_km2)),
-    avg_cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
+    cum_stress_km2= country_farm_feed_chi/(eez_area_km2 + land_area_km2)) %>%
   ungroup() %>%
-   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2), 0, avg_cum_stress_km2))
+   mutate(prop_of_global = ifelse(is.na(cum_stress_km2), 0, cum_stress_km2))
 
 write.csv(broiler_cpi_km2, here("_analysis/figures/Country_results/Broiler_country_cpi_km2.csv"))
 write.csv(salmon_cpi_km2, here("_analysis/figures/Country_results/Salmon_country_cpi_km2.csv"))
@@ -454,11 +485,11 @@ salmon_cpi_km2_prod<-full_join(salmon_cpi_km2, salmon_prod)%>%
 Test CPI/km2 vs area correlation?
 
 ```{r}
-cor.test(broiler_cpi_km2_prod$avg_cum_stress_km2, broiler_cpi_km2_prod$total_area, type = "pearsons")
+cor.test(broiler_cpi_km2_prod$cum_stress_km2, broiler_cpi_km2_prod$total_area, type = "pearsons")
 ```
 
 ```{r}
-cor.test(salmon_cpi_km2_prod$avg_cum_stress_km2, salmon_cpi_km2_prod$total_area, type = "pearsons")
+cor.test(salmon_cpi_km2_prod$cum_stress_km2, salmon_cpi_km2_prod$total_area, type = "pearsons")
 ```
 
 ```{r}
@@ -471,7 +502,7 @@ broiler_cpi_comp<-full_join(iso3_broiler_cpi, broiler_cpi_km2)
 rgns_proj<-projectRaster(rgns, crs = broiler_cpi)
 rgns_rs<-resample(rgns_proj, broiler_cpi)
 
-rgn_df<-as_tibble(rgns_rs) %>% 
+rgn_df<-tabularaster::as_tibble(rgns_rs) %>% 
   rename(ID_0 = cellvalue)
 
 rgn_names_df<-full_join(rgn_names, rgn_df) %>% 
@@ -493,7 +524,11 @@ iso3_cpi<-full_join(rgn_names_df, broiler_cpi_df) %>%
 
 cells_iso3_cpi<- iso3_cpi %>% 
   group_by(iso3c, Country, ncells) %>% 
-  summarise(broiler_cells = length(which(broiler_cpi>0)),
+  summarise(mean_broiler_cpi = mean(broiler_cpi, na.rm = T),
+            mean_salmon_cpi = mean(salmon_cpi, na.rm = T),
+            med_broiler_cpi = median(broiler_cpi, na.rm = T),
+            med_salmon_cpi = median(salmon_cpi, na.rm = T),
+    broiler_cells = length(which(broiler_cpi>0)),
          salmon_cells = length(which(salmon_cpi>0)),
          med_broiler = length(which(broiler_cpi>chick_quant_45 & broiler_cpi<chick_quant_90)),
          med_salmon = length(which(salmon_cpi>salmon_quant_45 & salmon_cpi<salmon_quant_90)),
@@ -505,7 +540,29 @@ cells_iso3_cpi<- iso3_cpi %>%
          prop_high_salmon = high_salmon/salmon_cells) %>% 
   filter(!is.na(iso3c) == T)
 
+cells_iso3_cpi<-cells_iso3_cpi %>% 
+  mutate(mean_broiler_global = mean(broiler_cpi_df$broiler_cpi, na.rm = T),
+         mean_salmon_global = mean(salmon_cpi_df$salmon_cpi, na.rm = T),
+         med_broiler_global = median(broiler_cpi_df$broiler_cpi, na.rm = T),
+         med_salmon_global = median(salmon_cpi_df$salmon_cpi, na.rm = T))
+
 write.csv(cells_iso3_cpi, here("_analysis/output_data/CPI_cells_by_country.csv"))
+```
+
+# percent of the world with cpi
+
+```{r}
+broiler_cpi_cells<-broiler_cpi_df %>% 
+  filter(broiler_cpi>0,
+         !is.na(broiler_cpi) == T)
+  
+salmon_cpi_cells<-salmon_cpi_df %>% 
+  filter(salmon_cpi>0,
+         !is.na(salmon_cpi) == T)
+
+nrow(broiler_cpi_cells)/nrow(broiler_cpi_df)
+
+nrow(salmon_cpi_cells)/nrow(salmon_cpi_df)
 ```
 
 ```{r}
