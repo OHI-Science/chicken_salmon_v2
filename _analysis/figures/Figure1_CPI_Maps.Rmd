@@ -1,0 +1,210 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: '2022-04-19'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tmap)
+library(ggplot2)
+library(patchwork)
+library(png)
+library(here)
+library(grid) #for rasterising png
+library(raster)
+library(tidyverse)
+library(sf)
+library("rnaturalearth")
+library(RColorBrewer)
+library(rgdal)
+```
+
+
+
+```{r}
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+water <- readOGR(dsn=here("_analysis/raw/rgn_all_gcs_med_res.shp"))
+water <- water[!water$rgn_nam == "Antarctica",]
+proj4string(water) <- CRS("+proj=longlat +datum=WGS84")
+water <- spTransform(water, CRS("+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+plot(water)
+
+land <- ne_countries(scale = "medium", returnclass = "sp") 
+land <- land[!land$sov_a3 == "ATA",]
+land <- st_as_sf(land)
+land <- st_transform(land, crs=gall_peters)
+land <- as(land, "Spatial")
+plot(land)
+```
+
+
+
+# Animal PNGs
+
+```{r}
+chicken_png <- readPNG(here("_analysis/figures", "chicken.png"))
+chicken_png <- rasterGrob(chicken_png)
+```
+
+```{r}
+salmon_png<-readPNG(here("_analysis/figures", "salmon.png"))
+salmon_png<-rasterGrob(salmon_png)
+```
+
+
+# Plots
+
+## Cumulative stressors all food systems (only chickens and salmon at this point)
+
+```{r}
+
+chi_cols <- brewer.pal(9, "YlOrBr")[4:9]
+chi_cols = colorRampPalette(chi_cols)(10000) 
+chi_cols = c("NA", paste0(chi_cols, "BF"))
+              
+```
+
+
+
+## Cumulative salmon and chicken
+
+```{r}
+chi_plot_system <- function(system){
+#system="salmon"
+
+## get the max value
+# chi
+chi_all<- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif")/1000000
+
+chi_all_quantile <- quantile(chi_all, 0.9999)
+  
+chi <- raster(list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/", pattern = system, full=TRUE))/1000000
+
+chi_cols <- brewer.pal(9, "YlOrBr")[4:9]
+chi_cols = colorRampPalette(chi_cols)(10000) 
+chi_cols = c("NA", paste0(chi_cols, "BF"))
+
+chi[chi > chi_all_quantile] <- chi_all_quantile
+
+              
+#chi[chi > chi_all_quantile] <- quant 
+
+raster_data=chi
+title="" 
+cols=chi_cols
+
+png(here(sprintf("_analysis/figures/maps/%s_cumulative.png", system)), res=500, width=7, height=3, units="in")
+
+par(oma=c(1,1,1,0), new = TRUE) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 2))
+  
+#cuts=c(0,0.5,1,1.5,2,2.5,3,3.5,4)
+
+plot(water, border="#f2f8fc", col="#f2f8fc", lwd=0.5, cex=0.75)
+plot(land, border="#c5b89c", col="#f6f2e9", lwd=0.5, add=TRUE)
+plot(raster_data, 
+     breaks=seq(0, chi_all_quantile, length.out=10000),
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     add=TRUE,  
+     legend=TRUE, 
+     legend.shrink= 0.7, 
+     legend.width=.4, 
+     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1, at = c(0,0.00002,0.00004,round(chi_all_quantile, 6)),
+                      labels=c("0", "0.00002", "0.00004", paste0(">", round(chi_all_quantile, 6)))), 
+     legend.args=list(text = "", cex = 0.7, side = 3, line = 1))
+
+dev.off()
+}
+
+```
+
+```{r}
+chi_plot_system(system="chickens")
+chi_plot_system(system="salmon")
+```
+
+```{r}
+unique_chi_plot_system <- function(system){
+#system="salmon"
+
+## get the max value
+# chi
+chi_all<- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif")/1000000
+  
+chi <- raster(list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/", pattern = system, full=TRUE))/1000000
+
+chi_all_quantile <- quantile(chi, 0.9999)
+
+chi_cols <- brewer.pal(9, "YlOrBr")[4:9]
+chi_cols = colorRampPalette(chi_cols)(10000) 
+chi_cols = c("NA", paste0(chi_cols, "BF"))
+
+#chi[chi > chi_all_quantile] <- chi_all_quantile
+
+              
+#chi[chi > chi_all_quantile] <- quant 
+
+raster_data=chi
+title="" 
+cols=chi_cols
+
+png(here(sprintf("_analysis/figures/maps/%s_cumulative_unique_scale.png", system)), res=500, width=7, height=3, units="in")
+
+par(oma=c(1,1,1,0), new = TRUE) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 2))
+  
+#cuts=c(0,0.5,1,1.5,2,2.5,3,3.5,4)
+
+plot(water, border="#f2f8fc", col="#f2f8fc", lwd=0.5, cex=0.75)
+plot(land, border="#c5b89c", col="#f6f2e9", lwd=0.5, add=TRUE)
+plot(raster_data, 
+     breaks=seq(0, chi_all_quantile, length.out=10000),
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     add=TRUE,  
+     legend=TRUE, 
+     legend.shrink= 0.7, 
+     legend.width=.4, 
+     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1, at = c(0,0.00002,0.00004,round(chi_all_quantile, 6)),
+                      labels=c("0", "0.00002", "0.00004", paste0(">", round(chi_all_quantile, 6)))), 
+     legend.args=list(text = "", cex = 0.7, side = 3, line = 1))
+
+dev.off()
+}
+```
+
+
+```{r}
+unique_chi_plot_system(system="chickens")
+unique_chi_plot_system(system="salmon")
+```
+# Pressure comparison plot
+
+```{r}
+dat<-read.csv(here("_analysis/figures/Pressure_comparison.csv")) %>% 
+  mutate(value2 = ifelse(stressor %in% c("Freshwater use"), value/10000, 
+                         ifelse(stressor %in% c("GHG emissions"), value/1000, value)))
+
+chick<-dat %>% 
+  filter(type == "chicken") %>% 
+  mutate(value2 = ifelse(stressor %in% c("Freshwater use"), value/1000, value))
+
+
+```
+
+
+```{r}
+ggplot(dat, aes(x = stressor, y = log10(value), fill = type)) +
+  geom_bar(positio = "dodge", stat = "identity") +
+  theme_bw()
+```
+
