@@ -23,61 +23,87 @@ un_geopolitical <- read_csv("/home/shares/food-systems/Food_footprint/chicken_sa
   rename(georegion=Region_Name) %>% 
   dplyr::select(iso3c, georegion) %>% 
   filter(!iso3c == "ATA")
+
+rgn_names <- read_csv("/home/shares/food-systems/Food_footprint/chicken_salmon/_spatial/master_rgns.csv") %>%
+  rename(land_area_km2 = area_km2)
+
+eez_rgns <- read_csv("/home/shares/food-systems/Food_footprint/chicken_salmon/_spatial/eez_rgns.csv") %>%
+  rename(eez_area_km2 = area_km2)
+
+iso3_broiler_cpi<-read.csv(here("_analysis/figures/Country_results/Broiler_country_cpi.csv")) %>% 
+  rename(broiler_cpi = country_farm_feed_chi) %>% 
+  dplyr::select(-animal_system)
+
+iso3_salmon_cpi<-read.csv(here("_analysis/figures/Country_results/Salmon_country_cpi.csv")) %>% 
+  rename(salmon_cpi = country_farm_feed_chi) %>% 
+  dplyr::select(-animal_system)
+
+iso3_both<-full_join(iso3_broiler_cpi, iso3_salmon_cpi)
 ```
 
 
 ```{r}
-cells<-read.csv(here("_analysis/output_data/CPI_cells_by_country.csv"))
+broiler_prod<-read.csv("/home/shares/food-systems/Food_footprint/chicken_salmon/production/broiler_production.csv") %>% 
+  dplyr::select(iso3c, Country, broiler_slaughter_wt_tonnes)
+
+salmon_prod<-read.csv("/home/shares/food-systems/Food_footprint/chicken_salmon/production/salmon_production.csv") %>% 
+  dplyr::select(iso3c, country, fao_tonnes_production) %>% 
+    rename(Country = country)
+
+all_prod<-full_join(broiler_prod, salmon_prod)
+```
+
+
+```{r}
+cells<-read.csv(here("_analysis/output_data/CPI_cells_by_country.csv")) %>% 
+  dplyr::select(iso3c, Country, ncells, broiler_cells, salmon_cells, high_broiler, high_salmon)
 ```
 
 ```{r}
-cells2<-full_join(un_geopolitical, cells)
+cells2<-full_join(un_geopolitical, cells) %>% 
+  full_join(., iso3_both) %>%
+  mutate(broiler_cpi_cell = broiler_cpi/broiler_cells,
+         salmon_cpi_cell = salmon_cpi/salmon_cells) %>% 
+  #full_join(., rgn_names) %>%
+  #full_join(eez_rgns) %>%
+  #rowwise() %>%
+  #mutate(eez_area_km2 = ifelse(is.na(eez_area_km2) == T, 0, as.numeric(eez_area_km2))) %>% 
+  full_join(., all_prod) %>% 
+  mutate(fao_tonnes_production = ifelse(is.na(fao_tonnes_production) == T, 0, fao_tonnes_production),
+    broiler_eff = broiler_cpi/broiler_slaughter_wt_tonnes,
+         salmon_eff = salmon_cpi/fao_tonnes_production,
+    broiler_eff = ifelse(is.finite(broiler_eff) == F, 0, broiler_eff),
+    salmon_eff = ifelse(is.finite(salmon_eff) == F, 0, salmon_eff))
 ```
 
 
-```{r}
-ggplot(cells2, aes(x = prop_broiler, y = prop_high_broiler)) +
-  geom_point() +
-  theme_bw()
-```
+
+
 
 ```{r}
-ggplot(cells2, aes(x = prop_broiler, y = prop_high_broiler)) +
-  facet_wrap(~georegion) +
-  geom_point() +
-  theme_bw()
-```
-
-```{r}
-ggplot(cells2, aes(x = prop_salmon, y = prop_high_salmon)) +
-  geom_point() +
-  theme_bw()
-```
-
-```{r}
-ggplot(cells2, aes(x = prop_salmon, y = prop_high_salmon)) +
-  facet_wrap(~georegion) +
-  geom_point() +
-  theme_bw()
-```
-```{r}
-ggplot(cells2, aes(x = prop_broiler, y = prop_salmon)) +
-  geom_point() +
-  theme_bw()
-```
-```{r}
-ggplot(cells2, aes(x = prop_broiler, y = prop_salmon)) +
-  facet_wrap(~georegion) +
-  geom_point() +
-  theme_bw()
+eff_dat<-cells2 %>% 
+  dplyr::select(iso3c, Country, broiler_eff, salmon_eff)
 ```
 
 ```{r}
-ggplot(cells2, aes(x = prop_high_salmon, y = prop_high_broiler)) +
-  geom_point() +
-  theme_bw()
+ggplot(eff_dat, aes(x = Country, y = broiler_eff)) +
+  geom_bar(stat = "identity")
 ```
 
-# Plot prop cells vs. average CPI
+# Test whether countries efficient in one are also in the other
 
-# Plot prop cells vs median CPI
+```{r}
+test<-eff_dat %>% 
+  filter(!salmon_eff == 0)
+
+ggplot(test, aes(x = salmon_eff, y = broiler_eff)) +
+  geom_point()
+```
+
+# plot efficienty of tonnes vs area
+
+```{r}
+ggplot(cells2, aes(x = broiler_eff*1000000, y = broiler_cpi_cell*1000000)) +
+  geom_point()
+```
+
