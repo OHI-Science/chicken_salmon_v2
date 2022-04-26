@@ -447,6 +447,21 @@ cor.test(broiler_cpi_prod$country_farm_feed_chi, broiler_cpi_prod$broiler_slaugh
 ```{r}
 cor.test(salmon_cpi_prod$country_farm_feed_chi, salmon_cpi_prod$fao_tonnes_production, type = "pearsons")
 ```
+```{r}
+iso3_broiler_cpi_prod<-broiler_cpi_prod %>% 
+  mutate(cpi_prod = country_farm_feed_chi/broiler_slaughter_wt_tonnes) %>% 
+  dplyr::select(iso3c, Country, country_farm_feed_chi, broiler_slaughter_wt_tonnes, cpi_prod)
+
+iso3_salmon_cpi_prod<-salmon_cpi_prod %>% 
+  mutate(cpi_prod = country_farm_feed_chi/fao_tonnes_production) %>% 
+  dplyr::select(iso3c, Country, country_farm_feed_chi, fao_tonnes_production, cpi_prod)
+```
+
+```{r}
+test<-iso3_broiler_cpi_prod %>% 
+  filter(broiler_slaughter_wt_tonnes == 0)
+```
+
 
 # CPI per km2 by country
 
@@ -482,19 +497,6 @@ salmon_cpi_km2_prod<-full_join(salmon_cpi_km2, salmon_prod)%>%
          total_area = land_area_km2 + eez_area_km2) #%>% 
   #filter(prop_prod >0.05)
 ```
-Test CPI/km2 vs area correlation?
-
-```{r}
-cor.test(broiler_cpi_km2_prod$cum_stress_km2, broiler_cpi_km2_prod$total_area, type = "pearsons")
-```
-
-```{r}
-cor.test(salmon_cpi_km2_prod$cum_stress_km2, salmon_cpi_km2_prod$total_area, type = "pearsons")
-```
-
-```{r}
-broiler_cpi_comp<-full_join(iso3_broiler_cpi, broiler_cpi_km2)
-```
 
 # Extract cells within each country
 
@@ -521,33 +523,56 @@ salmon_cpi_df<-as_tibble(salmon_cpi) %>%
 iso3_cpi<-full_join(rgn_names_df, broiler_cpi_df) %>% 
   full_join(., salmon_cpi_df) 
 
+bottom_5_perc<-iso3_cpi %>% 
+  group_by(iso3c, Country) %>% 
+  summarise(broiler_quant_5 = quantile(broiler_cpi, probs = 0.05, na.rm = T),
+         salmon_quant_5 = quantile(salmon_cpi, probs = 0.05, na.rm = T))
+
+rm_5<-full_join(iso3_cpi, bottom_5_perc) %>% 
+  mutate(broiler_cpi2 = ifelse(broiler_cpi<=broiler_quant_5, 0, as.numeric(broiler_cpi)),
+         salmon_cpi2 = ifelse(salmon_cpi<=salmon_quant_5, 0, as.numeric(salmon_cpi)))
+  
+test<-rm_5 %>% 
+  group_by(iso3c, Country, ncells) %>% 
+  summarise(broiler_cells = length(which(broiler_cpi2>0)),
+         salmon_cells = length(which(salmon_cpi2>0))) %>% 
+  mutate(prop_broiler = broiler_cells/ncells) %>% 
+  filter(!is.na(iso3c) == T) %>% 
+  full_join(., iso3_salmon_cpi) %>% 
+  rename(salmon_cpi = country_farm_feed_chi) %>% 
+  dplyr::select(-animal_system) %>% 
+  full_join(., iso3_broiler_cpi) %>% 
+  rename(chicken_cpi = country_farm_feed_chi) %>% 
+  dplyr::select(-animal_system) %>% 
+  mutate(broiler_cpi_cell = chicken_cpi/broiler_cells,
+         salmon_cpi_cell = salmon_cpi/salmon_cells) %>% 
+  full_join(., broiler_prod) %>% 
+  full_join(., salmon_prod, by = c("Country" = "country", "iso3c"))
 
 cells_iso3_cpi<- iso3_cpi %>% 
   group_by(iso3c, Country, ncells) %>% 
-  summarise(mean_broiler_cpi = mean(broiler_cpi, na.rm = T),
-            mean_salmon_cpi = mean(salmon_cpi, na.rm = T),
-            med_broiler_cpi = median(broiler_cpi, na.rm = T),
-            med_salmon_cpi = median(salmon_cpi, na.rm = T),
-    broiler_cells = length(which(broiler_cpi>0)),
-         salmon_cells = length(which(salmon_cpi>0)),
-         med_broiler = length(which(broiler_cpi>chick_quant_45 & broiler_cpi<chick_quant_90)),
-         med_salmon = length(which(salmon_cpi>salmon_quant_45 & salmon_cpi<salmon_quant_90)),
-         high_broiler = length(which(broiler_cpi>chick_quant_90)),
-         high_salmon = length(which(salmon_cpi>salmon_quant_90))) %>% 
-  mutate(prop_broiler = broiler_cells/ncells,
-         prop_salmon = salmon_cells/ncells,
-         prop_high_broiler = high_broiler/broiler_cells,
-         prop_high_salmon = high_salmon/salmon_cells) %>% 
-  filter(!is.na(iso3c) == T)
+  summarise(broiler_cells = length(which(broiler_cpi>0)),
+         salmon_cells = length(which(salmon_cpi>0))) %>% 
+  mutate(prop_broiler = broiler_cells/ncells) %>% 
+  filter(!is.na(iso3c) == T) %>% 
+  full_join(., iso3_salmon_cpi) %>% 
+  rename(salmon_cpi = country_farm_feed_chi) %>% 
+  dplyr::select(-animal_system) %>% 
+  full_join(., iso3_broiler_cpi) %>% 
+  rename(chicken_cpi = country_farm_feed_chi) %>% 
+  dplyr::select(-animal_system) %>% 
+  mutate(broiler_cpi_cell = chicken_cpi/broiler_cells,
+         salmon_cpi_cell = salmon_cpi/salmon_cells) %>% 
+  full_join(., broiler_prod) %>% 
+  full_join(., salmon_prod, by = c("Country" = "country", "iso3c"))
 
-cells_iso3_cpi<-cells_iso3_cpi %>% 
-  mutate(mean_broiler_global = mean(broiler_cpi_df$broiler_cpi, na.rm = T),
-         mean_salmon_global = mean(salmon_cpi_df$salmon_cpi, na.rm = T),
-         med_broiler_global = median(broiler_cpi_df$broiler_cpi, na.rm = T),
-         med_salmon_global = median(salmon_cpi_df$salmon_cpi, na.rm = T))
+chicken_cells_iso3_cpi<-cells_iso3_cpi %>% 
+  dplyr::select(-salmon_cpi,-salmon_cells, -salmon_cpi_cell)
 
 write.csv(cells_iso3_cpi, here("_analysis/output_data/CPI_cells_by_country.csv"))
+write.csv(test, here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
 ```
+
 
 # percent of the world with cpi
 
@@ -743,7 +768,9 @@ broiler_cpi_feed<-results %>%
          source2 = ifelse(source == "farm", "farm", "feed")) %>%
    group_by(animal_system, source2) %>%
   summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
-  filter(animal_system == "chickens") %>% 
+  filter(animal_system == "chickens") 
+
+broiler_cpi_feed<-broiler_cpi_feed %>% 
   mutate(prop = country_farm_feed_chi/sum(broiler_cpi_feed$country_farm_feed_chi))
 
 
@@ -825,7 +852,8 @@ salmon_cpi_km2_feed<-salmon_cpi_feed %>%
 ```
 
 ```{r}
-broiler_cpi_feed_iso3<-results %>%
+# Chicken CPI
+broiler_cpi_feed_farm_iso3<-results %>%
     filter(!is.na(Country)) %>% ## Antarctica
   left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
   rowwise() %>%
@@ -833,34 +861,11 @@ broiler_cpi_feed_iso3<-results %>%
          source2 = ifelse(source == "farm", "farm", "feed")) %>%
    group_by(iso3c, Country, animal_system, source2) %>%
   summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
-  filter(animal_system == "chickens",
-         source2 == "feed") 
-
-broiler_cpi_farm_iso3<-results %>%
-    filter(!is.na(Country)) %>% ## Antarctica
-  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
-  rowwise() %>%
-  mutate(prop_of_global = value/global_total,
-         source2 = ifelse(source == "farm", "farm", "feed")) %>%
-   group_by(iso3c, Country, animal_system, source2) %>%
-  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
-  filter(animal_system == "chickens",
-         source2 == "farm") 
-
+  filter(animal_system == "chickens") 
 
 # Salmon CPI
-salmon_cpi_feed_iso3<-results %>%
-    filter(!is.na(Country)) %>% ## Antarctica
-  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
-  rowwise() %>%
-  mutate(prop_of_global = value/global_total,
-         source2 = ifelse(source == "farm", "farm", "feed")) %>%
-   group_by(iso3c, Country,animal_system, source2) %>%
-  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
-  filter(animal_system == "salmon",
-         source2 == "feed") 
 
-salmon_cpi_farm_iso3<-results %>%
+salmon_cpi_feed_farm_iso3<-results %>%
     filter(!is.na(Country)) %>% ## Antarctica
   left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
   rowwise() %>%
@@ -868,8 +873,11 @@ salmon_cpi_farm_iso3<-results %>%
          source2 = ifelse(source == "farm", "farm", "feed")) %>%
    group_by(iso3c, Country,animal_system, source2) %>%
   summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>%
-  filter(animal_system == "salmon",
-         source2 == "farm") 
+  filter(animal_system == "salmon") 
+
+write.csv(broiler_cpi_feed_farm_iso3, here("_analysis/output_data/Broiler_farm_feed_cpi.csv"))
+
+write.csv(salmon_cpi_feed_farm_iso3, here("_analysis/output_data/Salmon_farm_feed_cpi.csv"))
 ```
 
 ```{r}
@@ -928,6 +936,77 @@ length(which(dom_chicken$cat == "water"))/n_cells_chicken_cpi
 
 #GHG
 length(which(dom_chicken$cat == "ghg"))/n_cells_chicken_cpi
+```
+
+
+```{r}
+farm_iso3_cpi_stressor<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total,
+         source2 = ifelse(source == "farm", "farm", "feed")) %>%
+   #group_by(iso3c, Country, source, subsource, animal_system, location, stressor) %>%
+  group_by(iso3c, Country, animal_system, stressor, source2) %>% 
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>% 
+  filter(animal_system == "chickens",
+         source2 == "farm")
+
+test<-farm_iso3_cpi_stressor %>% 
+  filter(Country %in% c("United States", "China", "Brazil"))
+
+test<-farm_iso3_cpi_stressor %>% 
+  filter(Country == "Nauru")
+
+ghg<-farm_iso3_cpi_stressor %>% 
+  filter(stressor == "ghg")
+
+mean(ghg$country_farm_feed_chi)
+
+100-((244-157)/244*100)
+
+#Nauru ranks 157 out of 244
+
+nutrient<-farm_iso3_cpi_stressor %>% 
+  filter(stressor == "nutrient")
+
+mean(nutrient$country_farm_feed_chi)
+
+#Naru ranks 150
+
+100-((244-150)/244*100)
+
+water<-farm_iso3_cpi_stressor %>% 
+  filter(stressor == "water")
+
+mean(water$country_farm_feed_chi)
+
+#Nauru ranks 165
+
+100-((244-165)/244*100)
+
+dist<-farm_iso3_cpi_stressor %>% 
+  filter(stressor == "disturbance")
+
+mean(dist$country_farm_feed_chi)
+median(dist$country_farm_feed_chi)
+
+#Nauru ranks 161
+
+100-((244-161)/244*100)
+```
+
+```{r}
+iso3_cpi_stressor<-results %>%
+    filter(!is.na(Country)) %>% ## Antarctica
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   #group_by(iso3c, Country, source, subsource, animal_system, location, stressor) %>%
+  group_by(iso3c, Country, animal_system, stressor) %>% 
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE)) %>% 
+  filter(animal_system == "chickens")
+
 ```
 
 ```{r}
