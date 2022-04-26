@@ -1,0 +1,146 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: '2022-04-21'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(patchwork)
+library(tidyverse)
+library(ggrepel)
+library(ggpmisc)
+library(ggforce)
+```
+
+
+# Data
+```{r}
+dat<-read.csv(here("_analysis/output_data/CPI_cells_by_country.csv"))
+dat<-read.csv(here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
+```
+
+# Chicken
+
+Chicken CPI vs CPI footprint
+
+```{r}
+dat<-dat %>% 
+  mutate(broiler_cpi_pixel_lab = ifelse(broiler_cells>50000 | chicken_cpi > 0.1, as.character(Country), NA))
+
+my.formula <- y ~ x
+
+chick_cpi_km2_plot<-ggplot(dat, aes(x = broiler_cells/100000, y = chicken_cpi, label = Country)) + 
+  #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
+  geom_point() +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max.overlaps = 40) + 
+  theme_bw() +
+  xlab("Pixels (hundred thousands)") +
+  ylab("") 
+
+chick_cpi_km2_plot
+```
+```{r}
+cp3<-chick_cpi_km2_plot+
+facet_zoom(xlim = c(0, 0.5),
+           ylim = c(0,0.25), 
+           horizontal = T, 
+           zoom.size = 1,
+           shrink = T)
+
+cp3
+```
+```{r}
+ggsave(here("_analysis/figures/Chicken_cpi_km2_inset.png"), dpi = 300, height = 3, width = 10)
+```
+
+# Salmon
+
+Salmon CPI per footprint
+
+```{r}
+salmon_cpi_km2_plot<-ggplot(dat, aes(x = salmon_cells/100000, y = salmon_cpi, label = Country)) +
+ # annotation_custom(salmon_png, xmin = 0, xmax = 0.35, ymin = 0.035, ymax=0.045) +
+  geom_point() +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max_overlaps = 20) + 
+  theme_bw() +
+  xlab("Pixels (hundred thousands)") +
+  ylab("") 
+
+salmon_cpi_km2_plot
+```
+
+```{r}
+sp3<-salmon_cpi_km2_plot+
+facet_zoom(xlim = c(0, 0.25),
+           ylim = c(0,0.005), 
+           horizontal = T, 
+           zoom.size = 1, 
+           shrink = T)
+
+sp3
+```
+
+```{r}
+ggsave(here("_analysis/figures/Salmon_cpi_km2_inset.png"),dpi = 300, height = 3, width = 10)
+```
+
+# Log10
+
+```{r}
+log_chick_cpi_km2_plot<-ggplot(dat, aes(x = broiler_cells/100000, y = chicken_cpi, label = Country)) + 
+  #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
+  geom_point() +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max.overlaps = 20) + 
+  theme_bw() +
+  xlab("Pixels (hundred thousands)") +
+  ylab("") +
+  scale_x_log10()+
+  scale_y_log10()
+
+log_chick_cpi_km2_plot
+```
+
+```{r}
+
+log_salmon_cpi_km2_plot<-ggplot(dat, aes(x = salmon_cells/100000, y = salmon_cpi, label = Country)) +
+ # annotation_custom(salmon_png, xmin = 0, xmax = 0.35, ymin = 0.035, ymax=0.045) +
+  geom_point() +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max_overlaps = 40) + 
+  theme_bw() +
+  xlab("Pixels (hundred thousands, log10)") +
+  ylab("") +
+  scale_x_log10() +
+  scale_y_log10()
+
+log_salmon_cpi_km2_plot
+```
+
+```{r}
+log_chick_cpi_km2_plot + log_salmon_cpi_km2_plot + plot_annotation(tag_levels = "A")
+```
+```{r}
+ggsave(here("_analysis/figures/CPI_footprint_plots_log10.png"), dpi = 300, height = 3, width = 10)
+```
+
