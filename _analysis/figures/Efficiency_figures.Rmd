@@ -15,93 +15,117 @@ library(patchwork)
 library(tidyverse)
 library(ggrepel)
 library(ggpmisc)
-```
-
-# Animal PNGs
-
-```{r}
-chicken_png <- readPNG(here("_analysis/figures", "chicken.png"))
-chicken_png <- rasterGrob(chicken_png)
-```
-
-```{r}
-salmon_png<-readPNG(here("_analysis/figures", "salmon.png"))
-salmon_png<-rasterGrob(salmon_png)
+library(ggforce)
 ```
 
 # Data
 ```{r}
-dat<-read.csv(here("_analysis/output_data/CPI_cells_by_country.csv"))
+chick_dat<-read.csv(here("_analysis/output_data/Broiler_farm_feed_cpi.csv"))
+chick_prod<-read.csv("/home/shares/food-systems/Food_footprint/chicken_salmon/production/broiler_production.csv") %>% 
+  dplyr::select(iso3c, Country, broiler_slaughter_wt_tonnes)
+
+chick_all<-full_join(chick_dat, chick_prod) %>% 
+  mutate(eff = country_farm_feed_chi/broiler_slaughter_wt_tonnes)
 ```
-
-Chicken CPI vs CPI footprint
-
-```{r}
-dat<-dat %>% 
-  mutate(broiler_cpi_pixel_lab = ifelse(broiler_cells>50000 | chicken_cpi > 0.1, as.character(Country), NA))
-
-my.formula <- y ~ x
-
-chick_cpi_km2_plot<-ggplot(dat, aes(x = broiler_cells/100000, y = chicken_cpi, label = broiler_cpi_pixel_lab)) + 
-  #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
-  geom_point() +
-  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
-  #stat_poly_eq(formula = my.formula, 
-  #              aes(label = paste(..rr.label.., sep = "~~~")), 
-  #              parse = TRUE) +
-  geom_text_repel() + 
-  theme_bw() +
-  xlab("Pixels (hundred thousands)") +
-  ylab("") 
-
-chick_cpi_km2_plot
-```
-Chicken CPI vs production
 
 
 ```{r}
-dat<-dat %>% 
-  mutate(broiler_cpi_prod_lab = ifelse(broiler_slaughter_wt_tonnes>240000000 | chicken_cpi > 0.07, as.character(Country), NA))
+salmon_dat<-read.csv(here("_analysis/output_data/Salmon_farm_feed_cpi.csv"))
+salmon_prod<-read.csv("/home/shares/food-systems/Food_footprint/chicken_salmon/production/salmon_production.csv") %>% 
+  dplyr::select(iso3c, country, fao_tonnes_production) %>% 
+  rename(Country = country)
 
-chick_cpi_prod_plot<-ggplot(dat, aes(x = broiler_slaughter_wt_tonnes/1000000, y = chicken_cpi, label = broiler_cpi_prod_lab)) +
+salmon_all<-full_join(salmon_dat, salmon_prod) %>% 
+  mutate(eff = country_farm_feed_chi/fao_tonnes_production)
+```
+
+
+Chicken farm CPI vs production
+
+
+```{r}
+chick_all_farm<-chick_all %>% 
+  filter(source2 == "farm") %>% 
+  mutate(broiler_cpi_prod_lab = ifelse(broiler_slaughter_wt_tonnes>240000000 | country_farm_feed_chi > 0.02, as.character(Country), NA))
+
+cp1<-ggplot(chick_all_farm, aes(x = broiler_slaughter_wt_tonnes/1000000, y = country_farm_feed_chi, label = Country)) +
   #annotation_custom(chicken_png, xmin = 0, xmax = 2.5, ymin = 0.65, ymax=0.75) +
   geom_point() +
   #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel() + 
+  geom_text_repel(max.overlaps = 40) + 
   theme_bw() +
   xlab("Slaughter weight (million tonnes)") +
-  ylab("") 
+  ylab("") #+
+  #scale_x_log10() +
+  #scale_y_log10()
 
-chick_cpi_prod_plot
+cp1
+
+```
+```{r}
+cp3<-cp1+
+facet_zoom(xlim = c(0, 2.5),
+           ylim = c(0,0.025), 
+           horizontal = T, 
+           zoom.size = 1)
+
+cp3
+```
+```{r}
+ggsave(here("_analysis/figures/Chicken_direct_prod_inset1.png"), dpi = 300, height = 3, width = 10)
+
 ```
 
-Salmon CPI per footprint
+
 
 ```{r}
-dat<-dat %>% 
-  mutate(salmon_cpi_pixel_lab = ifelse(salmon_cells>24000 | salmon_cpi > 0.005, as.character(Country), NA))
+sub<-chick_all_farm %>% 
+  filter(broiler_slaughter_wt_tonnes<2500000)
 
-salmon_cpi_km2_plot<-ggplot(dat, aes(x = salmon_cells/100000, y = salmon_cpi, label = salmon_cpi_pixel_lab)) +
- # annotation_custom(salmon_png, xmin = 0, xmax = 0.35, ymin = 0.035, ymax=0.045) +
+cp2<-ggplot(sub, aes(x = broiler_slaughter_wt_tonnes/1000000, y = country_farm_feed_chi, label = Country)) +
+  #annotation_custom(chicken_png, xmin = 0, xmax = 2.5, ymin = 0.65, ymax=0.75) +
   geom_point() +
+  #xlim(c(0,2.5)) +
+  coord_cartesian(xlim = c(0, 2.5)) +
+  scale_x_continuous(breaks = seq(from = 0, to = 2.5, by = 0.5)) +
   #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel() + 
+  geom_text_repel(max.overlaps = 50) + 
   theme_bw() +
-  xlab("Pixels (hundred thousands)") +
-  ylab("") 
+  xlab("Slaughter weight (million tonnes)") +
+  ylab("") +
+  ylim(c(0,0.025))
 
-salmon_cpi_km2_plot
+cp2
 ```
+```{r}
+cp2
+print(cp1, vp = viewport(x = 0.32, y = 0.75, width = 0.42, height = 0.42))
+```
+
+
+```{r}
+cp1
+print(cp2, vp = viewport(x = 0.3, y = 0.75, width = 0.4, height = 0.4))
+```
+
+```{r}
+cp1 + inset_element(cp2, 0,0, 0.6,0.6)
+```
+
+
  Salmon CPI vs production
  
 ```{r}
-salmon_cpi_prod_plot<-ggplot(dat, aes(x = fao_tonnes_production/10000, y = salmon_cpi, label = Country)) +
+salmon_all_farm<- salmon_all %>% 
+  filter(source2 == "farm")
+
+sp1<-ggplot(salmon_all_farm, aes(x = fao_tonnes_production/10000, y = country_farm_feed_chi, label = Country)) +
   #annotation_custom(salmon_png, xmin = 0, xmax = 20, ymin = 0.035, ymax=0.045) +
   geom_point() +
   #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
@@ -113,14 +137,17 @@ salmon_cpi_prod_plot<-ggplot(dat, aes(x = fao_tonnes_production/10000, y = salmo
   xlab("Slaughter weight (ten thounsand tonnes)") +
   ylab("") 
 
-salmon_cpi_prod_plot
+sp1
+```
+```{r}
+ggsave(here("_analysis/figures/Salmon_direct_prod.png"), dpi = 300, height = 3, width = 5)
+
 ```
 
 ```{r}
-(chick_cpi_prod_plot + chick_cpi_km2_plot)/(salmon_cpi_prod_plot + salmon_cpi_km2_plot) +  plot_annotation(tag_levels = 'A')
+(cp3+sp1) +  plot_annotation(tag_levels = 'A')
 ```
 
-```{r}
-ggsave(here("_analysis/figures/Efficiency_figures.png"), dpi = 300, height = 7, width = 10)
-```
+
+
 

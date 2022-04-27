@@ -1,0 +1,489 @@
+"","iso3c","Country","animal_system","source2","country_farm_feed_chi"
+"1","ABW","Aruba","salmon","farm",0
+"2","ABW","Aruba","salmon","feed",0.0000038720018570445
+"3","AFG","Afghanistan","salmon","farm",0
+"4","AFG","Afghanistan","salmon","feed",0.000000729625565280616
+"5","AGO","Angola","salmon","farm",0
+"6","AGO","Angola","salmon","feed",0.000542261811255589
+"7","AIA","Anguilla","salmon","farm",0
+"8","AIA","Anguilla","salmon","feed",0.00000106256105237947
+"9","ALA","Åland","salmon","farm",0
+"10","ALA","Åland","salmon","feed",0.000000533662484171787
+"11","ALB","Albania","salmon","farm",0
+"12","ALB","Albania","salmon","feed",0.00000169349405689829
+"13","AND","Andorra","salmon","farm",0
+"14","AND","Andorra","salmon","feed",0.000000487208300196247
+"15","ARE","United Arab Emirates","salmon","farm",0
+"16","ARE","United Arab Emirates","salmon","feed",0.0000737899954849384
+"17","ARG","Argentina","salmon","farm",0
+"18","ARG","Argentina","salmon","feed",0.00222480719342756
+"19","ARM","Armenia","salmon","farm",0
+"20","ARM","Armenia","salmon","feed",0.00000507245226822731
+"21","ASM","American Samoa","salmon","farm",0
+"22","ASM","American Samoa","salmon","feed",0.00000194806953883791
+"23","ATG","Antigua and Barbuda","salmon","farm",0
+"24","ATG","Antigua and Barbuda","salmon","feed",0.000000379680918022891
+"25","AUS","Australia","salmon","farm",0.00096172107743587
+"26","AUS","Australia","salmon","feed",0.00057617053023962
+"27","AUT","Austria","salmon","farm",0
+"28","AUT","Austria","salmon","feed",0.0000054485019895182
+"29","AZE","Azerbaijan","salmon","farm",0
+"30","AZE","Azerbaijan","salmon","feed",0.00000199561827105621
+"31","BDI","Burundi","salmon","farm",0.0000110535554770876
+"32","BDI","Burundi","salmon","feed",0.00000724368458837691
+"33","BEL","Belgium","salmon","farm",0.000000725201722396564
+"34","BEL","Belgium","salmon","feed",0.000169224426999134
+"35","BEN","Benin","salmon","farm",0
+"36","BEN","Benin","salmon","feed",0.0000120801071537596
+"37","BES","Bonaire, Sint Eustatius and Saba","salmon","farm",0
+"38","BES","Bonaire, Sint Eustatius and Saba","salmon","feed",0.00000707389882968778
+"39","BFA","Burkina Faso","salmon","farm",0
+"40","BFA","Burkina Faso","salmon","feed",0.00000631386263172019
+"41","BGD","Bangladesh","salmon","farm",0
+"42","BGD","Bangladesh","salmon","feed",0.000172614307093954
+"43","BGR","Bulgaria","salmon","farm",0
+"44","BGR","Bulgaria","salmon","feed",0.0000248006840593202
+"45","BHR","Bahrain","salmon","farm",0
+"46","BHR","Bahrain","salmon","feed",0.00000855921381754049
+"47","BHS","Bahamas","salmon","farm",0
+"48","BHS","Bahamas","salmon","feed",0.00000194602100044267
+"49","BIH","Bosnia and Herzegovina","salmon","farm",0
+"50","BIH","Bosnia and Herzegovina","salmon","feed",0.0000156209010218149
+"51","BLM","Saint-Barthélemy","salmon","farm",0
+"52","BLM","Saint-Barthélemy","salmon","feed",0.00001615326650306
+"53","BLR","Belarus","salmon","farm",0
+"54","BLR","Belarus","salmon","feed",0.0000330111006049721
+"55","BLZ","Belize","salmon","farm",0.0000272042817689395
+"56","BLZ","Belize","salmon","feed",0.0000153970643614654
+"57","BMU","Bermuda","salmon","farm",0
+"58","BMU","Bermuda","salmon","feed",0.00000809063536777035
+"59","BOL","Bolivia","salmon","farm",0
+"60","BOL","Bolivia","salmon","feed",0.000172597406619065
+"61","BRA","Brazil","salmon","farm",0.0000010924109192375
+"62","BRA","Brazil","salmon","feed",0.00271632655037832
+"63","BRB","Barbados","salmon","farm",0
+"64","BRB","Barbados","salmon","feed",0.00000248683044164424
+"65","BRN","Brunei","salmon","farm",0
+"66","BRN","Brunei","salmon","feed",0.0000136088204995667
+"67","BTN","Bhutan","salmon","farm",0
+"68","BTN","Bhutan","salmon","feed",0.00000548277815130416
+"69","BWA","Botswana","salmon","farm",0
+"70","BWA","Botswana","salmon","feed",0.00000540453591060425
+"71","CAF","Central African Republic","salmon","farm",0
+"72","CAF","Central African Republic","salmon","feed",0.00000312778966326952
+"73","CAN","Canada","salmon","farm",0.00233778456266825
+"74","CAN","Canada","salmon","feed",0.00165262799539432
+"75","CCK","Cocos Islands","salmon","farm",0.0000181108022801393
+"76","CCK","Cocos Islands","salmon","feed",0.0000119407793388526
+"77","CHE","Switzerland","salmon","farm",0
+"78","CHE","Switzerland","salmon","feed",0.0000171227861704197
+"79","CHL","Chile","salmon","farm",0.016185903962033
+"80","CHL","Chile","salmon","feed",0.00396260613430125
+"81","CHN","China","salmon","farm",0.0000301710462608063
+"82","CHN","China","salmon","feed",0.00223558314153541
+"83","CIV","Côte d'Ivoire","salmon","farm",0.000000729842120392525
+"84","CIV","Côte d'Ivoire","salmon","feed",0.0000186148893275249
+"85","CMR","Cameroon","salmon","farm",0.000054408563537879
+"86","CMR","Cameroon","salmon","feed",0.000143215922812033
+"87","COD","Democratic Republic of the Congo","salmon","farm",0
+"88","COD","Democratic Republic of the Congo","salmon","feed",0.00000565932346232556
+"89","COG","Republic of Congo","salmon","farm",0
+"90","COG","Republic of Congo","salmon","feed",0.0000274333902998574
+"91","COK","Cook Islands","salmon","farm",0
+"92","COK","Cook Islands","salmon","feed",0.0000112820284359368
+"93","COL","Colombia","salmon","farm",0
+"94","COL","Colombia","salmon","feed",0.000026780364433813
+"95","COM","Comoros","salmon","farm",0
+"96","COM","Comoros","salmon","feed",0.0000094348270336035
+"97","CPV","Cape Verde","salmon","farm",0.00000457140448622719
+"98","CPV","Cape Verde","salmon","feed",0.00000790304183345987
+"99","CRI","Costa Rica","salmon","farm",0
+"100","CRI","Costa Rica","salmon","feed",0.00000856229376619413
+"101","CUB","Cuba","salmon","farm",0
+"102","CUB","Cuba","salmon","feed",0.0000130742573648935
+"103","CUW","Curaçao","salmon","farm",0
+"104","CUW","Curaçao","salmon","feed",0.00000906364387003167
+"105","CXR","Christmas Island","salmon","farm",0
+"106","CXR","Christmas Island","salmon","feed",0.00000982368065772207
+"107","CYM","Cayman Islands","salmon","farm",0.0000875337580569236
+"108","CYM","Cayman Islands","salmon","feed",0.00000461832043091134
+"109","CYP","Cyprus","salmon","farm",0
+"110","CYP","Cyprus","salmon","feed",0.00000822297355506227
+"111","CZE","Czech Republic","salmon","farm",0
+"112","CZE","Czech Republic","salmon","feed",0.00000910301096108701
+"113","DEU","Germany","salmon","farm",0.000030460096809358
+"114","DEU","Germany","salmon","feed",0.0017601767772432
+"115","DJI","Djibouti","salmon","farm",0.0000114271888491099
+"116","DJI","Djibouti","salmon","feed",0.0000780421960861401
+"117","DMA","Dominica","salmon","farm",0.000000363534404684066
+"118","DMA","Dominica","salmon","feed",0.0000299612356771076
+"119","DNK","Denmark","salmon","farm",0.000243981781237855
+"120","DNK","Denmark","salmon","feed",0.00198069733466177
+"121","DOM","Dominican Republic","salmon","farm",0.0000228211766780498
+"122","DOM","Dominican Republic","salmon","feed",0.0000459483143029159
+"123","DZA","Algeria","salmon","farm",0
+"124","DZA","Algeria","salmon","feed",0.0000354571167162228
+"125","ECU","Ecuador","salmon","farm",0
+"126","ECU","Ecuador","salmon","feed",0.000595170640595413
+"127","EGY","Egypt","salmon","farm",0
+"128","EGY","Egypt","salmon","feed",0.0000722137428148171
+"129","ERI","Eritrea","salmon","farm",0.000000363534404684066
+"130","ERI","Eritrea","salmon","feed",0.0000477633162406947
+"131","ESH","Western Sahara","salmon","farm",0
+"132","ESH","Western Sahara","salmon","feed",0.0000963121050270783
+"133","ESP","Spain","salmon","farm",0
+"134","ESP","Spain","salmon","feed",0.000805326822874942
+"135","EST","Estonia","salmon","farm",0.00000389328408155401
+"136","EST","Estonia","salmon","feed",0.00031754511708937
+"137","ETH","Ethiopia","salmon","farm",0.00000146146257208005
+"138","ETH","Ethiopia","salmon","feed",0.0000415201119962649
+"139","FIN","Finland","salmon","farm",0.000209537404212938
+"140","FIN","Finland","salmon","feed",0.000717526554217204
+"141","FJI","Fiji","salmon","farm",0.00000272836676736344
+"142","FJI","Fiji","salmon","feed",0.0000524563145949441
+"143","FLK","Falkland Islands","salmon","farm",0
+"144","FLK","Falkland Islands","salmon","feed",0.0000433344894749797
+"145","FRA","France","salmon","farm",0
+"146","FRA","France","salmon","feed",0.00379621858022144
+"147","FRO","Faroe Islands","salmon","farm",0.00175239528314429
+"148","FRO","Faroe Islands","salmon","feed",0.00251305196139477
+"149","FSM","Micronesia","salmon","farm",0
+"150","FSM","Micronesia","salmon","feed",0.0000164468324680641
+"151","GAB","Gabon","salmon","farm",0
+"152","GAB","Gabon","salmon","feed",0.0000619540859135277
+"153","GBR","United Kingdom","salmon","farm",0.00348120641714964
+"154","GBR","United Kingdom","salmon","feed",0.0139955223671408
+"155","GEO","Georgia","salmon","farm",0
+"156","GEO","Georgia","salmon","feed",0.0000648631530764976
+"157","GGY","Guernsey","salmon","farm",0
+"158","GGY","Guernsey","salmon","feed",0.000123704383678446
+"159","GHA","Ghana","salmon","farm",0
+"160","GHA","Ghana","salmon","feed",0.0000920399494642086
+"161","GIB","Gibraltar","salmon","farm",0
+"162","GIB","Gibraltar","salmon","feed",0.0000270418392070709
+"163","GIN","Guinea","salmon","farm",0
+"164","GIN","Guinea","salmon","feed",0.00019450004092251
+"165","GLP","Guadeloupe","salmon","farm",0
+"166","GLP","Guadeloupe","salmon","feed",0.0000329310646737435
+"167","GMB","Gambia","salmon","farm",0
+"168","GMB","Gambia","salmon","feed",0.0000549380384219892
+"169","GNB","Guinea-Bissau","salmon","farm",0
+"170","GNB","Guinea-Bissau","salmon","feed",0.0000744537585651001
+"171","GNQ","Equatorial Guinea","salmon","farm",0.00000679798393010475
+"172","GNQ","Equatorial Guinea","salmon","feed",0.0000476731684588858
+"173","GRC","Greece","salmon","farm",0.0000111762411437887
+"174","GRC","Greece","salmon","feed",0.000142130993982228
+"175","GRD","Grenada","salmon","farm",0
+"176","GRD","Grenada","salmon","feed",0.0000309273547131208
+"177","GRL","Greenland","salmon","farm",0
+"178","GRL","Greenland","salmon","feed",0.00150185983575075
+"179","GTM","Guatemala","salmon","farm",0
+"180","GTM","Guatemala","salmon","feed",0.0000430944443179464
+"181","GUF","French Guiana","salmon","farm",0
+"182","GUF","French Guiana","salmon","feed",0.0000761979450579722
+"183","GUM","Guam","salmon","farm",0.00000453394194415476
+"184","GUM","Guam","salmon","feed",0.0000311855374805444
+"185","GUY","Guyana","salmon","farm",0
+"186","GUY","Guyana","salmon","feed",0.000026877037034438
+"187","HKG","Hong Kong","salmon","farm",0
+"188","HKG","Hong Kong","salmon","feed",0.0000278355351634523
+"189","HND","Honduras","salmon","farm",0
+"190","HND","Honduras","salmon","feed",0.0000300904380622655
+"191","HRV","Croatia","salmon","farm",0.00000292203594649893
+"192","HRV","Croatia","salmon","feed",0.0000417709971633031
+"193","HTI","Haiti","salmon","farm",0
+"194","HTI","Haiti","salmon","feed",0.0000334885453634446
+"195","HUN","Hungary","salmon","farm",0
+"196","HUN","Hungary","salmon","feed",0.0000557118057443426
+"197","IDN","Indonesia","salmon","farm",0.00000220813224440067
+"198","IDN","Indonesia","salmon","feed",0.00144095741516775
+"199","IMN","Isle of Man","salmon","farm",0
+"200","IMN","Isle of Man","salmon","feed",0.0000374382430853752
+"201","IND","India","salmon","farm",0.0000380990216008281
+"202","IND","India","salmon","feed",0.00144888872514451
+"203","IOT","British Indian Ocean Territory","salmon","farm",0
+"204","IOT","British Indian Ocean Territory","salmon","feed",0.00000543549022518462
+"205","IRL","Ireland","salmon","farm",0.000364211295636124
+"206","IRL","Ireland","salmon","feed",0.00213839947466949
+"207","IRN","Iran","salmon","farm",0
+"208","IRN","Iran","salmon","feed",0.0000897401144959395
+"209","IRQ","Iraq","salmon","farm",0
+"210","IRQ","Iraq","salmon","feed",0.0000252547279628281
+"211","ISL","Iceland","salmon","farm",0.000315035977111671
+"212","ISL","Iceland","salmon","feed",0.0137952186066832
+"213","ISR","Israel","salmon","farm",0.00000263862328866002
+"214","ISR","Israel","salmon","feed",0.0000437748279510421
+"215","ITA","Italy","salmon","farm",0
+"216","ITA","Italy","salmon","feed",0.000504298907397615
+"217","JAM","Jamaica","salmon","farm",0
+"218","JAM","Jamaica","salmon","feed",0.0000183645345662153
+"219","JEY","Jersey","salmon","farm",0
+"220","JEY","Jersey","salmon","feed",0.0000419280973304385
+"221","JOR","Jordan","salmon","farm",0
+"222","JOR","Jordan","salmon","feed",0.0000287352589403977
+"223","JPN","Japan","salmon","farm",0.000293527121427379
+"224","JPN","Japan","salmon","feed",0.00056167872141469
+"225","KAZ","Kazakhstan","salmon","farm",0
+"226","KAZ","Kazakhstan","salmon","feed",0.0000493542869078244
+"227","KEN","Kenya","salmon","farm",0
+"228","KEN","Kenya","salmon","feed",0.000024616858312943
+"229","KGZ","Kyrgyzstan","salmon","farm",0
+"230","KGZ","Kyrgyzstan","salmon","feed",0.0000169705320327891
+"231","KHM","Cambodia","salmon","farm",0
+"232","KHM","Cambodia","salmon","feed",0.00000958276465738136
+"233","KIR","Kiribati","salmon","farm",0
+"234","KIR","Kiribati","salmon","feed",0.0000307783845715384
+"235","KNA","Saint Kitts and Nevis","salmon","farm",0
+"236","KNA","Saint Kitts and Nevis","salmon","feed",0.000026941229699053
+"237","KOR","South Korea","salmon","farm",0.0000029953721943992
+"238","KOR","South Korea","salmon","feed",0.000131040227163369
+"239","KWT","Kuwait","salmon","farm",0.00000456476327801825
+"240","KWT","Kuwait","salmon","feed",0.0000366941347551505
+"241","LAO","Laos","salmon","farm",0.000000656964851975821
+"242","LAO","Laos","salmon","feed",0.0000236116448382288
+"243","LBN","Lebanon","salmon","farm",0
+"244","LBN","Lebanon","salmon","feed",0.0000334467861466327
+"245","LBR","Liberia","salmon","farm",0.000000369127967753592
+"246","LBR","Liberia","salmon","feed",0.0000344060815166361
+"247","LBY","Libya","salmon","farm",0
+"248","LBY","Libya","salmon","feed",0.0000424226667608061
+"249","LCA","Saint Lucia","salmon","farm",0
+"250","LCA","Saint Lucia","salmon","feed",0.0000219957515582074
+"251","LIE","Liechtenstein","salmon","farm",0
+"252","LIE","Liechtenstein","salmon","feed",0.0000323927603266537
+"253","LKA","Sri Lanka","salmon","farm",0
+"254","LKA","Sri Lanka","salmon","feed",0.0000259264796001069
+"255","LSO","Lesotho","salmon","farm",0
+"256","LSO","Lesotho","salmon","feed",0.0000161726668461847
+"257","LTU","Lithuania","salmon","farm",0
+"258","LTU","Lithuania","salmon","feed",0.000191377736143321
+"259","LUX","Luxembourg","salmon","farm",0.000000368181783945586
+"260","LUX","Luxembourg","salmon","feed",0.0000230655282065914
+"261","LVA","Latvia","salmon","farm",0.0000322162666217503
+"262","LVA","Latvia","salmon","feed",0.000256860548330559
+"263","MAC","Macao","salmon","farm",0
+"264","MAC","Macao","salmon","feed",0.0000258177163621714
+"265","MAF","Saint-Martin","salmon","farm",0
+"266","MAF","Saint-Martin","salmon","feed",0.000014991329331755
+"267","MAR","Morocco","salmon","farm",0
+"268","MAR","Morocco","salmon","feed",0.00108163827944519
+"269","MCO","Monaco","salmon","farm",0
+"270","MCO","Monaco","salmon","feed",0.0000219670740311478
+"271","MDA","Moldova","salmon","farm",0.000000656964851975821
+"272","MDA","Moldova","salmon","feed",0.0000226774676120528
+"273","MDG","Madagascar","salmon","farm",0
+"274","MDG","Madagascar","salmon","feed",0.000032037179310339
+"275","MDV","Maldives","salmon","farm",0.00000286001717721339
+"276","MDV","Maldives","salmon","feed",0.0000153112888698505
+"277","MEX","Mexico","salmon","farm",0
+"278","MEX","Mexico","salmon","feed",0.00180550751685525
+"279","MHL","Marshall Islands","salmon","farm",0
+"280","MHL","Marshall Islands","salmon","feed",0.0000368933440809083
+"281","MKD","Macedonia","salmon","farm",0.0000014300085886067
+"282","MKD","Macedonia","salmon","feed",0.0000252225087616538
+"283","MLI","Mali","salmon","farm",0.00000282778667162535
+"284","MLI","Mali","salmon","feed",0.0000213676258259666
+"285","MLT","Malta","salmon","farm",0
+"286","MLT","Malta","salmon","feed",0.000034747781784482
+"287","MMR","Myanmar","salmon","farm",0
+"288","MMR","Myanmar","salmon","feed",0.000189482442234645
+"289","MNE","Montenegro","salmon","farm",0
+"290","MNE","Montenegro","salmon","feed",0.0000161372945218915
+"291","MNG","Mongolia","salmon","farm",0
+"292","MNG","Mongolia","salmon","feed",0.0000131545636140708
+"293","MNP","Northern Mariana Islands","salmon","farm",0
+"294","MNP","Northern Mariana Islands","salmon","feed",0.0000248674462820468
+"295","MOZ","Mozambique","salmon","farm",0
+"296","MOZ","Mozambique","salmon","feed",0.0000302162025321733
+"297","MRT","Mauritania","salmon","farm",0
+"298","MRT","Mauritania","salmon","feed",0.000462593989541444
+"299","MSR","Montserrat","salmon","farm",0
+"300","MSR","Montserrat","salmon","feed",0.0000177209814023007
+"301","MTQ","Martinique","salmon","farm",0
+"302","MTQ","Martinique","salmon","feed",0.0000183647489055091
+"303","MUS","Mauritius","salmon","farm",0.00000131661382354424
+"304","MUS","Mauritius","salmon","feed",0.0000240871911156566
+"305","MWI","Malawi","salmon","farm",0.00000141389333581268
+"306","MWI","Malawi","salmon","feed",0.0000269906755828051
+"307","MYS","Malaysia","salmon","farm",0
+"308","MYS","Malaysia","salmon","feed",0.000478114782335809
+"309","MYT","Mayotte","salmon","farm",0
+"310","MYT","Mayotte","salmon","feed",0.0000210048429202906
+"311","NAM","Namibia","salmon","farm",0.00000140300269397796
+"312","NAM","Namibia","salmon","feed",0.000258373046121307
+"313","NCL","New Caledonia","salmon","farm",0
+"314","NCL","New Caledonia","salmon","feed",0.0000296450781904033
+"315","NER","Niger","salmon","farm",0
+"316","NER","Niger","salmon","feed",0.0000245919613800475
+"317","NFK","Norfolk Island","salmon","farm",0
+"318","NFK","Norfolk Island","salmon","feed",0.0000368662716310908
+"319","NGA","Nigeria","salmon","farm",0
+"320","NGA","Nigeria","salmon","feed",0.000146976898307289
+"321","NIC","Nicaragua","salmon","farm",0
+"322","NIC","Nicaragua","salmon","feed",0.0000287118353977754
+"323","NIU","Niue","salmon","farm",0
+"324","NIU","Niue","salmon","feed",0.0000150041462290039
+"325","NLD","Netherlands","salmon","farm",0
+"326","NLD","Netherlands","salmon","feed",0.00159796245966709
+"327","NOR","Norway","salmon","farm",0.0246557196603168
+"328","NOR","Norway","salmon","feed",0.0205791198404306
+"329","NPL","Nepal","salmon","farm",0
+"330","NPL","Nepal","salmon","feed",0.000023796103168646
+"331","NRU","Nauru","salmon","farm",0
+"332","NRU","Nauru","salmon","feed",0.0000284560843609037
+"333","NZL","New Zealand","salmon","farm",0.000269298721064881
+"334","NZL","New Zealand","salmon","feed",0.00017868577611226
+"335","OMN","Oman","salmon","farm",0.0000080530388562123
+"336","OMN","Oman","salmon","feed",0.000112225249901771
+"337","PAK","Pakistan","salmon","farm",0
+"338","PAK","Pakistan","salmon","feed",0.000113580334434023
+"339","PAN","Panama","salmon","farm",0.00000966498147610571
+"340","PAN","Panama","salmon","feed",0.0000972670218226852
+"341","PCN","Pitcairn Islands","salmon","farm",0
+"342","PCN","Pitcairn Islands","salmon","feed",0.000020829953330393
+"343","PER","Peru","salmon","farm",0
+"344","PER","Peru","salmon","feed",0.0109021868868057
+"345","PHL","Philippines","salmon","farm",0
+"346","PHL","Philippines","salmon","feed",0.000525972161308625
+"347","PLW","Palau","salmon","farm",0.0000161696491896308
+"348","PLW","Palau","salmon","feed",0.0000218567062873323
+"349","PNG","Papua New Guinea","salmon","farm",0.0000241611721670875
+"350","PNG","Papua New Guinea","salmon","feed",0.0000162252523621062
+"351","POL","Poland","salmon","farm",0
+"352","POL","Poland","salmon","feed",0.00044666672410189
+"353","PRI","Puerto Rico","salmon","farm",0
+"354","PRI","Puerto Rico","salmon","feed",0.0000671347582664608
+"355","PRK","North Korea","salmon","farm",0
+"356","PRK","North Korea","salmon","feed",0.0000270877748545591
+"357","PRT","Portugal","salmon","farm",0.00000280600538795593
+"358","PRT","Portugal","salmon","feed",0.000179548717560257
+"359","PRY","Paraguay","salmon","farm",0
+"360","PRY","Paraguay","salmon","feed",0.000518957292272481
+"361","PSE","Palestina","salmon","farm",0.000000368181783945586
+"362","PSE","Palestina","salmon","feed",0.0000246027369881387
+"363","PYF","French Polynesia","salmon","farm",0
+"364","PYF","French Polynesia","salmon","feed",0.0000531928826735779
+"365","QAT","Qatar","salmon","farm",0
+"366","QAT","Qatar","salmon","feed",0.0000349032042009781
+"367","REU","Reunion","salmon","farm",0
+"368","REU","Reunion","salmon","feed",0.0000231733795853849
+"369","ROU","Romania","salmon","farm",0
+"370","ROU","Romania","salmon","feed",0.000043128068328064
+"371","RUS","Russia","salmon","farm",0.000254990230840601
+"372","RUS","Russia","salmon","feed",0.00125072460975042
+"373","RWA","Rwanda","salmon","farm",0
+"374","RWA","Rwanda","salmon","feed",0.0000137946992496578
+"375","SAU","Saudi Arabia","salmon","farm",0
+"376","SAU","Saudi Arabia","salmon","feed",0.000339388997883892
+"377","SDN","Sudan","salmon","farm",0
+"378","SDN","Sudan","salmon","feed",0.0001379347881907
+"379","SEN","Senegal","salmon","farm",0
+"380","SEN","Senegal","salmon","feed",0.000170331189053265
+"381","SGP","Singapore","salmon","farm",0
+"382","SGP","Singapore","salmon","feed",0.0000164357552337778
+"383","SHN","Saint Helena","salmon","farm",0
+"384","SHN","Saint Helena","salmon","feed",0.0000149734063553359
+"385","SJM","Svalbard and Jan Mayen","salmon","farm",0
+"386","SJM","Svalbard and Jan Mayen","salmon","feed",0.0000187428508083384
+"387","SLB","Solomon Islands","salmon","farm",0.00000140300269397796
+"388","SLB","Solomon Islands","salmon","feed",0.0000117241951119161
+"389","SLE","Sierra Leone","salmon","farm",0
+"390","SLE","Sierra Leone","salmon","feed",0.0000881597171032323
+"391","SLV","El Salvador","salmon","farm",0
+"392","SLV","El Salvador","salmon","feed",0.0000307618591283218
+"393","SMR","San Marino","salmon","farm",0
+"394","SMR","San Marino","salmon","feed",0.0000194883214749141
+"395","SOM","Somalia","salmon","farm",0
+"396","SOM","Somalia","salmon","feed",0.000021299947684466
+"397","SPM","Saint Pierre and Miquelon","salmon","farm",0
+"398","SPM","Saint Pierre and Miquelon","salmon","feed",0.0000153442973266927
+"399","SRB","Serbia","salmon","farm",0
+"400","SRB","Serbia","salmon","feed",0.0000161808483754179
+"401","SSD","South Sudan","salmon","farm",0
+"402","SSD","South Sudan","salmon","feed",0.0000177723270728624
+"403","STP","São Tomé and Príncipe","salmon","farm",0
+"404","STP","São Tomé and Príncipe","salmon","feed",0.0000209060038951235
+"405","SUR","Suriname","salmon","farm",0
+"406","SUR","Suriname","salmon","feed",0.0000211856787249439
+"407","SVK","Slovakia","salmon","farm",0.0000147651986405382
+"408","SVK","Slovakia","salmon","feed",0.0000288454440250676
+"409","SVN","Slovenia","salmon","farm",0
+"410","SVN","Slovenia","salmon","feed",0.0000240435049246285
+"411","SWE","Sweden","salmon","farm",0.0000570880578597109
+"412","SWE","Sweden","salmon","feed",0.00200745793938453
+"413","SWZ","Swaziland","salmon","farm",0
+"414","SWZ","Swaziland","salmon","feed",0.0000313592296554658
+"415","SXM","Sint Maarten","salmon","farm",0
+"416","SXM","Sint Maarten","salmon","feed",0.000017651251379062
+"417","SYC","Seychelles","salmon","farm",0
+"418","SYC","Seychelles","salmon","feed",0.0000192518491845289
+"419","SYR","Syria","salmon","farm",0
+"420","SYR","Syria","salmon","feed",0.0000160171696239977
+"421","TCA","Turks and Caicos Islands","salmon","farm",0
+"422","TCA","Turks and Caicos Islands","salmon","feed",0.0000251407219456616
+"423","TCD","Chad","salmon","farm",0.0000561863509044275
+"424","TCD","Chad","salmon","feed",0.00001038113573575
+"425","TGO","Togo","salmon","farm",0.00000279383840085402
+"426","TGO","Togo","salmon","feed",0.0000230338936422023
+"427","THA","Thailand","salmon","farm",0
+"428","THA","Thailand","salmon","feed",0.000196680914620337
+"429","TJK","Tajikistan","salmon","farm",0.00000139691920042701
+"430","TJK","Tajikistan","salmon","feed",0.000011402097682178
+"431","TKL","Tokelau","salmon","farm",0
+"432","TKL","Tokelau","salmon","feed",0.0000226396689292741
+"433","TKM","Turkmenistan","salmon","farm",0
+"434","TKM","Turkmenistan","salmon","feed",0.0000332338901508297
+"435","TLS","Timor-Leste","salmon","farm",0
+"436","TLS","Timor-Leste","salmon","feed",0.0000280696523902484
+"437","TON","Tonga","salmon","farm",0
+"438","TON","Tonga","salmon","feed",0.0000163233776051404
+"439","TTO","Trinidad and Tobago","salmon","farm",0.00000139691920042701
+"440","TTO","Trinidad and Tobago","salmon","feed",0.0000254012721932536
+"441","TUN","Tunisia","salmon","farm",0
+"442","TUN","Tunisia","salmon","feed",0.000038996954211112
+"443","TUR","Turkey","salmon","farm",0.000084793540528474
+"444","TUR","Turkey","salmon","feed",0.000319258658500014
+"445","TUV","Tuvalu","salmon","farm",0
+"446","TUV","Tuvalu","salmon","feed",0.0000266932710203367
+"447","TWN","Taiwan","salmon","farm",0
+"448","TWN","Taiwan","salmon","feed",0.0000888816733453137
+"449","TZA","Tanzania","salmon","farm",0.0000028341263053782
+"450","TZA","Tanzania","salmon","feed",0.0000452208254883562
+"451","UGA","Uganda","salmon","farm",0
+"452","UGA","Uganda","salmon","feed",0.0000382931522788441
+"453","UKR","Ukraine","salmon","farm",0.0000141054653757222
+"454","UKR","Ukraine","salmon","feed",0.000119373804027213
+"455","URY","Uruguay","salmon","farm",0
+"456","URY","Uruguay","salmon","feed",0.000756377901393184
+"457","USA","United States","salmon","farm",0.00015865927459374
+"458","USA","United States","salmon","feed",0.0033556478187783
+"459","UZB","Uzbekistan","salmon","farm",0
+"460","UZB","Uzbekistan","salmon","feed",0.00000549260117736452
+"461","VCT","Saint Vincent and the Grenadines","salmon","farm",0
+"462","VCT","Saint Vincent and the Grenadines","salmon","feed",0.0000122473691931611
+"463","VEN","Venezuela","salmon","farm",0
+"464","VEN","Venezuela","salmon","feed",0.0000413539275635452
+"465","VGB","British Virgin Islands","salmon","farm",0
+"466","VGB","British Virgin Islands","salmon","feed",0.00000323511891654557
+"467","VIR","Virgin Islands, U.S.","salmon","farm",0
+"468","VIR","Virgin Islands, U.S.","salmon","feed",0.000000946561490821532
+"469","VNM","Vietnam","salmon","farm",0
+"470","VNM","Vietnam","salmon","feed",0.0000233376639997398
+"471","VUT","Vanuatu","salmon","farm",0
+"472","VUT","Vanuatu","salmon","feed",0.00000188945824894929
+"473","WLF","Wallis and Futuna","salmon","farm",0
+"474","WLF","Wallis and Futuna","salmon","feed",0.0000026925355849393
+"475","WSM","Samoa","salmon","farm",0
+"476","WSM","Samoa","salmon","feed",0.0000201745592945891
+"477","XKO","Kosovo","salmon","farm",0.00000226990008746867
+"478","XKO","Kosovo","salmon","feed",0.0000143981365341428
+"479","XMI","Madeira Island","salmon","farm",0
+"480","XMI","Madeira Island","salmon","feed",0.0000126506474194584
+"481","YEM","Yemen","salmon","farm",0
+"482","YEM","Yemen","salmon","feed",0.0000369498326842158
+"483","ZAF","South Africa","salmon","farm",0
+"484","ZAF","South Africa","salmon","feed",0.000459936252478686
+"485","ZMB","Zambia","salmon","farm",0
+"486","ZMB","Zambia","salmon","feed",0.000000539963878180995
+"487","ZWE","Zimbabwe","salmon","farm",0
+"488","ZWE","Zimbabwe","salmon","feed",0.000000668896251203189
