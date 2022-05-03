@@ -1,0 +1,49 @@
+---
+title: "Create land + eez raster"
+author: "Juliette"
+date: "5/28/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Create a land_eez_rgns.tif file
+
+Note: there will likely be some cells that are in both land and ocean (the resolution is not good enough to be specific enough)
+
+This combines the eez_master_rgns.tif and the master_rgns.tiff. Will be useful for extracting all impacts of a country at once regardless or ocean or land.
+
+```{r}
+library(tidyverse)
+
+prep <- "/home/shares/food-systems/Food_footprint/dataprep/"
+
+rgns_tif <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns_extended_gall_peters.tif")
+eez_tif <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/eez_extended_rgns_gall_peters.tif")
+
+rgn_info <- read_csv(here("_spatial/output/master_rgns.csv"))
+
+plot(eez_tif)
+plot(rgns_tif)
+unique(eez_tif)
+```
+
+
+#combine
+```{r}
+
+myFun <- function(x,y){ifelse(is.na(y), x, y)}
+
+land_eez_raster <- overlay(eez_tif, rgns_tif, fun=myFun)
+
+plot(land_eez_raster)
+
+
+writeRaster(land_eez_raster, "/home/shares/food-systems/Food_footprint/dataprep/spatial/land_eez_rgns_gall_peters.tif", format="GTiff", overwrite=TRUE)
+```
+
+

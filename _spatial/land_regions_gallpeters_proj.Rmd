@@ -1,0 +1,175 @@
+---
+title: "Rasterize spatial regions"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we establish the map and list of regions.
+
+```{r setup, include=FALSE}
+library(fasterize)
+library(sf)
+library(tidyverse)
+library(raster)
+library(here)
+
+
+## gall_peters projection
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+#raster template 
+#template_eq_area <- raster(res=0.083333333333333333)
+#extent(template_eq_area) <- c(-180, 180, -90, 90)
+#template_eq_area <- projectRaster(template_eq_area, crs=gall_peters, res=6000) 
+
+template_eq_area <- raster("/home/shares/food-systems/Food_footprint/stressor_summary_new/feed_farm_system_stressor/farm_broiler_water_per_cell.tif")
+
+```
+
+## Shapefile created in land_regions.Rmd
+```{r}
+
+map <- st_read("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns.shp")
+
+rgn_master <- read_csv(here("_spatial/output/master_rgns.csv"))
+
+
+```
+
+
+Project shapefile to gall-peters.       
+```{r}
+
+map_gp <- st_transform(map, crs(template_eq_area))
+plot(st_geometry(map_gp))
+
+```
+
+Create a country raster from spatial data.
+
+```{r}
+map_raster <- dplyr::select(map_gp, ID_0)
+rgn_raster_gp <- fasterize::fasterize(map_raster, template_eq_area, field="ID_0") 
+plot(rgn_raster_gp)
+
+#click(rgn_raster)
+
+```
+
+Determine if any regions are being cut due to rasterization
+```{r}
+## check that all names in csv master regions match the regions in the raster
+
+rgn_df <- as.data.frame(rgn_raster_gp) %>%
+  rename(ID_0 = layer)
+
+
+setdiff(rgn_df$ID_0, rgn_master$ID_0)
+cut <- setdiff(rgn_master$ID_0, rgn_df$ID_0)  # make sure no countries are being cut from rasterization, need to be added in
+dplyr::filter(rgn_master, ID_0 %in% cut) 
+
+
+
+```
+
+```{r}
+## lat longs of two missed regions
+cocos <- data.frame(latitude = -12.1368, longitude = 96.8694, ID_0 = 52) 
+gibraltar <- data.frame(latitude = 36.1393, longitude = -5.3528, ID_0 = 88)
+monaco <- data.frame(latitude = 43.7382, longitude = 7.4227, ID_0 = 148)
+tokelau <- data.frame(latitude = -9.1678, longitude = -171.8224, ID_0 = 231) 
+macao <- data.frame(latitude = 22.1987, longitude = 113.5439, ID_0=132)
+
+
+add_rgns <- rbind(cocos, gibraltar, monaco, tokelau, macao)
+
+add_rgns_sf <-  st_as_sf(add_rgns, coords = c("longitude", "latitude"), 
+                 crs = 4326, agr = "constant")
+
+## convert to equal area crs:
+add_rgns_sf <- st_transform(add_rgns_sf, crs(template_eq_area))
+
+## check
+plot(rgn_raster_gp)
+plot(st_geometry(add_rgns_sf), add=TRUE)
+
+## convert to spatial shapefile (can't use fasterize for points)
+ add_rgns_shape <- as(add_rgns_sf, 'Spatial')
+## rasterize
+add_rgn_raster_gp <- rasterize(add_rgns_shape, template_eq_area, field="ID_0") 
+## combine rasters:
+myFun <- function(x,y){ifelse(is.na(y), x, y)}
+
+rgn_raster <- overlay(rgn_raster_gp, add_rgn_raster_gp, fun=myFun)
+plot(rgn_raster)
+
+rgn_raster_df <- as.data.frame(rgn_raster) %>%
+  rename(ID_0 = layer)
+  
+## Check against master list:
+setdiff(rgn_raster_df$ID_0, rgn_master$ID_0)
+cut <- setdiff(rgn_master$ID_0, rgn_raster_df$ID_0)  # make sure no countries are being cut from rasterization, need to be added in
+dplyr::filter(rgn_master, ID_0 %in% cut) 
+
+## all in there now!
+
+```
+
+## save the raster
+```{r}
+writeRaster(rgn_raster, "/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns_gall_peters.tif", overwrite=TRUE)
+
+```
+
+
+
+## extend raster a cell offshore for extracting data
+```{r}
+rgn_raster <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns_gall_peters.tif")
+plot(rgn_raster)
+
+
+## Function to gapfill NA cells using most common value of surrounding cells
+getmode <- function(v) {
+   uniqv <- na.omit(unique(v))
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+gf_raster <- function(x){raster::focal(x, w = matrix(1,3,3), fun = getmode, pad = TRUE, NAonly=TRUE)}
+
+r <- rgn_raster
+
+#1 cell out
+i <- 0
+
+while (i <= 1){
+
+r <- gf_raster(r)
+
+i <- i + 1
+print(i)
+}
+
+plot(r)
+
+rtest <-r  
+rtest[r>0] <- 1000
+
+plot(rtest, col="blue")
+crop_vals <- zoom(rtest)
+
+#rtest_crop <- crop(rtest, crop_vals)
+plot(rtest_crop, col="blue")
+
+rgn_raster_crop <- crop(rgn_raster, crop_vals)
+plot(rgn_raster_crop, col="red", add=TRUE)
+
+#this looks good!
+#crop to original extent (goes a bit beyond boundaries with addition)
+
+r_crop <- crop(r, extent(template_eq_area))
+
+writeRaster(r_crop, "/home/shares/food-systems/Food_footprint/dataprep/spatial/master_rgns_extended_gall_peters.tif", overwrite=TRUE)
+
+```

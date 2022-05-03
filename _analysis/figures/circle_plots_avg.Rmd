@@ -19,7 +19,8 @@ rgn_names <- read_csv(here("_spatial/output/master_rgns.csv")) %>%
 eez_rgns <- read_csv(here("_spatial/output/eez_rgns.csv")) %>%
   rename(eez_area_km2 = area_km2)
 
-rescaling_values <- read_csv(here("_analysis/step4_stressor_rescaling.csv")) 
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) %>%
+  rename(stressor=pressure)
 
 
 ```
@@ -29,7 +30,7 @@ rescaling_values <- read_csv(here("_analysis/step4_stressor_rescaling.csv"))
 ```{r}
 
 
-pressures <- read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.csv"))  %>%
+pressures <- read_csv(here("_analysis/output_data/sum_pressures_country.csv"))  %>%
     filter(!is.na(Country)) %>% ## Antarctica
   left_join(rescaling_values, by="stressor") %>%
   rowwise() %>%
@@ -39,22 +40,22 @@ pressures <- read_csv(here("_analysis/data/zonal_extract/sum_pressures_country.c
   left_join(rgn_names) %>%
   left_join(eez_rgns) %>%
   rowwise() %>%
-  mutate(avg_cum_stress_km2_1e_9= ifelse(location=="marine", 
-                          country_farm_feed_chi/eez_area_km2*1000000000,
-                          country_farm_feed_chi/land_area_km2*1000000000)) %>%
+  mutate(avg_cum_stress_km2_1e_6= ifelse(location=="marine", 
+                          country_farm_feed_chi/eez_area_km2*1000000,
+                          country_farm_feed_chi/land_area_km2*1000000)) %>%
   ungroup() %>%
-   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2_1e_9), 0, avg_cum_stress_km2_1e_9)) %>%
+   mutate(prop_of_global = ifelse(is.na(avg_cum_stress_km2_1e_6), 0, avg_cum_stress_km2_1e_6)) %>%
 
     mutate(source = ifelse(is.na(subsource), paste(animal_system, source, sep="-"), 
                          paste(animal_system, source, subsource, sep="-"))) %>%
 left_join(un_geopolitical, by="iso3c") %>%
-  select(Country, iso3c, location, source, avg_cum_stress_km2_1e_9, georegion)
+  select(Country, iso3c, location, source, avg_cum_stress_km2_1e_6, georegion)
   
 
 ## get georegion ranks
 chi <- pressures %>%
   group_by(georegion, Country, iso3c) %>%
-  summarize(chi = sum(avg_cum_stress_km2_1e_9, na.rm=TRUE)) %>%
+  summarize(chi = sum(avg_cum_stress_km2_1e_6, na.rm=TRUE)) %>%
   arrange(-chi)
 
 rank_georgn <- chi %>%
@@ -106,26 +107,31 @@ rank_rgn <- rank_rgn %>%
 ## Stuff for both plots
 ```{r}
 
-source_name <- data.frame(source = c("broiler-farm", "broiler-feed-crop", "salmon-feed-crop", 
-                                         "salmon-farm", "broiler-feed-marinefish", "salmon-feed-marinefish"),
+source_name <- data.frame(source = c("chickens-farm-land", "chickens-feedcrop-land", "salmon-feedcrop-marine", 
+                                         "salmon-farm-marine", "chickens-feedfofm-land", "salmon-feedfofm-marine"),
                             source_name = c("Broiler: farm", "Broiler: feed, crops", "Salmon: feed, crops",
                                               "Salmon: farm", "Broiler: feed, fish", "Salmon: feed, fish"))
 
 myPalette <- c("#D7A374", "#609DA4", "#1D6060",  # darkbrown, lightergreen, darkergreen
                "#6F4C41", "#CCEAF4", "#005AB8")    # tan, lighterblue, darkerblue   
 
-cutoff_value <- 100
+cutoff_value <- 1
 ```
 
 
 #### Circle part
 ```{r}
-
+#explore chi values
+pressures %>%
+  group_by(Country, iso3c) %>%
+  summarize(chi = sum(avg_cum_stress_km2_1e_6, na.rm=TRUE)) %>%
+  arrange(chi) %>% data.frame()
+filter(pressures, iso3c=="MCO")
 #filter to include only countries in circle
 pressures_adj_circle <- pressures %>%
   group_by(Country, iso3c) %>%
-  mutate(chi = sum(avg_cum_stress_km2_1e_9, na.rm=TRUE)) %>%
-  mutate(avg_cum_stress_km2_1e_9 = ifelse(location=="marine", avg_cum_stress_km2_1e_9*(-1), avg_cum_stress_km2_1e_9)) %>%
+  mutate(chi = sum(avg_cum_stress_km2_1e_6, na.rm=TRUE)) %>%
+  mutate(avg_cum_stress_km2_1e_6 = ifelse(location=="marine", avg_cum_stress_km2_1e_6*(-1), avg_cum_stress_km2_1e_6)) %>%
   ungroup() %>%
   arrange(chi) %>%
   filter(chi<=cutoff_value)
@@ -174,11 +180,11 @@ rgn_shift <- rank_rgn_adj %>%
   mutate(region_shift = as.numeric(georegion) - lag(as.numeric(georegion)), default=first(as.numeric(georegion)))
 
 rgn_shift <- which(rgn_shift$region_shift > 0)
-rgn_shift <- c(1, rgn_shift) -0.5
+rgn_shift <- c(1, rgn_shift) -0.05
 rgn_shift <- data.frame(rgn_shift_x=rgn_shift,
                          georegion = rank_georgn$georegion,
                          name_x= c(15, 60, 115, 150, 200), # 140
-                         name_y=c(55, 55, 55, 55, 55))
+                         name_y=c(0.55, 0.55, 0.55, 0.55, 0.55))
 rgn_shift <- rgn_shift %>%
    mutate(georegion = as.character(georegion))
 
@@ -186,13 +192,13 @@ rgn_shift <- rgn_shift %>%
   to_add <-  data.frame( matrix(NA, empty_bar*nlevels(as.factor(pressures_adj_circle$source)), ncol(pressures_adj_circle)) )
   colnames(to_add) <- colnames(pressures_adj_circle)
   to_add$source <- rep(levels(as.factor(pressures_adj_circle$source)), each=empty_bar)
-  to_add$avg_cum_stress_km2_1e_9<-  0
+  to_add$avg_cum_stress_km2_1e_6<-  0
   to_add$Country <- as.character(rep(1:empty_bar, nlevels(as.factor(pressures_adj_circle$source)))) 
   pressures_adj_circle <- rbind(to_add, pressures_adj_circle, to_add)
 
 pressures_adj_circle %>%
   group_by(source) %>%
-  summarize(mean = mean(avg_cum_stress_km2_1e_9, na.rm=TRUE)) %>%
+  summarize(mean = mean(avg_cum_stress_km2_1e_6, na.rm=TRUE)) %>%
   arrange(mean)
 
 pressures_adj_circle <- pressures_adj_circle %>%
@@ -221,15 +227,15 @@ circle_theme <- theme(axis.line=element_blank(),
 
 
 
-p <- ggplot(data=pressures_adj_circle, aes(x=Country, y=avg_cum_stress_km2_1e_9, fill=source_name)) + 
+p <- ggplot(data=pressures_adj_circle, aes(x=Country, y=avg_cum_stress_km2_1e_6, fill=source)) + 
   
-  geom_bar(stat="identity") +
+  geom_bar(stat="identity", aes(fill=source_name)) +
   
   # ## this adjust the inner circle size (ymin) and outer circle size (ymax), which can be expanded to include names
    geom_errorbar(aes(
        x     = 1, 
-       ymin  = -75,   
-       ymax  = 110), 
+       ymin  = -0.3,   
+       ymax  = 1.10), 
        alpha = 0) +
 
       # Country name text placement
@@ -268,8 +274,8 @@ p <- ggplot(data=pressures_adj_circle, aes(x=Country, y=avg_cum_stress_km2_1e_9,
       annotate(
         "text", 
         x     = c(3, 3, 3), 
-        y     = c(-50, 0, 50),
-        label = c(50, 0, 50), 
+        y     = c(-0.25, 0, 0.50),
+        label = c(-0.25, 0, 0.50), 
         color = "darkgray", angle = -4, size = 6) +
   #     
   scale_colour_identity() +
@@ -292,8 +298,8 @@ ggsave(here('_analysis/figures/circular_plots/feed_farm_marine_land.png'), heigh
 
 pressures_adj_bar <- pressures %>%
   group_by(Country, iso3c) %>%
-  mutate(chi = sum(avg_cum_stress_km2_1e_9, na.rm=TRUE)) %>%
-  mutate(avg_cum_stress_km2_1e_9 = ifelse(location=="marine", avg_cum_stress_km2_1e_9*(-1), avg_cum_stress_km2_1e_9)) %>%
+  mutate(chi = sum(avg_cum_stress_km2_1e_6, na.rm=TRUE)) %>%
+  mutate(avg_cum_stress_km2_1e_6 = ifelse(location=="marine", avg_cum_stress_km2_1e_6*(-1), avg_cum_stress_km2_1e_6)) %>%
   ungroup() %>%
   filter(chi>cutoff_value) %>%
   rbind(pressures_highest_country) %>%
@@ -342,16 +348,16 @@ bar_theme <- theme(axis.line=element_blank(),
 
 
 
-p <- ggplot(data=pressures_adj_bar, aes(x=Country, y=avg_cum_stress_km2_1e_9, fill=source_name)) + 
+p <- ggplot(data=pressures_adj_bar, aes(x=Country, y=avg_cum_stress_km2_1e_6, fill=source_name)) + 
   
   geom_bar(stat="identity") +
-  ylab(bquote("cumulative pressures per" ~km^2~"(x 1e9)")) +
+  ylab(bquote("cumulative pressures per" ~km^2~"(x 1e6)")) +
    
   # ## this adjust the plot dimensions, which can be expanded to include names
     geom_errorbar(aes(
         x     = 1, 
-        ymin  = -1000,   
-        ymax  = 2000), 
+        ymin  = -1,   
+        ymax  = 2), 
         alpha = 0) +
 
    geom_errorbar(aes(
@@ -363,7 +369,7 @@ p <- ggplot(data=pressures_adj_bar, aes(x=Country, y=avg_cum_stress_km2_1e_9, fi
       # Country name text placement
     geom_text(
       data = rank_rgn_adj_bar,
-      aes(y = -100,
+      aes(y = -1,
           x = 1:length(rank_rgn_adj_bar$Country),
           label = rgn_name_short),
       inherit.aes = FALSE,
@@ -377,8 +383,8 @@ p <- ggplot(data=pressures_adj_bar, aes(x=Country, y=avg_cum_stress_km2_1e_9, fi
       annotate(
         "text",
         x     = c(-0.025, -0.025, -0.025),
-        y     = c(0, 500, 1000),
-        label = c(0, 500, 1000),
+        y     = c(0, 0.5, 1),
+        label = c(0, 0.5, 1),
         color = "darkgray", size = 3) +
 
   scale_colour_identity() +

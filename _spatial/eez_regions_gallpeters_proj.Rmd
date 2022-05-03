@@ -1,0 +1,139 @@
+---
+title: "aligning_EEZ"
+author: "Juliette"
+date: "4/14/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This markdown aligns EEZs to our region list.
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(raster)
+library(rgdal)
+library(sf)
+library(fasterize)
+library(readr)
+library(here)
+library(mapview)
+library(countrycode)
+
+prep <- "/home/shares/food-systems/Food_footprint/dataprep/"
+
+## gall_peters projection
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+#raster template 
+template_eq_area <- raster("/home/shares/food-systems/Food_footprint/stressor_summary_new/feed_farm_system_stressor/farm_broiler_water_per_cell.tif")
+
+
+master_rgns <- read_csv(here("_spatial/output/master_rgns.csv"))
+
+
+```
+
+## EEZ raster 
+Created in eez_regions.Rmd
+```{r}
+
+EEZ_shape <- st_read("/home/shares/food-systems/Food_footprint/dataprep/spatial/eez_rgns.shp")
+```
+
+## Now convert to raster!
+The EEZs will have the same ID_0 values used in the regions list.
+
+```{r}
+EEZ_raster_start <- EEZ_shape %>%
+  dplyr::select(iso3c = ISO_TER1) %>%
+  left_join(master_rgns, by="iso3c")
+
+check <- filter(EEZ_raster_start, is.na(ID_0))
+table(check$iso3c)
+
+EEZ_raster_start <- EEZ_raster_start %>%
+  mutate(ID_0 = ifelse(iso3c=="ATA", 10, ID_0)) %>%
+  mutate(ID_0 = ifelse(iso3c=="HS", 500, ID_0))
+
+filter(EEZ_raster_start, is.na(ID_0))
+summary(EEZ_raster_start)
+
+```
+
+
+Convert to gall peters coordinate reference system.
+```{r}
+
+EEZ_raster_start_dateline <- EEZ_raster_start %>%
+  st_wrap_dateline(c("WRAPDATELINE=YES"))
+
+# for some reason, losing the "MULTIPOLYGON" designation...this action recovers it.
+EEZ_raster_start_dataline_shape <- as(EEZ_raster_start_dateline, 'Spatial')
+EEZ_raster_start_dateline <- st_as_sf(EEZ_raster_start_dataline_shape)
+
+## Transform to equal area
+EEZ_gp <- sf::st_transform(EEZ_raster_start_dateline, crs(template_eq_area)) 
+plot(st_geometry(EEZ_gp))
+plot(st_geometry(EEZ_raster_start))
+
+## rasterize
+EEZ_raster <- fasterize(EEZ_gp, template_eq_area, field="ID_0")
+plot(EEZ_raster)
+
+writeRaster(EEZ_raster, "/home/shares/food-systems/Food_footprint/dataprep/spatial/eez_rgns_gall_peters.tif", overwrite=TRUE)
+
+
+```
+
+
+### Extend the EEZ rasters 4 cells inland to capture coastal cells
+
+This is especially a problem for salmon aquaculture because it is located so close to shore in complex coastlines..
+and these cells are often identified as ocean, especially given the scale of our raster cells.
+```{r}
+
+
+## Function to gapfill NA cells using most common value of surrounding cells
+getmode <- function(v) {
+   uniqv <- na.omit(unique(v))
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+gf_raster <- function(x){raster::focal(x, w = matrix(1,3,3), fun = getmode, pad = TRUE, NAonly=TRUE)}
+
+r <- EEZ_raster
+
+#2 cells out
+i <- 0
+
+while (i <= 2){
+
+r <- gf_raster(r)
+
+i <- i + 1
+print(i)
+}
+
+plot(r)
+
+rtest <-r  
+rtest[r>0] <- 1000
+
+plot(rtest, col="blue")
+#crop_vals <- zoom(rtest)
+
+rtest_crop <- crop(rtest, crop_vals)
+plot(rtest_crop, col="blue")
+
+rgn_raster_crop <- crop(EEZ_raster, crop_vals)
+plot(rgn_raster_crop, col="red", add=TRUE)
+
+#this looks good!
+# crop because extending raster can create extra rows, etc.
+r_crop <- crop(r, extent(template_eq_area))
+
+writeRaster(r_crop, "/home/shares/food-systems/Food_footprint/dataprep/spatial/eez_extended_rgns_gall_peters.tif", overwrite=TRUE)
+
+```
