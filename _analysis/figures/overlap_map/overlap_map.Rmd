@@ -364,7 +364,7 @@ circle_legend_plot <- ggplot(circle_legend, aes(x= salmon, y=chicken)) +
 
 circle_legend_plot
 
-ggsave(here("_analysis/figures/overlap_map/outputs/overlap_circle_legend.jpg"), width=6, height=4, dpi=300) 
+ggsave(here("_analysis/figures/overlap_map/outputs/overlap_circle_legend.jpg"), width=6, height=4, dpi=300,  bg = "white") 
 ```
 
 
