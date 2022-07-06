@@ -103,20 +103,12 @@ cp2<-ggplot(sub, aes(x = broiler_slaughter_wt_tonnes/1000000, y = country_farm_f
 
 cp2
 ```
-```{r}
-cp2
-print(cp1, vp = viewport(x = 0.32, y = 0.75, width = 0.42, height = 0.42))
-```
 
 
-```{r}
-cp1
-print(cp2, vp = viewport(x = 0.3, y = 0.75, width = 0.4, height = 0.4))
-```
 
-```{r}
-cp1 + inset_element(cp2, 0,0, 0.6,0.6)
-```
+
+
+
 
 
  Salmon CPI vs production
@@ -144,9 +136,7 @@ ggsave(here("_analysis/figures/Salmon_direct_prod.png"), dpi = 300, height = 3, 
 
 ```
 
-```{r}
-(cp3+sp1) +  plot_annotation(tag_levels = 'A')
-```
+
 
 
 
