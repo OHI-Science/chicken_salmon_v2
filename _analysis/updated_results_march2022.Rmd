@@ -35,6 +35,26 @@ eez_rgns <- read_csv("/home/shares/food-systems/Food_footprint/chicken_salmon/_s
 
 rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) 
 ```
+# Spatial data
+
+# Max and min chicken and salmon CPI values
+
+```{r}
+broiler_cpi<-raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/chickens_cumulative_stress.tif")
+
+salmon_cpi<-raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/salmon_cumulative_stress.tif")
+```
+
+These are the values - need to divide by 1000000
+
+```{r}
+cellStats(broiler_cpi, "max", na.rm = T)/1e6
+```
+
+```{r}
+cellStats(salmon_cpi, "max", na.rm = T)/1e6
+```
+
 
 Load output file from step6
 
@@ -198,24 +218,6 @@ salmon_prop<-animal_stressor_location %>%
   mutate(prop_pressure = ifelse(stressor == "disturbance", total_pressure/all_salmon_dist,
                                 ifelse(stressor == "ghg", total_pressure/all_salmon_ghg,
                                        ifelse(stressor == "nutrient", total_pressure/all_salmon_nutri, total_pressure/all_salmon_fw))))
-```
-
-# Max and min chicken and salmon CPI values
-
-```{r}
-broiler_cpi<-raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/chickens_cumulative_stress.tif")
-
-salmon_cpi<-raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/salmon_cumulative_stress.tif")
-```
-
-These are the values - need to divide by 1000000
-
-```{r}
-cellStats(broiler_cpi, "max", na.rm = T)
-```
-
-```{r}
-cellStats(salmon_cpi, "max", na.rm = T)
 ```
 
 ```{r}
@@ -444,9 +446,12 @@ Correlation
 ```{r}
 cor.test(broiler_cpi_prod$country_farm_feed_chi, broiler_cpi_prod$broiler_slaughter_wt_tonnes, type = "pearsons")
 ```
+
 ```{r}
 cor.test(salmon_cpi_prod$country_farm_feed_chi, salmon_cpi_prod$fao_tonnes_production, type = "pearsons")
 ```
+
+
 ```{r}
 iso3_broiler_cpi_prod<-broiler_cpi_prod %>% 
   mutate(cpi_prod = country_farm_feed_chi/broiler_slaughter_wt_tonnes) %>% 
