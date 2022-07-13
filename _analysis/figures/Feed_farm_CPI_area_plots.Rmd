@@ -1,0 +1,250 @@
+---
+title: "Untitled"
+author: "Caitie"
+date: '2022-07-07'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(patchwork)
+library(tidyverse)
+library(ggrepel)
+library(ggpmisc)
+library(ggforce)
+```
+
+# Production
+
+```{r}
+broiler_prod<-read.csv("/home/shares/food-systems/Food_footprint/chicken_salmon/production/broiler_production.csv")
+salmon_prod<-read.csv("/home/shares/food-systems/Food_footprint/chicken_salmon/production/salmon_production.csv")
+```
+
+# Results from Step 6 zonal states
+```{r}
+results<-read.csv(here("_analysis/output_data/sum_pressures_country.csv"))
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) 
+```
+```{r}
+iso3_broiler_cpi_farm<-results %>%
+    filter(!is.na(Country),
+           animal_system == "chickens",
+           source == "farm") %>% ## Antarctica
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE),
+            variance_chi = var(prop_of_global, na.rm = T)) 
+
+iso3_broiler_cpi_feed<-results %>%
+    filter(!is.na(Country),
+           animal_system == "chickens",
+           !source == "farm") %>% ## Antarctica
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE),
+            variance_chi = var(prop_of_global, na.rm = T)) 
+
+iso3_salmon_cpi_farm<-results %>%
+    filter(!is.na(Country),
+           source == "farm") %>%  ## Antarctica
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE),
+            variance_chi = var(prop_of_global, na.rm = T)) %>%
+  filter(animal_system == "salmon") 
+
+iso3_salmon_cpi_feed<-results %>%
+    filter(!is.na(Country),
+           !source == "farm") %>%  ## Antarctica
+  left_join(rescaling_values, by=c("stressor" = "pressure")) %>%
+  rowwise() %>%
+  mutate(prop_of_global = value/global_total) %>%
+   group_by(iso3c, Country, animal_system) %>%
+  summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE),
+            variance_chi = var(prop_of_global, na.rm = T)) %>%
+  filter(animal_system == "salmon") 
+```
+
+Ask Mel about feed CPI values - they are mapped to where they are produced correct?
+```{r}
+iso3_broiler_cpi_farm_dist<-results %>%
+    filter(!is.na(Country),
+           animal_system == "chickens",
+           source == "farm",
+           stressor == "disturbance") %>% ## Antarctica
+   group_by(iso3c, Country, animal_system, stressor) %>%
+  summarize(disturbance = sum(value, na.rm=TRUE)) %>% 
+  full_join(iso3_broiler_cpi_farm)
+
+iso3_broiler_cpi_feed_dist<-results %>%
+    filter(!is.na(Country),
+           animal_system == "chickens",
+           !source == "farm",
+           stressor == "disturbance") %>% ## Antarctica
+   group_by(iso3c, Country, animal_system, stressor) %>%
+  summarize(disturbance = sum(value, na.rm=TRUE)) %>% 
+  full_join(iso3_broiler_cpi_feed)
+
+
+# Salmon CPI
+iso3_salmon_cpi_farm_dist<-results%>%
+    filter(!is.na(Country),
+           animal_system == "salmon",
+           source == "farm",
+           stressor == "disturbance") %>% ## Antarctica
+   group_by(iso3c, Country, animal_system, stressor) %>%
+  summarize(disturbance = sum(value, na.rm=TRUE)) %>% 
+  full_join(iso3_salmon_cpi_farm)
+
+iso3_salmon_cpi_feed_dist<-results%>%
+    filter(!is.na(Country),
+           animal_system == "salmon",
+           !source == "farm",
+           stressor == "disturbance") %>% ## Antarctica
+   group_by(iso3c, Country, animal_system, stressor) %>%
+  summarize(disturbance = sum(value, na.rm=TRUE)) %>% 
+  full_join(iso3_salmon_cpi_feed)
+```
+
+
+# Plot
+
+## Chicken
+
+Direct farm land disturbance vs production
+
+```{r}
+cp1<-ggplot(iso3_broiler_cpi_farm_dist, aes(x = disturbance, y = country_farm_feed_chi, label = Country)) +
+  #annotation_custom(chicken_png, xmin = 0, xmax = 2.5, ymin = 0.65, ymax=0.75) +
+  geom_point() +
+  #xlim(c(0,2.5)) +
+  #coord_cartesian(xlim = c(0, 350)) +
+  #scale_x_continuous(breaks = seq(from = 0, to = 2.5, by = 0.5)) +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max.overlaps = 30) + 
+  theme_bw() +
+  xlab("On-farm disturbance (km2)") +
+  ylab("") #+
+ # ylim(c(0,0.025))
+```
+
+
+```{r}
+cp2<-cp1+
+facet_zoom(xlim = c(0, 40),
+           ylim = c(0,0.017), 
+           horizontal = T, 
+           zoom.size = 1)
+
+cp2
+```
+
+Feed pressures vs. production
+
+```{r}
+cp3<-ggplot(iso3_broiler_cpi_feed_dist, aes(x = disturbance, y = country_farm_feed_chi, label = Country)) +
+  #annotation_custom(chicken_png, xmin = 0, xmax = 2.5, ymin = 0.65, ymax=0.75) +
+  geom_point() +
+  #xlim(c(0,2.5)) +
+  #coord_cartesian(xlim = c(0, 350)) +
+  #scale_x_continuous(breaks = seq(from = 0, to = 2.5, by = 0.5)) +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max.overlaps = 40) + 
+  theme_bw() +
+  xlab("Feed disturbance (km2)") +
+  ylab("") #+
+ # ylim(c(0,0.025))
+```
+
+```{r}
+cp4<-cp3+
+facet_zoom(xlim = c(0, 20000),
+           ylim = c(0,0.05), 
+           horizontal = T, 
+           zoom.size = 1)
+
+cp4
+```
+
+## Salmon
+
+Direct farm land disturbance vs production
+
+```{r}
+sp1<-ggplot(iso3_salmon_cpi_farm_dist, aes(x = disturbance, y = country_farm_feed_chi, label = Country)) +
+  #annotation_custom(chicken_png, xmin = 0, xmax = 2.5, ymin = 0.65, ymax=0.75) +
+  geom_point() +
+  #xlim(c(0,2.5)) +
+  #coord_cartesian(xlim = c(0, 350)) +
+  #scale_x_continuous(breaks = seq(from = 0, to = 2.5, by = 0.5)) +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max.overlaps = 50) + 
+  theme_bw() +
+  xlab("On-farm disturbance (km2)") +
+  ylab("") #+
+ # ylim(c(0,0.025))
+```
+
+
+```{r}
+sp2<-sp1+
+facet_zoom(xlim = c(0, 0.75),
+           ylim = c(0,0.001), 
+           horizontal = T, 
+           zoom.size = 1)
+
+sp2
+```
+
+Feed pressures vs. production
+
+```{r}
+sp3<-ggplot(iso3_salmon_cpi_feed_dist, aes(x = disturbance, y = country_farm_feed_chi, label = Country)) +
+  #annotation_custom(chicken_png, xmin = 0, xmax = 2.5, ymin = 0.65, ymax=0.75) +
+  geom_point() +
+  #xlim(c(0,2.5)) +
+  #coord_cartesian(xlim = c(0, 350)) +
+  #scale_x_continuous(breaks = seq(from = 0, to = 2.5, by = 0.5)) +
+  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
+  #stat_poly_eq(formula = my.formula, 
+  #              aes(label = paste(..rr.label.., sep = "~~~")), 
+  #              parse = TRUE) +
+  geom_text_repel(max.overlaps = 30) + 
+  theme_bw() +
+  xlab("Feed disturbance (km2)") +
+  ylab("") #+
+ # ylim(c(0,0.025))
+```
+
+```{r}
+sp4<-sp3+
+facet_zoom(xlim = c(0, 1500),
+           ylim = c(0,0.002), 
+           horizontal = T, 
+           zoom.size = 1)
+
+sp4
+```
+
+
+
