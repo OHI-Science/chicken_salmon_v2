@@ -1,0 +1,489 @@
+iso3c,country,system,cpi,tonnes_feed,cpi_per_tonne
+ABW,Aruba,feed_land_chickens_industrial_meat,0,0,0
+ABW,Aruba,feed_marine_salmon_aquaculture_meat,0,0,0
+AFG,Afghanistan,feed_land_chickens_industrial_meat,1.9468906323175203e-4,11965.107891531932,1.6271400558747936e-8
+AFG,Afghanistan,feed_marine_salmon_aquaculture_meat,3.445709527254859e-7,31.621952494883597,1.089657423213311e-8
+AGO,Angola,feed_land_chickens_industrial_meat,8.215745027917149e-4,480929.6612284115,1.708304912392414e-9
+AGO,Angola,feed_marine_salmon_aquaculture_meat,5.8280624323413104e-9,1.1089937135112529,5.255270937369631e-9
+AIA,Anguilla,feed_land_chickens_industrial_meat,0,0,0
+AIA,Anguilla,feed_marine_salmon_aquaculture_meat,0,0,0
+ALA,Åland,feed_land_chickens_industrial_meat,3.575494046054785e-8,14.370433357347302,2.4880906213080274e-9
+ALA,Åland,feed_marine_salmon_aquaculture_meat,0,0,0
+ALB,Albania,feed_land_chickens_industrial_meat,1.3740391560509863e-4,43367.2293193366,3.1683812353636555e-9
+ALB,Albania,feed_marine_salmon_aquaculture_meat,5.942247875838699e-8,40.84811953115865,1.4547176085562508e-9
+AND,Andorra,feed_land_chickens_industrial_meat,0,0,0
+AND,Andorra,feed_marine_salmon_aquaculture_meat,0,0,0
+ARE,United Arab Emirates,feed_land_chickens_industrial_meat,1.4551623464471222e-5,27142.691931623274,5.361157066192646e-10
+ARE,United Arab Emirates,feed_marine_salmon_aquaculture_meat,9.855919907499264e-10,0.15571099313917053,6.329623688605141e-9
+ARG,Argentina,feed_land_chickens_industrial_meat,0.027036565383696778,31690199.74767846,8.531522552387006e-10
+ARG,Argentina,feed_marine_salmon_aquaculture_meat,3.8836160965627836e-4,283849.3269836575,1.3681963377656277e-9
+ARM,Armenia,feed_land_chickens_industrial_meat,1.3939540512654742e-5,6715.546535803605,2.0757119972792635e-9
+ARM,Armenia,feed_marine_salmon_aquaculture_meat,5.752920461720532e-9,1.1035737211751606,5.212991530456551e-9
+ASM,American Samoa,feed_land_chickens_industrial_meat,0,0,0
+ASM,American Samoa,feed_marine_salmon_aquaculture_meat,0,0,0
+ATG,Antigua and Barbuda,feed_land_chickens_industrial_meat,1.9150474569609495e-8,5.064292599475037,3.781470796453315e-9
+ATG,Antigua and Barbuda,feed_marine_salmon_aquaculture_meat,3.137195080385713e-9,0.25925404859814877,1.2100852801911131e-8
+AUS,Australia,feed_land_chickens_industrial_meat,0.013012003944797982,6327045.718463067,2.056568661552013e-9
+AUS,Australia,feed_marine_salmon_aquaculture_meat,1.549108087793419e-4,48563.93905481583,3.189832039869925e-9
+AUT,Austria,feed_land_chickens_industrial_meat,5.995526605381322e-4,441047.614460741,1.3593830708532268e-9
+AUT,Austria,feed_marine_salmon_aquaculture_meat,2.6678526772582464e-6,1534.5005734341219,1.738580436817791e-9
+AZE,Azerbaijan,feed_land_chickens_industrial_meat,8.574454012235205e-4,214840.28235181063,3.9910830121672204e-9
+AZE,Azerbaijan,feed_marine_salmon_aquaculture_meat,5.571046482984868e-7,128.20281174750573,4.345494772733217e-9
+BDI,Burundi,feed_land_chickens_industrial_meat,3.716108418585392e-5,11946.760162672337,3.110557480007321e-9
+BDI,Burundi,feed_marine_salmon_aquaculture_meat,0,0,0
+BEL,Belgium,feed_land_chickens_industrial_meat,8.134344581380863e-4,355153.8389232387,2.2903721401527586e-9
+BEL,Belgium,feed_marine_salmon_aquaculture_meat,2.4478256617889846e-5,5847.278864124286,4.186264617559987e-9
+BEN,Benin,feed_land_chickens_industrial_meat,1.486138200318735e-4,102487.17049948928,1.4500724267006092e-9
+BEN,Benin,feed_marine_salmon_aquaculture_meat,8.526109526234252e-7,589.3292324597642,1.4467481089725789e-9
+BES,"Bonaire, Sint Eustatius and Saba",feed_land_chickens_industrial_meat,0,0,0
+BES,"Bonaire, Sint Eustatius and Saba",feed_marine_salmon_aquaculture_meat,0,0,0
+BFA,Burkina Faso,feed_land_chickens_industrial_meat,7.801256180387112e-4,209840.00803225598,3.7177162989757067e-9
+BFA,Burkina Faso,feed_marine_salmon_aquaculture_meat,1.329704454048822e-6,689.0610374706032,1.929733915778905e-9
+BGD,Bangladesh,feed_land_chickens_industrial_meat,2.5534651535961224e-4,272921.86913532636,9.356029847245422e-10
+BGD,Bangladesh,feed_marine_salmon_aquaculture_meat,2.1302166627491602e-7,191.32272623121116,1.1134153818061424e-9
+BGR,Bulgaria,feed_land_chickens_industrial_meat,7.319231332497222e-4,592152.3687481969,1.2360385128526955e-9
+BGR,Bulgaria,feed_marine_salmon_aquaculture_meat,1.3264766887986674e-5,9026.966686908278,1.469460046554114e-9
+BHR,Bahrain,feed_land_chickens_industrial_meat,0,0,0
+BHR,Bahrain,feed_marine_salmon_aquaculture_meat,0,0,0
+BHS,Bahamas,feed_land_chickens_industrial_meat,5.732161284568254e-7,778.3494896587812,7.364508309861118e-10
+BHS,Bahamas,feed_marine_salmon_aquaculture_meat,0,0,0
+BIH,Bosnia and Herzegovina,feed_land_chickens_industrial_meat,2.4962706053280234e-4,175288.69182731822,1.424091069027527e-9
+BIH,Bosnia and Herzegovina,feed_marine_salmon_aquaculture_meat,7.302736647521622e-8,42.37340094640752,1.7234247156035178e-9
+BLM,Saint-Barthélemy,feed_land_chickens_industrial_meat,0,0,0
+BLM,Saint-Barthélemy,feed_marine_salmon_aquaculture_meat,0,0,0
+BLR,Belarus,feed_land_chickens_industrial_meat,0.0014260224505015387,579498.4533090359,2.4607873280052867e-9
+BLR,Belarus,feed_marine_salmon_aquaculture_meat,4.769940341012439e-5,12586.686934983944,3.789671075201429e-9
+BLZ,Belize,feed_land_chickens_industrial_meat,2.887712458051239e-5,42331.5121559711,6.821661478596415e-10
+BLZ,Belize,feed_marine_salmon_aquaculture_meat,3.830050691453943e-8,1.069332789157025,3.581720050381363e-8
+BMU,Bermuda,feed_land_chickens_industrial_meat,0,0,0
+BMU,Bermuda,feed_marine_salmon_aquaculture_meat,0,0,0
+BOL,Bolivia,feed_land_chickens_industrial_meat,0.0036029569508065117,2847642.9982353197,1.2652417992842708e-9
+BOL,Bolivia,feed_marine_salmon_aquaculture_meat,5.265272588218047e-5,28687.398416985776,1.8353956366780492e-9
+BRA,Brazil,feed_land_chickens_industrial_meat,0.0637134933124899,68151783.67634183,9.348763873161455e-10
+BRA,Brazil,feed_marine_salmon_aquaculture_meat,2.9326916004232263e-4,275964.0706668459,1.0627077624042156e-9
+BRB,Barbados,feed_land_chickens_industrial_meat,2.2971920481987084e-7,93.27160115218179,2.4629062006243615e-9
+BRB,Barbados,feed_marine_salmon_aquaculture_meat,2.895074731562177e-16,1.1588855654223036e-7,2.4981541042037205e-9
+BRN,Brunei,feed_land_chickens_industrial_meat,9.338432863004788e-9,7.267445933982383,1.2849676417045672e-9
+BRN,Brunei,feed_marine_salmon_aquaculture_meat,0,0,0
+BTN,Bhutan,feed_land_chickens_industrial_meat,5.096975361266514e-6,4381.22036232543,1.1633688652357995e-9
+BTN,Bhutan,feed_marine_salmon_aquaculture_meat,0,0,0
+BWA,Botswana,feed_land_chickens_industrial_meat,5.157229417455233e-5,3276.3727586389427,1.5740667492296047e-8
+BWA,Botswana,feed_marine_salmon_aquaculture_meat,0,0,0
+CAF,Central African Republic,feed_land_chickens_industrial_meat,1.2655575714212394e-4,34014.42431239668,3.72064968613919e-9
+CAF,Central African Republic,feed_marine_salmon_aquaculture_meat,1.8262062122033128e-7,120.30363031025709,1.5179975928354094e-9
+CAN,Canada,feed_land_chickens_industrial_meat,0.011319365119692497,7979774.154263145,1.4185069528120912e-9
+CAN,Canada,feed_marine_salmon_aquaculture_meat,5.565850251474554e-4,321530.3845800466,1.7310495425631874e-9
+CCK,Cocos Islands,feed_land_chickens_industrial_meat,0,0,0
+CCK,Cocos Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+CHE,Switzerland,feed_land_chickens_industrial_meat,7.938860120467403e-4,587010.1068632175,1.3524230720472553e-9
+CHE,Switzerland,feed_marine_salmon_aquaculture_meat,2.616068409533389e-7,115.50811837803094,2.2648351010026946e-9
+CHL,Chile,feed_land_chickens_industrial_meat,0.0029094708659863438,739575.5755108964,3.933973703737432e-9
+CHL,Chile,feed_marine_salmon_aquaculture_meat,9.447008494155043e-4,370222.48834874074,2.551711144369001e-9
+CHN,China,feed_land_chickens_industrial_meat,0.11873570045941935,49091775.86834569,2.4186474895070962e-9
+CHN,China,feed_marine_salmon_aquaculture_meat,1.0747411144845656e-4,57410.624937214045,1.872024761374631e-9
+CIV,Côte d'Ivoire,feed_land_chickens_industrial_meat,4.0516034411840245e-4,318121.5892773426,1.2736021627415494e-9
+CIV,Côte d'Ivoire,feed_marine_salmon_aquaculture_meat,3.970599526920406e-7,201.8338108647192,1.9672618328461e-9
+CMR,Cameroon,feed_land_chickens_industrial_meat,6.853108758008678e-4,467959.8569951665,1.4644650936542751e-9
+CMR,Cameroon,feed_marine_salmon_aquaculture_meat,9.12986494073247e-7,584.1605489991231,1.562903375857067e-9
+COD,Democratic Republic of the Congo,feed_land_chickens_industrial_meat,2.0656097154043293e-4,102082.26655682703,2.023475560522011e-9
+COD,Democratic Republic of the Congo,feed_marine_salmon_aquaculture_meat,7.861299606506718e-7,321.8825050797497,2.4422885625793796e-9
+COG,Republic of Congo,feed_land_chickens_industrial_meat,2.9226140221297113e-5,9541.559106320126,3.0630361239326535e-9
+COG,Republic of Congo,feed_marine_salmon_aquaculture_meat,0,0,0
+COK,Cook Islands,feed_land_chickens_industrial_meat,0,0,0
+COK,Cook Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+COL,Colombia,feed_land_chickens_industrial_meat,9.287251158693173e-4,652364.2965110667,1.423629589841544e-9
+COL,Colombia,feed_marine_salmon_aquaculture_meat,9.579949523342969e-7,171.4269807351399,5.588355743221246e-9
+COM,Comoros,feed_land_chickens_industrial_meat,0,0,0
+COM,Comoros,feed_marine_salmon_aquaculture_meat,0,0,0
+CPV,Cape Verde,feed_land_chickens_industrial_meat,1.4402131939264385e-5,1182.4965499363043,1.2179428295194741e-8
+CPV,Cape Verde,feed_marine_salmon_aquaculture_meat,1.204466198585043e-8,1.9461915863260963,6.18883673656591e-9
+CRI,Costa Rica,feed_land_chickens_industrial_meat,2.2185708684734227e-5,4379.44667387266,5.0658702655501994e-9
+CRI,Costa Rica,feed_marine_salmon_aquaculture_meat,1.5218638992603427e-8,1.5082970643324043,1.0089948029793078e-8
+CUB,Cuba,feed_land_chickens_industrial_meat,1.795986641008383e-4,103484.86803547651,1.7355065287348928e-9
+CUB,Cuba,feed_marine_salmon_aquaculture_meat,0,0,0
+CUW,Curaçao,feed_land_chickens_industrial_meat,0,0,0
+CUW,Curaçao,feed_marine_salmon_aquaculture_meat,0,0,0
+CXR,Christmas Island,feed_land_chickens_industrial_meat,2.6135528453084415e-10,0.037145055895679444,7.036071913980991e-9
+CXR,Christmas Island,feed_marine_salmon_aquaculture_meat,0,0,0
+CYM,Cayman Islands,feed_land_chickens_industrial_meat,0,0,0
+CYM,Cayman Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+CYP,Cyprus,feed_land_chickens_industrial_meat,9.024006723692304e-5,22858.382096208894,3.947788905492551e-9
+CYP,Cyprus,feed_marine_salmon_aquaculture_meat,7.311712091861731e-8,10.211415343572268,7.160331693357473e-9
+CZE,Czech Republic,feed_land_chickens_industrial_meat,0.0023907913165677444,899301.737900525,2.658497382813018e-9
+CZE,Czech Republic,feed_marine_salmon_aquaculture_meat,1.4842988741523264e-6,858.332539154997,1.729281841759809e-9
+DEU,Germany,feed_land_chickens_industrial_meat,0.006902697235007804,3848497.1978631173,1.7936084866686495e-9
+DEU,Germany,feed_marine_salmon_aquaculture_meat,2.0532755539901136e-4,100897.31679093312,2.0350150224952524e-9
+DJI,Djibouti,feed_land_chickens_industrial_meat,1.1361251759520094e-9,0.5399867843465406,2.1039870028057807e-9
+DJI,Djibouti,feed_marine_salmon_aquaculture_meat,1.039721612078947e-8,2.8719572946951644,3.6202544306610425e-9
+DMA,Dominica,feed_land_chickens_industrial_meat,3.714524318921669e-7,189.2381886982975,1.962883044100436e-9
+DMA,Dominica,feed_marine_salmon_aquaculture_meat,0,0,0
+DNK,Denmark,feed_land_chickens_industrial_meat,4.228049855502692e-4,412970.310769779,1.0238144838115803e-9
+DNK,Denmark,feed_marine_salmon_aquaculture_meat,9.758080803162262e-5,54588.13171116144,1.7875828494725826e-9
+DOM,Dominican Republic,feed_land_chickens_industrial_meat,1.1279394902697029e-4,44841.13401609852,2.5154125001940376e-9
+DOM,Dominican Republic,feed_marine_salmon_aquaculture_meat,6.007142527269952e-8,11.586432718581891,5.184635058240074e-9
+DZA,Algeria,feed_land_chickens_industrial_meat,1.0545478257630371e-4,44432.13004493506,2.3733902126604165e-9
+DZA,Algeria,feed_marine_salmon_aquaculture_meat,1.023726028534266e-6,584.3803097575308,1.7518147196968823e-9
+ECU,Ecuador,feed_land_chickens_industrial_meat,0.005721097719380375,1295455.2638277144,4.416283509842017e-9
+ECU,Ecuador,feed_marine_salmon_aquaculture_meat,8.285211069000684e-8,7.420932139200723,1.1164650091912914e-8
+EGY,Egypt,feed_land_chickens_industrial_meat,0.0067382706262223415,1178444.4575661467,5.717936541649965e-9
+EGY,Egypt,feed_marine_salmon_aquaculture_meat,5.872867403286775e-6,1201.4177712076475,4.8882807829481786e-9
+ERI,Eritrea,feed_land_chickens_industrial_meat,1.1261590044295093e-4,33814.883019423476,3.330364927723206e-9
+ERI,Eritrea,feed_marine_salmon_aquaculture_meat,0,0,0
+ESH,Western Sahara,feed_land_chickens_industrial_meat,3.195047659836919e-8,7.5902490486164504,4.209410836683036e-9
+ESH,Western Sahara,feed_marine_salmon_aquaculture_meat,0,0,0
+ESP,Spain,feed_land_chickens_industrial_meat,0.0036866418293873683,1175932.9668074697,3.1350782174227164e-9
+ESP,Spain,feed_marine_salmon_aquaculture_meat,9.06237818794881e-5,9900.911262391664,9.15307485117254e-9
+EST,Estonia,feed_land_chickens_industrial_meat,1.448111143103141e-4,70210.60280237797,2.062524868471995e-9
+EST,Estonia,feed_marine_salmon_aquaculture_meat,1.6578979702197694e-5,15758.980482403937,1.0520337734226746e-9
+ETH,Ethiopia,feed_land_chickens_industrial_meat,0.001149492922661154,939345.2080561738,1.2237172370739484e-9
+ETH,Ethiopia,feed_marine_salmon_aquaculture_meat,1.585114635250853e-6,1121.6545338313667,1.4131932671251204e-9
+FIN,Finland,feed_land_chickens_industrial_meat,2.674935300315192e-4,86281.72965771506,3.1002337469668554e-9
+FIN,Finland,feed_marine_salmon_aquaculture_meat,3.046055124988635e-4,31297.989296622163,9.732430719814262e-9
+FJI,Fiji,feed_land_chickens_industrial_meat,4.377211059598799e-7,256.7292550207673,1.7049911430018827e-9
+FJI,Fiji,feed_marine_salmon_aquaculture_meat,3.889306408659313e-9,1.0326352933757719,3.766389192398066e-9
+FLK,Falkland Islands,feed_land_chickens_industrial_meat,0,0,0
+FLK,Falkland Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+FRA,France,feed_land_chickens_industrial_meat,0.009338740895999793,4921612.939034046,1.8974960062244734e-9
+FRA,France,feed_marine_salmon_aquaculture_meat,2.1031547209769534e-4,62589.703938115636,3.3602247472785734e-9
+FRO,Faroe Islands,feed_land_chickens_industrial_meat,0,0,0
+FRO,Faroe Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+FSM,Micronesia,feed_land_chickens_industrial_meat,1.4190445403778508e-9,3.96185727251541,3.5817659314034043e-10
+FSM,Micronesia,feed_marine_salmon_aquaculture_meat,0,0,0
+GAB,Gabon,feed_land_chickens_industrial_meat,5.259711573932583e-5,22066.4524061582,2.383578237734638e-9
+GAB,Gabon,feed_marine_salmon_aquaculture_meat,1.2922215588199753e-8,9.624478201160406,1.3426406417172565e-9
+GBR,United Kingdom,feed_land_chickens_industrial_meat,0.004666805808402778,2932374.4501310517,1.5914767666162869e-9
+GBR,United Kingdom,feed_marine_salmon_aquaculture_meat,2.9481765848047995e-4,135815.53253947519,2.170721219936978e-9
+GEO,Georgia,feed_land_chickens_industrial_meat,8.491948124253174e-5,47381.166675344044,1.7922623523477246e-9
+GEO,Georgia,feed_marine_salmon_aquaculture_meat,1.1825611945689496e-8,4.875146932203005,2.425693442709363e-9
+GGY,Guernsey,feed_land_chickens_industrial_meat,0,0,0
+GGY,Guernsey,feed_marine_salmon_aquaculture_meat,0,0,0
+GHA,Ghana,feed_land_chickens_industrial_meat,5.306552101966053e-4,267759.8114758037,1.9818329243354667e-9
+GHA,Ghana,feed_marine_salmon_aquaculture_meat,6.222593563153521e-7,303.08822640356914,2.0530634386530046e-9
+GIB,Gibraltar,feed_land_chickens_industrial_meat,0,0,0
+GIB,Gibraltar,feed_marine_salmon_aquaculture_meat,0,0,0
+GIN,Guinea,feed_land_chickens_industrial_meat,1.1053571187581812e-4,85936.52980709422,1.2862482593135055e-9
+GIN,Guinea,feed_marine_salmon_aquaculture_meat,2.5221685184894235e-7,371.62832209019956,6.786803826747243e-10
+GLP,Guadeloupe,feed_land_chickens_industrial_meat,0,0,0
+GLP,Guadeloupe,feed_marine_salmon_aquaculture_meat,0,0,0
+GMB,Gambia,feed_land_chickens_industrial_meat,2.7362075226988254e-5,6922.191838384797,3.952805103617706e-9
+GMB,Gambia,feed_marine_salmon_aquaculture_meat,5.932071606487525e-9,0.876586098795592,6.76724353105536e-9
+GNB,Guinea-Bissau,feed_land_chickens_industrial_meat,1.4670443305669092e-5,3671.561359244928,3.995696073205795e-9
+GNB,Guinea-Bissau,feed_marine_salmon_aquaculture_meat,1.8420184085615143e-8,18.340794701642334,1.004328568377994e-9
+GNQ,Equatorial Guinea,feed_land_chickens_industrial_meat,0,0,0
+GNQ,Equatorial Guinea,feed_marine_salmon_aquaculture_meat,0,0,0
+GRC,Greece,feed_land_chickens_industrial_meat,9.376501396298348e-4,405690.0623679813,2.311247493115419e-9
+GRC,Greece,feed_marine_salmon_aquaculture_meat,7.978597639814042e-6,2689.456086933682,2.9666212728205e-9
+GRD,Grenada,feed_land_chickens_industrial_meat,3.913307457814028e-7,253.90927095236506,1.5412227537560804e-9
+GRD,Grenada,feed_marine_salmon_aquaculture_meat,0,0,0
+GRL,Greenland,feed_land_chickens_industrial_meat,0,0,0
+GRL,Greenland,feed_marine_salmon_aquaculture_meat,0,0,0
+GTM,Guatemala,feed_land_chickens_industrial_meat,5.35611196333997e-4,267892.1406283606,1.999353900706761e-9
+GTM,Guatemala,feed_marine_salmon_aquaculture_meat,4.193529645455895e-7,108.21596753882329,3.875148687231794e-9
+GUF,French Guiana,feed_land_chickens_industrial_meat,2.796255419449735e-8,10.421761916632871,2.6830927839437412e-9
+GUF,French Guiana,feed_marine_salmon_aquaculture_meat,0,0,0
+GUM,Guam,feed_land_chickens_industrial_meat,1.871718130753056e-9,1.514107556112928,1.236185714281883e-9
+GUM,Guam,feed_marine_salmon_aquaculture_meat,0,0,0
+GUY,Guyana,feed_land_chickens_industrial_meat,9.959875286763983e-6,4398.133489822714,2.2645686652783834e-9
+GUY,Guyana,feed_marine_salmon_aquaculture_meat,7.737373185959513e-10,0.21501152993739747,3.598585242480865e-9
+HKG,Hong Kong,feed_land_chickens_industrial_meat,0,0,0
+HKG,Hong Kong,feed_marine_salmon_aquaculture_meat,0,0,0
+HND,Honduras,feed_land_chickens_industrial_meat,9.532102131407737e-4,476529.8577824744,2.0003158198240194e-9
+HND,Honduras,feed_marine_salmon_aquaculture_meat,9.330554831260069e-8,24.24440408242119,3.848539563826748e-9
+HRV,Croatia,feed_land_chickens_industrial_meat,3.99903394788699e-4,267162.32193604065,1.496855514245893e-9
+HRV,Croatia,feed_marine_salmon_aquaculture_meat,2.7997562770852767e-7,305.3467703351461,9.169103947005194e-10
+HTI,Haiti,feed_land_chickens_industrial_meat,1.76363158779148e-4,34811.67439693517,5.0662072949491644e-9
+HTI,Haiti,feed_marine_salmon_aquaculture_meat,1.9803167743733389e-7,49.39284566740785,4.0093190574765006e-9
+HUN,Hungary,feed_land_chickens_industrial_meat,0.0015013285542721916,1375717.6907608092,1.0913056976405648e-9
+HUN,Hungary,feed_marine_salmon_aquaculture_meat,5.461068187769177e-6,5882.10900625667,9.284200925144976e-10
+IDN,Indonesia,feed_land_chickens_industrial_meat,0.02298801357405891,25456228.52004156,9.030408238188372e-10
+IDN,Indonesia,feed_marine_salmon_aquaculture_meat,7.610542707862583e-7,173.31685644519936,4.3911151309560835e-9
+IMN,Isle of Man,feed_land_chickens_industrial_meat,0,0,0
+IMN,Isle of Man,feed_marine_salmon_aquaculture_meat,0,0,0
+IND,India,feed_land_chickens_industrial_meat,0.037812551756818656,9695432.52253134,3.9000376382328055e-9
+IND,India,feed_marine_salmon_aquaculture_meat,1.041004371125769e-4,26965.10493978057,3.8605611713752905e-9
+IOT,British Indian Ocean Territory,feed_land_chickens_industrial_meat,0,0,0
+IOT,British Indian Ocean Territory,feed_marine_salmon_aquaculture_meat,0,0,0
+IRL,Ireland,feed_land_chickens_industrial_meat,3.633870975051599e-4,89748.60192848215,4.048944381269935e-9
+IRL,Ireland,feed_marine_salmon_aquaculture_meat,1.5100770080705471e-5,5452.4264379187825,2.7695504474278624e-9
+IRN,Iran,feed_land_chickens_industrial_meat,0.048813676021145724,8545529.9354186,5.71218828908761e-9
+IRN,Iran,feed_marine_salmon_aquaculture_meat,2.992733428607655e-6,236.23476984574123,1.2668471413255034e-8
+IRQ,Iraq,feed_land_chickens_industrial_meat,0.004635489356584096,374576.81013802317,1.2375270521621512e-8
+IRQ,Iraq,feed_marine_salmon_aquaculture_meat,1.67660746157071e-7,15.412425577399281,1.0878284233399839e-8
+ISL,Iceland,feed_land_chickens_industrial_meat,0,0,0
+ISL,Iceland,feed_marine_salmon_aquaculture_meat,0,0,0
+ISR,Israel,feed_land_chickens_industrial_meat,2.278499081361897e-4,88094.54275927911,2.5864247772849695e-9
+ISR,Israel,feed_marine_salmon_aquaculture_meat,5.244677017079307e-7,106.43120927414338,4.927762310367227e-9
+ITA,Italy,feed_land_chickens_industrial_meat,0.0016669442221205434,1241257.7183598743,1.3429477194495487e-9
+ITA,Italy,feed_marine_salmon_aquaculture_meat,1.7274953282359386e-5,5326.008398932455,3.2435084566937556e-9
+JAM,Jamaica,feed_land_chickens_industrial_meat,5.4377159458582885e-6,2402.6785266778647,2.263189138905282e-9
+JAM,Jamaica,feed_marine_salmon_aquaculture_meat,9.700206718510476e-10,0.42945699711667235,2.2587143261459496e-9
+JEY,Jersey,feed_land_chickens_industrial_meat,0,0,0
+JEY,Jersey,feed_marine_salmon_aquaculture_meat,0,0,0
+JOR,Jordan,feed_land_chickens_industrial_meat,1.0835044788431231e-4,28414.35370747674,3.8132293628695765e-9
+JOR,Jordan,feed_marine_salmon_aquaculture_meat,3.432075054521264e-7,73.73877279784243,4.654369640691505e-9
+JPN,Japan,feed_land_chickens_industrial_meat,6.25265688226681e-4,263445.44611258927,2.37341619471175e-9
+JPN,Japan,feed_marine_salmon_aquaculture_meat,5.905837011550607e-6,1374.3184092135887,4.297284364349045e-9
+KAZ,Kazakhstan,feed_land_chickens_industrial_meat,0.001871656231642813,689961.1608954101,2.7126979571050577e-9
+KAZ,Kazakhstan,feed_marine_salmon_aquaculture_meat,4.3855199139572006e-5,8005.099056004389,5.478408053761373e-9
+KEN,Kenya,feed_land_chickens_industrial_meat,4.220431013328438e-4,197350.8452396186,2.138542152279152e-9
+KEN,Kenya,feed_marine_salmon_aquaculture_meat,9.095541427251243e-7,336.9749322816473,2.699174495166629e-9
+KGZ,Kyrgyzstan,feed_land_chickens_industrial_meat,7.163345872322845e-5,26190.26909436739,2.7351173241146383e-9
+KGZ,Kyrgyzstan,feed_marine_salmon_aquaculture_meat,2.3337426995595715e-7,101.99391416905358,2.2881195594586395e-9
+KHM,Cambodia,feed_land_chickens_industrial_meat,1.7955007715888134e-4,159857.85023630224,1.1231858610225897e-9
+KHM,Cambodia,feed_marine_salmon_aquaculture_meat,1.28168078439842e-10,0.04092188336315729,3.1320180770378235e-9
+KIR,Kiribati,feed_land_chickens_industrial_meat,0,0,0
+KIR,Kiribati,feed_marine_salmon_aquaculture_meat,0,0,0
+KNA,Saint Kitts and Nevis,feed_land_chickens_industrial_meat,7.978449052114436e-11,0.03646359623542653,2.188058742369164e-9
+KNA,Saint Kitts and Nevis,feed_marine_salmon_aquaculture_meat,0,0,0
+KOR,South Korea,feed_land_chickens_industrial_meat,2.2320679000703333e-4,109530.9032255633,2.0378430509914696e-9
+KOR,South Korea,feed_marine_salmon_aquaculture_meat,1.8849550448015595e-7,62.18374042429096,3.0312667458409043e-9
+KWT,Kuwait,feed_land_chickens_industrial_meat,9.322271636919184e-6,3693.3846891389708,2.524045671260001e-9
+KWT,Kuwait,feed_marine_salmon_aquaculture_meat,4.433584298473119e-8,1.1188879394084343,3.962491812019346e-8
+LAO,Laos,feed_land_chickens_industrial_meat,1.982064252487567e-4,219119.06074452147,9.045604000642028e-10
+LAO,Laos,feed_marine_salmon_aquaculture_meat,2.796591921923463e-12,0.0010337124236810087,2.7053867766867992e-9
+LBN,Lebanon,feed_land_chickens_industrial_meat,3.560722343247346e-4,152556.6650716867,2.3340326308091195e-9
+LBN,Lebanon,feed_marine_salmon_aquaculture_meat,2.496891274338601e-7,43.40813936550734,5.752126930191951e-9
+LBR,Liberia,feed_land_chickens_industrial_meat,4.3513308492772345e-6,732.121969209535,5.9434507258064176e-9
+LBR,Liberia,feed_marine_salmon_aquaculture_meat,0,0,0
+LBY,Libya,feed_land_chickens_industrial_meat,8.643394584229747e-5,8336.133153185861,1.0368589879021376e-8
+LBY,Libya,feed_marine_salmon_aquaculture_meat,0,0,0
+LCA,Saint Lucia,feed_land_chickens_industrial_meat,0,0,0
+LCA,Saint Lucia,feed_marine_salmon_aquaculture_meat,1.4393476502406923e-11,0.00968858955424387,1.4856111327476126e-9
+LIE,Liechtenstein,feed_land_chickens_industrial_meat,0,0,0
+LIE,Liechtenstein,feed_marine_salmon_aquaculture_meat,0,0,0
+LKA,Sri Lanka,feed_land_chickens_industrial_meat,1.284477485380886e-4,81529.68783253407,1.5754721004442762e-9
+LKA,Sri Lanka,feed_marine_salmon_aquaculture_meat,1.267191951908324e-7,20.5811191081645,6.157060484653775e-9
+LSO,Lesotho,feed_land_chickens_industrial_meat,4.066826074967109e-5,11989.264571051706,3.3920563274469173e-9
+LSO,Lesotho,feed_marine_salmon_aquaculture_meat,1.5796830697282536e-8,6.3442433042264685,2.4899471756953036e-9
+LTU,Lithuania,feed_land_chickens_industrial_meat,0.0010115141317882234,415471.6066869162,2.4346167475903172e-9
+LTU,Lithuania,feed_marine_salmon_aquaculture_meat,1.0502410912728394e-4,35673.85466318062,2.9440078768858272e-9
+LUX,Luxembourg,feed_land_chickens_industrial_meat,5.965727437490918e-5,17476.265229506596,3.413616902207742e-9
+LUX,Luxembourg,feed_marine_salmon_aquaculture_meat,4.1164965782115836e-8,9.657595715559301,4.262444504256393e-9
+LVA,Latvia,feed_land_chickens_industrial_meat,4.480818284133175e-4,218752.92331343552,2.048346699217788e-9
+LVA,Latvia,feed_marine_salmon_aquaculture_meat,6.402283618596077e-5,27007.287347977945,2.3705763322710826e-9
+MAC,Macao,feed_land_chickens_industrial_meat,0,0,0
+MAC,Macao,feed_marine_salmon_aquaculture_meat,0,0,0
+MAF,Saint-Martin,feed_land_chickens_industrial_meat,0,0,0
+MAF,Saint-Martin,feed_marine_salmon_aquaculture_meat,0,0,0
+MAR,Morocco,feed_land_chickens_industrial_meat,0.001944632559696036,191530.13348695246,1.0153141567295517e-8
+MAR,Morocco,feed_marine_salmon_aquaculture_meat,4.137598211727551e-6,549.8112312003122,7.525488707632645e-9
+MCO,Monaco,feed_land_chickens_industrial_meat,0,0,0
+MCO,Monaco,feed_marine_salmon_aquaculture_meat,0,0,0
+MDA,Moldova,feed_land_chickens_industrial_meat,9.169094449575572e-4,667006.0618522663,1.374664335750282e-9
+MDA,Moldova,feed_marine_salmon_aquaculture_meat,4.085305193084911e-7,548.0381074232678,7.454418110253227e-10
+MDG,Madagascar,feed_land_chickens_industrial_meat,4.3596354998621373e-4,161509.67818795078,2.699302945046288e-9
+MDG,Madagascar,feed_marine_salmon_aquaculture_meat,9.056808940693183e-8,32.53228612693358,2.78394481880418e-9
+MDV,Maldives,feed_land_chickens_industrial_meat,0,10.763437476905272,0
+MDV,Maldives,feed_marine_salmon_aquaculture_meat,0,0,0
+MEX,Mexico,feed_land_chickens_industrial_meat,0.018201403257430464,7850556.441562378,2.3184857523052355e-9
+MEX,Mexico,feed_marine_salmon_aquaculture_meat,7.901742865445205e-6,1674.35187534573,4.7192845075134565e-9
+MHL,Marshall Islands,feed_land_chickens_industrial_meat,0,0,0
+MHL,Marshall Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+MKD,Macedonia,feed_land_chickens_industrial_meat,1.8151871328019308e-5,8853.85722892341,2.050165352646701e-9
+MKD,Macedonia,feed_marine_salmon_aquaculture_meat,2.8760151480012803e-8,14.265374889189719,2.016081014583585e-9
+MLI,Mali,feed_land_chickens_industrial_meat,5.992505120186703e-4,328497.840508151,1.8242144639115248e-9
+MLI,Mali,feed_marine_salmon_aquaculture_meat,1.2119426460490723e-6,854.0705900878747,1.4190192943236417e-9
+MLT,Malta,feed_land_chickens_industrial_meat,1.6507075368032792e-6,1206.43712938902,1.3682499457217905e-9
+MLT,Malta,feed_marine_salmon_aquaculture_meat,5.3088245348849104e-8,34.718493701045624,1.529105663568873e-9
+MMR,Myanmar,feed_land_chickens_industrial_meat,9.059001972792617e-4,1052660.3208934152,8.605816893624383e-10
+MMR,Myanmar,feed_marine_salmon_aquaculture_meat,4.684041036548417e-6,2647.754904131646,1.769061414725087e-9
+MNE,Montenegro,feed_land_chickens_industrial_meat,8.11153044027441e-7,813.3781018626942,9.97264423728451e-10
+MNE,Montenegro,feed_marine_salmon_aquaculture_meat,0,0,0
+MNG,Mongolia,feed_land_chickens_industrial_meat,3.0511028892342027e-5,4975.120571954289,6.1327214991207574e-9
+MNG,Mongolia,feed_marine_salmon_aquaculture_meat,0,0,0
+MNP,Northern Mariana Islands,feed_land_chickens_industrial_meat,0,0,0
+MNP,Northern Mariana Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+MOZ,Mozambique,feed_land_chickens_industrial_meat,4.0284904688421704e-4,73857.40193973384,5.454416704407417e-9
+MOZ,Mozambique,feed_marine_salmon_aquaculture_meat,1.2477168036137533e-6,267.26828432738176,4.6684057809321e-9
+MRT,Mauritania,feed_land_chickens_industrial_meat,9.215827891196391e-5,13082.928628711401,7.044162780932407e-9
+MRT,Mauritania,feed_marine_salmon_aquaculture_meat,2.3705647010152947e-9,0.008676739429877825,2.7320916113400836e-7
+MSR,Montserrat,feed_land_chickens_industrial_meat,7.321221761863799e-8,100.25461143864953,7.302628434547368e-10
+MSR,Montserrat,feed_marine_salmon_aquaculture_meat,3.8554814273024735e-10,0.06828567447153507,5.646105800579935e-9
+MTQ,Martinique,feed_land_chickens_industrial_meat,0,0,0
+MTQ,Martinique,feed_marine_salmon_aquaculture_meat,0,0,0
+MUS,Mauritius,feed_land_chickens_industrial_meat,4.950245511984698e-8,127.91245325898129,3.8700262451866626e-10
+MUS,Mauritius,feed_marine_salmon_aquaculture_meat,0,0,0
+MWI,Malawi,feed_land_chickens_industrial_meat,3.1958065618044123e-4,188693.16719320265,1.6936525097022887e-9
+MWI,Malawi,feed_marine_salmon_aquaculture_meat,7.785853846881345e-7,371.8406522722403,2.0938683813358286e-9
+MYS,Malaysia,feed_land_chickens_industrial_meat,1.0915805236523486e-4,80115.35429523086,1.3625110108479276e-9
+MYS,Malaysia,feed_marine_salmon_aquaculture_meat,3.0626266815523746e-6,1021.5575874529713,2.997997096951097e-9
+MYT,Mayotte,feed_land_chickens_industrial_meat,0,0,0
+MYT,Mayotte,feed_marine_salmon_aquaculture_meat,0,0,0
+"NAM",Namibia,feed_land_chickens_industrial_meat,6.171774776727551e-5,20461.494721507577,3.0162873537485254e-9
+"NAM",Namibia,feed_marine_salmon_aquaculture_meat,2.4807821325734024e-11,0.07189573146274396,3.4505277046370023e-10
+NCL,New Caledonia,feed_land_chickens_industrial_meat,4.4958819448014947e-7,658.6283124682674,6.826129183473426e-10
+NCL,New Caledonia,feed_marine_salmon_aquaculture_meat,0,0,0
+NER,Niger,feed_land_chickens_industrial_meat,6.380211846160191e-4,208167.5339621736,3.0649408794550776e-9
+NER,Niger,feed_marine_salmon_aquaculture_meat,4.425897886470003e-7,244.97372257061795,1.8066827086705844e-9
+NFK,Norfolk Island,feed_land_chickens_industrial_meat,0,0,0
+NFK,Norfolk Island,feed_marine_salmon_aquaculture_meat,0,0,0
+NGA,Nigeria,feed_land_chickens_industrial_meat,0.002672319722877807,1367241.2031911833,1.9545342231060107e-9
+NGA,Nigeria,feed_marine_salmon_aquaculture_meat,4.133156842740113e-6,2379.5307242233444,1.7369630073127697e-9
+NIC,Nicaragua,feed_land_chickens_industrial_meat,6.715735095957414e-4,209814.60182546353,3.200794910138794e-9
+NIC,Nicaragua,feed_marine_salmon_aquaculture_meat,5.215063919529179e-7,197.3393525385785,2.64268826893494e-9
+NIU,Niue,feed_land_chickens_industrial_meat,0,0,0
+NIU,Niue,feed_marine_salmon_aquaculture_meat,0,0,0
+NLD,Netherlands,feed_land_chickens_industrial_meat,6.747203766094243e-4,350982.8546825701,1.922374177563868e-9
+NLD,Netherlands,feed_marine_salmon_aquaculture_meat,7.344875997497174e-6,2220.0654099824346,3.308405222869216e-9
+NOR,Norway,feed_land_chickens_industrial_meat,2.3165449579389994e-4,95102.31441712404,2.4358449866724636e-9
+NOR,Norway,feed_marine_salmon_aquaculture_meat,3.5540698377134954e-4,148588.3074281295,2.3918906535984055e-9
+NPL,Nepal,feed_land_chickens_industrial_meat,0.0010605221904307538,333740.9722127699,3.1776805328973484e-9
+NPL,Nepal,feed_marine_salmon_aquaculture_meat,8.434498805925788e-7,268.7812233780915,3.1380535812433126e-9
+NRU,Nauru,feed_land_chickens_industrial_meat,0,0,0
+NRU,Nauru,feed_marine_salmon_aquaculture_meat,0,0,0
+NZL,New Zealand,feed_land_chickens_industrial_meat,3.9518722116961395e-4,185726.90689541836,2.12778658609838e-9
+NZL,New Zealand,feed_marine_salmon_aquaculture_meat,5.621926815762721e-6,2361.763134528342,2.3803940088536664e-9
+OMN,Oman,feed_land_chickens_industrial_meat,4.2984433340278056e-5,21866.236012884776,1.965790240028018e-9
+OMN,Oman,feed_marine_salmon_aquaculture_meat,0,0,0
+PAK,Pakistan,feed_land_chickens_industrial_meat,0.029406443303777476,4555804.576184451,6.454720085558582e-9
+PAK,Pakistan,feed_marine_salmon_aquaculture_meat,1.314088163146208e-5,2920.5560879072323,4.499445049479729e-9
+PAN,Panama,feed_land_chickens_industrial_meat,1.661661216615634e-4,110357.86242318316,1.5057026116034705e-9
+PAN,Panama,feed_marine_salmon_aquaculture_meat,2.5097346292708456e-9,0.8566480592435759,2.929714953754699e-9
+PCN,Pitcairn Islands,feed_land_chickens_industrial_meat,0,0,0
+PCN,Pitcairn Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+PER,Peru,feed_land_chickens_industrial_meat,0.0031600845251723467,1006165.386488918,3.14072076778518e-9
+PER,Peru,feed_marine_salmon_aquaculture_meat,2.995633001544629e-5,1881.9600051996704,1.5917623080554262e-8
+PHL,Philippines,feed_land_chickens_industrial_meat,0.002044816496624862,1254211.817234131,1.6303597753800658e-9
+PHL,Philippines,feed_marine_salmon_aquaculture_meat,2.6128668299682417e-7,144.0436797923566,1.8139406281030653e-9
+PLW,Palau,feed_land_chickens_industrial_meat,0,0,0
+PLW,Palau,feed_marine_salmon_aquaculture_meat,0,0,0
+PNG,Papua New Guinea,feed_land_chickens_industrial_meat,7.638908671298208e-7,819.5391876076254,9.32098035921563e-10
+PNG,Papua New Guinea,feed_marine_salmon_aquaculture_meat,0,0,0
+POL,Poland,feed_land_chickens_industrial_meat,0.004188898752255648,3059952.016575428,1.3689426270623977e-9
+POL,Poland,feed_marine_salmon_aquaculture_meat,4.4222251479282844e-5,37264.1181899199,1.186724753659813e-9
+PRI,Puerto Rico,feed_land_chickens_industrial_meat,2.7040855129932896e-8,3.2551837111786917,8.307013529550222e-9
+PRI,Puerto Rico,feed_marine_salmon_aquaculture_meat,0,0,0
+PRK,North Korea,feed_land_chickens_industrial_meat,1.8657534431356225e-4,88505.50591355078,2.1080648304050464e-9
+PRK,North Korea,feed_marine_salmon_aquaculture_meat,0,0,0
+PRT,Portugal,feed_land_chickens_industrial_meat,2.538895517025471e-4,69234.01752018408,3.6671214642213946e-9
+PRT,Portugal,feed_marine_salmon_aquaculture_meat,2.399819646719592e-6,924.50884308906,2.5957779253912577e-9
+PRY,Paraguay,feed_land_chickens_industrial_meat,0.005716551262929332,4894011.731278771,1.168070608902206e-9
+PRY,Paraguay,feed_marine_salmon_aquaculture_meat,1.2129452876758033e-4,97978.55844124101,1.2379701303762518e-9
+PSE,Palestina,feed_land_chickens_industrial_meat,0,0,0
+PSE,Palestina,feed_marine_salmon_aquaculture_meat,0,0,0
+PYF,French Polynesia,feed_land_chickens_industrial_meat,0,0,0
+PYF,French Polynesia,feed_marine_salmon_aquaculture_meat,0,0,0
+QAT,Qatar,feed_land_chickens_industrial_meat,2.140349521111083e-6,558.5986648646774,3.83164095393889e-9
+QAT,Qatar,feed_marine_salmon_aquaculture_meat,0,0,0
+REU,Reunion,feed_land_chickens_industrial_meat,0,0,0
+REU,Reunion,feed_marine_salmon_aquaculture_meat,0,0,0
+ROU,Romania,feed_land_chickens_industrial_meat,0.0022671571610769063,2100677.814532924,1.0792502997805013e-9
+ROU,Romania,feed_marine_salmon_aquaculture_meat,4.4879819743893735e-6,4730.6623883499415,9.487005425375082e-10
+RUS,Russia,feed_land_chickens_industrial_meat,0.026121160900170536,14093981.288821368,1.8533557243252847e-9
+RUS,Russia,feed_marine_salmon_aquaculture_meat,2.6953841206258343e-4,172874.41961080628,1.5591572927295876e-9
+RWA,Rwanda,feed_land_chickens_industrial_meat,7.212627444926909e-5,33589.6436669975,2.14727715376554e-9
+RWA,Rwanda,feed_marine_salmon_aquaculture_meat,1.7547053542806126e-7,84.26303341514384,2.082414177561824e-9
+SAU,Saudi Arabia,feed_land_chickens_industrial_meat,0.003557966434782161,370708.5577335932,9.597745615948434e-9
+SAU,Saudi Arabia,feed_marine_salmon_aquaculture_meat,6.634265192924302e-7,23.909466996164443,2.7747440768916225e-8
+SDN,Sudan,feed_land_chickens_industrial_meat,0.0072171455015729484,952880.395657629,7.57403083793328e-9
+SDN,Sudan,feed_marine_salmon_aquaculture_meat,6.534379949696331e-6,1464.6139841341699,4.461503181371872e-9
+SEN,Senegal,feed_land_chickens_industrial_meat,2.338527777660508e-4,124601.09706926513,1.8768115471411397e-9
+SEN,Senegal,feed_marine_salmon_aquaculture_meat,7.314627681166435e-7,375.0043616234614,1.9505446948670395e-9
+SGP,Singapore,feed_land_chickens_industrial_meat,0,0,0
+SGP,Singapore,feed_marine_salmon_aquaculture_meat,0,0,0
+SHN,Saint Helena,feed_land_chickens_industrial_meat,0,0,0
+SHN,Saint Helena,feed_marine_salmon_aquaculture_meat,0,0,0
+SJM,Svalbard and Jan Mayen,feed_land_chickens_industrial_meat,0,0,0
+SJM,Svalbard and Jan Mayen,feed_marine_salmon_aquaculture_meat,0,0,0
+SLB,Solomon Islands,feed_land_chickens_industrial_meat,0,0,0
+SLB,Solomon Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+SLE,Sierra Leone,feed_land_chickens_industrial_meat,4.4577333832496427e-5,10713.867134859236,4.160713706020968e-9
+SLE,Sierra Leone,feed_marine_salmon_aquaculture_meat,6.480133476785209e-8,15.720378321109429,4.122123109520616e-9
+SLV,El Salvador,feed_land_chickens_industrial_meat,3.917594202156069e-4,210110.8720301148,1.8645366440602687e-9
+SLV,El Salvador,feed_marine_salmon_aquaculture_meat,1.1037320961043131e-7,35.42247375945002,3.11590913610278e-9
+SMR,San Marino,feed_land_chickens_industrial_meat,0,0,0
+SMR,San Marino,feed_marine_salmon_aquaculture_meat,0,0,0
+SOM,Somalia,feed_land_chickens_industrial_meat,1.8544586649805772e-4,11475.2594974269,1.616049436961668e-8
+SOM,Somalia,feed_marine_salmon_aquaculture_meat,8.243578522486656e-8,24.28522789747443,3.394482669583659e-9
+SPM,Saint Pierre and Miquelon,feed_land_chickens_industrial_meat,0,0,0
+SPM,Saint Pierre and Miquelon,feed_marine_salmon_aquaculture_meat,0,0,0
+SRB,Serbia,feed_land_chickens_industrial_meat,7.398306025902062e-4,733423.3264535433,1.0087361226532638e-9
+SRB,Serbia,feed_marine_salmon_aquaculture_meat,3.381624125653371e-7,378.6598594873001,8.930505943334054e-10
+SSD,South Sudan,feed_land_chickens_industrial_meat,7.430506912601198e-4,97038.65393675368,7.657265029092568e-9
+SSD,South Sudan,feed_marine_salmon_aquaculture_meat,2.712279602439524e-7,224.6195159970266,1.2074995311072737e-9
+STP,São Tomé and Príncipe,feed_land_chickens_industrial_meat,6.386736136163326e-7,353.4616066140927,1.806910854433004e-9
+STP,São Tomé and Príncipe,feed_marine_salmon_aquaculture_meat,0,0,0
+SUR,Suriname,feed_land_chickens_industrial_meat,1.0875786020900923e-7,91.42569300207808,1.1895765472243912e-9
+SUR,Suriname,feed_marine_salmon_aquaculture_meat,0,0,0
+SVK,Slovakia,feed_land_chickens_industrial_meat,5.354080190848457e-4,458673.4347456875,1.167296770482694e-9
+SVK,Slovakia,feed_marine_salmon_aquaculture_meat,4.5414863148095895e-7,472.7633366996893,9.606257427898753e-10
+SVN,Slovenia,feed_land_chickens_industrial_meat,6.742258135462371e-5,56618.40960601313,1.1908243594935442e-9
+SVN,Slovenia,feed_marine_salmon_aquaculture_meat,5.6796114568962755e-8,19.596153507301576,2.8983297435285134e-9
+SWE,Sweden,feed_land_chickens_industrial_meat,3.0610015722264925e-4,138014.8137341614,2.2178790011067005e-9
+SWE,Sweden,feed_marine_salmon_aquaculture_meat,2.4872860965162685e-4,107597.62198419862,2.3116552676987063e-9
+SWZ,Swaziland,feed_land_chickens_industrial_meat,4.400139349391115e-5,21129.237808461727,2.082488440557458e-9
+SWZ,Swaziland,feed_marine_salmon_aquaculture_meat,3.415781916531307e-9,1.1901692134609743,2.869996869267288e-9
+SXM,Sint Maarten,feed_land_chickens_industrial_meat,0,0,0
+SXM,Sint Maarten,feed_marine_salmon_aquaculture_meat,0,0,0
+SYC,Seychelles,feed_land_chickens_industrial_meat,0,0,0
+SYC,Seychelles,feed_marine_salmon_aquaculture_meat,0,0,0
+SYR,Syria,feed_land_chickens_industrial_meat,7.025900195064878e-4,113540.60627274858,6.188006586988956e-9
+SYR,Syria,feed_marine_salmon_aquaculture_meat,9.785150350228483e-7,239.75389874638932,4.081331065476926e-9
+TCA,Turks and Caicos Islands,feed_land_chickens_industrial_meat,0,0,0
+TCA,Turks and Caicos Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+TCD,Chad,feed_land_chickens_industrial_meat,4.063343851703717e-4,115540.03720620317,3.516827543037663e-9
+TCD,Chad,feed_marine_salmon_aquaculture_meat,6.615940867066475e-7,427.70740982741444,1.5468380287673982e-9
+TGO,Togo,feed_land_chickens_industrial_meat,3.839214219499423e-4,181797.10236938926,2.1118126578819795e-9
+TGO,Togo,feed_marine_salmon_aquaculture_meat,3.2229758739103493e-7,145.32718893461964,2.217737711392955e-9
+THA,Thailand,feed_land_chickens_industrial_meat,0.0040719994347193375,2929258.0765370126,1.3901128983258726e-9
+THA,Thailand,feed_marine_salmon_aquaculture_meat,1.2823809687531993e-6,319.85264317332195,4.009286764150021e-9
+TJK,Tajikistan,feed_land_chickens_industrial_meat,1.3648609756471654e-4,30514.340395018364,4.472850987367194e-9
+TJK,Tajikistan,feed_marine_salmon_aquaculture_meat,1.237949240550554e-6,246.8112220368278,5.015773716990203e-9
+TKL,Tokelau,feed_land_chickens_industrial_meat,0,0,0
+TKL,Tokelau,feed_marine_salmon_aquaculture_meat,0,0,0
+TKM,Turkmenistan,feed_land_chickens_industrial_meat,0.0026035245296997037,320573.0306200864,8.121470869410598e-9
+TKM,Turkmenistan,feed_marine_salmon_aquaculture_meat,1.2861261065513927e-6,175.33539390514943,7.335233793395667e-9
+TLS,Timor-Leste,feed_land_chickens_industrial_meat,2.1176768654718724e-5,8159.017030167046,2.5955048967810716e-9
+TLS,Timor-Leste,feed_marine_salmon_aquaculture_meat,0,0,0
+TON,Tonga,feed_land_chickens_industrial_meat,1.0026878192745304e-7,140.6567258186072,7.12861623529905e-10
+TON,Tonga,feed_marine_salmon_aquaculture_meat,0,0,0
+TTO,Trinidad and Tobago,feed_land_chickens_industrial_meat,4.5798979031529366e-6,3015.9275461604134,1.518570268368555e-9
+TTO,Trinidad and Tobago,feed_marine_salmon_aquaculture_meat,8.495165165355782e-10,0.5618937928138669,1.5118809415589848e-9
+TUN,Tunisia,feed_land_chickens_industrial_meat,1.0450121791335581e-4,40151.6732186859,2.6026615962973802e-9
+TUN,Tunisia,feed_marine_salmon_aquaculture_meat,1.296779229647333e-6,256.64883733998914,5.052737596973631e-9
+TUR,Turkey,feed_land_chickens_industrial_meat,0.011180959150938292,4064560.150530979,2.7508411087181606e-9
+TUR,Turkey,feed_marine_salmon_aquaculture_meat,2.8293761173291357e-5,8040.37176969091,3.5189618072074585e-9
+TUV,Tuvalu,feed_land_chickens_industrial_meat,0,0,0
+TUV,Tuvalu,feed_marine_salmon_aquaculture_meat,0,0,0
+TWN,Taiwan,feed_land_chickens_industrial_meat,8.94961096961579e-5,51386.54211491419,1.7416254531394702e-9
+TWN,Taiwan,feed_marine_salmon_aquaculture_meat,3.1472846073578774e-6,1276.5412932137374,2.465478104068595e-9
+TZA,Tanzania,feed_land_chickens_industrial_meat,6.346723243008674e-4,327971.97138626914,1.935141962339769e-9
+TZA,Tanzania,feed_marine_salmon_aquaculture_meat,2.2032834021848157e-6,2630.600806654892,8.375590080452158e-10
+UGA,Uganda,feed_land_chickens_industrial_meat,2.3985010890535812e-4,190796.1905068668,1.25710114163273e-9
+UGA,Uganda,feed_marine_salmon_aquaculture_meat,1.215013821379198e-6,642.7854057611577,1.8902324329228248e-9
+UKR,Ukraine,feed_land_chickens_industrial_meat,0.009043959427438032,8837528.28393408,1.023358470476324e-9
+UKR,Ukraine,feed_marine_salmon_aquaculture_meat,1.931903818373945e-5,18716.583700497908,1.0321882717958576e-9
+URY,Uruguay,feed_land_chickens_industrial_meat,0.0017548557447313413,716504.4267312058,2.449190373794675e-9
+URY,Uruguay,feed_marine_salmon_aquaculture_meat,2.1715438671559822e-7,75.8274719913876,2.8637956800176903e-9
+USA,United States,feed_land_chickens_industrial_meat,0.16303614494839666,123271115.64040627,1.3225818887207027e-9
+USA,United States,feed_marine_salmon_aquaculture_meat,2.5990482174350287e-4,115819.91470068392,2.244042593324135e-9
+UZB,Uzbekistan,feed_land_chickens_industrial_meat,0.0014521088006139637,421975.7729079114,3.4412136758639466e-9
+UZB,Uzbekistan,feed_marine_salmon_aquaculture_meat,7.123691410927581e-6,1486.8168514016031,4.7912366638918365e-9
+VCT,Saint Vincent and the Grenadines,feed_land_chickens_industrial_meat,1.7980502483056612e-7,604.4408855450898,2.97473299921491e-10
+VCT,Saint Vincent and the Grenadines,feed_marine_salmon_aquaculture_meat,0,0,0
+VEN,Venezuela,feed_land_chickens_industrial_meat,0.002396737702316392,710752.2440383458,3.3721141542918377e-9
+VEN,Venezuela,feed_marine_salmon_aquaculture_meat,1.6429077696733326e-7,9.870887088468388,1.6643972876486967e-8
+VGB,British Virgin Islands,feed_land_chickens_industrial_meat,0,0,0
+VGB,British Virgin Islands,feed_marine_salmon_aquaculture_meat,0,0,0
+VIR,"Virgin Islands, U.S.",feed_land_chickens_industrial_meat,0,0,0
+VIR,"Virgin Islands, U.S.",feed_marine_salmon_aquaculture_meat,0,0,0
+VNM,Vietnam,feed_land_chickens_industrial_meat,0.0016844769143696144,1064524.946107509,1.582374298065059e-9
+VNM,Vietnam,feed_marine_salmon_aquaculture_meat,3.988852360025977e-7,133.41949363430766,2.989707314404226e-9
+VUT,Vanuatu,feed_land_chickens_industrial_meat,3.900895335305802e-6,1450.1537743309766,2.689987368481295e-9
+VUT,Vanuatu,feed_marine_salmon_aquaculture_meat,3.0063682274225527e-10,0.2918833787544316,1.0299895253548786e-9
+WLF,Wallis and Futuna,feed_land_chickens_industrial_meat,0,0,0
+WLF,Wallis and Futuna,feed_marine_salmon_aquaculture_meat,0,0,0
+WSM,Samoa,feed_land_chickens_industrial_meat,0,0,0
+WSM,Samoa,feed_marine_salmon_aquaculture_meat,0,0,0
+XKO,Kosovo,feed_land_chickens_industrial_meat,6.431305218680419e-6,5474.0160472811785,1.1748787659975357e-9
+XKO,Kosovo,feed_marine_salmon_aquaculture_meat,0,0,0
+XMI,Madeira Island,feed_land_chickens_industrial_meat,0,0,0
+XMI,Madeira Island,feed_marine_salmon_aquaculture_meat,0,0,0
+YEM,Yemen,feed_land_chickens_industrial_meat,0.0025065178077240133,177634.12716871087,1.4110564493856564e-8
+YEM,Yemen,feed_marine_salmon_aquaculture_meat,7.713783293674284e-10,0.05806043373419708,1.3285783101428906e-8
+ZAF,South Africa,feed_land_chickens_industrial_meat,0.004300846894814851,3205223.602411086,1.3418242931880313e-9
+ZAF,South Africa,feed_marine_salmon_aquaculture_meat,1.2733352172253911e-6,976.857626172684,1.3035013323428743e-9
+ZMB,Zambia,feed_land_chickens_industrial_meat,4.8117226286675514e-4,365565.90166688507,1.316239454152412e-9
+ZMB,Zambia,feed_marine_salmon_aquaculture_meat,3.579050489512096e-7,238.52315090921422,1.5005044482555662e-9
+ZWE,Zimbabwe,feed_land_chickens_industrial_meat,4.10954933264899e-4,61135.986686194316,6.7219808747717576e-9
+ZWE,Zimbabwe,feed_marine_salmon_aquaculture_meat,3.7725428491726574e-7,73.20869032463065,5.1531352800384775e-9
