@@ -455,6 +455,8 @@ all_chick_fw/all_salmon_fw
 
 ## Efficiency - CPI/production
 
+On-farm
+
 ```{r}
 broiler_cpi_prod<-full_join(iso3_broiler_cpi, broiler_prod, by = c("iso3c", "Country"))
 
@@ -468,7 +470,10 @@ iso3_broiler_cpi_farm_prod<-broiler_cpi_feed_farm_iso3 %>%
   filter(source2 == "farm") %>% 
   full_join(broiler_prod) %>% 
   mutate(cpi_prod = country_farm_feed_chi/broiler_slaughter_wt_tonnes) %>% 
-  dplyr::select(iso3c, Country, country_farm_feed_chi, broiler_slaughter_wt_tonnes, cpi_prod)
+  dplyr::select(iso3c, Country, country_farm_feed_chi, broiler_slaughter_wt_tonnes, cpi_prod) 
+
+sub_farm_prod<- iso3_broiler_cpi_farm_prod %>% 
+  filter(iso3c %in% c("USA", "BRA", "CHN"))
 
 iso3_salmon_cpi_farm_prod<-salmon_cpi_feed_farm_iso3 %>% 
   filter(source2 == "farm") %>% 
@@ -506,3 +511,51 @@ iso3_salmon_cpi_farm_pressure<-results %>%
   filter(iso3c %in% c("NOR", "CHL", "CAN", "GBR"))
 ```
 
+Feed
+```{r}
+crop_feed_cpi<-read.csv(here("chicken_salmon_diet/feed_cpi_per_tonne_crop.csv")) %>% 
+  rename(crop_tonnes = tonnes_feed,
+         crop_cpi = cpi)
+
+
+fofm_feed_cpi<-read.csv(here("chicken_salmon_diet/feed_cpi_per_tonne_fofm.csv")) %>% 
+  rename(fofm_tonnes = tonnes_feed,
+         fofm_cpi = cpi)
+
+chicken_crop_feed_cpi<-crop_feed_cpi %>% 
+  filter(system == "feed_land_chickens_industrial_meat",
+         crop_tonnes>0)
+
+salmon_crop_feed_cpi<-crop_feed_cpi %>% 
+  filter(system == "feed_marine_salmon_aquaculture_meat",
+         crop_tonnes>0) 
+
+chicken_fofm_feed_cpi<-fofm_feed_cpi %>% 
+  filter(system == "feed_land_chickens_industrial_meat",
+         fofm_tonnes>0)
+
+salmon_fofm_feed_cpi<-fofm_feed_cpi %>% 
+  filter(system == "feed_marine_salmon_aquaculture_meat",
+         fofm_tonnes>0) 
+```
+
+```{r}
+crop_fofsm<-full_join(crop_feed_cpi, fofm_feed_cpi, by = c("iso3c", "country", "system")) %>% 
+  dplyr::select(-cpi_per_tonne.x, -cpi_per_tonne.y) %>% 
+  mutate(feed_tonnes = crop_tonnes + fofm_tonnes,
+         feed_cpi = crop_cpi + fofm_cpi,
+         cpi_per_tonne = feed_cpi/feed_tonnes)
+
+chicken_crop_fofsm<-crop_fofsm %>% 
+  filter(system == "feed_land_chickens_industrial_meat",
+         feed_tonnes>0) #%>% 
+  #dplyr::select(iso3c, country, feed_tonnes, feed_cpi, cpi_per_tonne)
+
+
+salmon_crop_fofsm<-crop_fofsm %>% 
+  filter(system == "feed_marine_salmon_aquaculture_meat",
+         feed_tonnes>0) #%>% 
+  #dplyr::select(iso3c, country, feed_tonnes, feed_cpi, cpi_per_tonne)
+```
+
+# Efficiency CPI/area
