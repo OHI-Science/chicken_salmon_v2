@@ -76,7 +76,6 @@ iso3_salmon_cpi_feed<-results %>%
   filter(animal_system == "salmon") 
 ```
 
-Ask Mel about feed CPI values - they are mapped to where they are produced correct?
 ```{r}
 iso3_broiler_cpi_farm_dist<-results %>%
     filter(!is.na(Country),
