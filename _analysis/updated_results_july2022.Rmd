@@ -480,6 +480,10 @@ iso3_salmon_cpi_farm_prod<-salmon_cpi_feed_farm_iso3 %>%
   full_join(salmon_prod) %>% 
   mutate(cpi_prod = country_farm_feed_chi/fao_tonnes_production) %>% 
   dplyr::select(iso3c, Country, country_farm_feed_chi, fao_tonnes_production, cpi_prod)
+
+write.csv(iso3_broiler_cpi_farm_prod,here("_analysis/output_data/Broiler_farm_cpi_prod.csv"))
+
+write.csv(iso3_salmon_cpi_farm_prod,here("_analysis/output_data/Salmon_farm_cpi_prod.csv"))
 ```
 
 
@@ -556,6 +560,16 @@ salmon_crop_fofsm<-crop_fofsm %>%
   filter(system == "feed_marine_salmon_aquaculture_meat",
          feed_tonnes>0) #%>% 
   #dplyr::select(iso3c, country, feed_tonnes, feed_cpi, cpi_per_tonne)
+
+write.csv(chicken_crop_fofsm,here("_analysis/output_data/Broiler_feed_cpi_prod.csv"))
+
+write.csv(salmon_crop_fofsm,here("_analysis/output_data/Salmon_feed_cpi_prod.csv"))
 ```
 
 # Efficiency CPI/area
+
+```{r}
+cpi_pixel<-read.csv(here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
+
+```
+
