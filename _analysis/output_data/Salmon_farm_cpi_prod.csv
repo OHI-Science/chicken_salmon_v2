@@ -1,0 +1,245 @@
+"","animal_system","iso3c","Country","country_farm_feed_chi","fao_tonnes_production","cpi_prod"
+"1","salmon","ABW","Aruba",0,NA,NA
+"2","salmon","AFG","Afghanistan",0,NA,NA
+"3","salmon","AGO","Angola",0,NA,NA
+"4","salmon","AIA","Anguilla",0,NA,NA
+"5","salmon","ALA","Åland",0,NA,NA
+"6","salmon","ALB","Albania",0,NA,NA
+"7","salmon","AND","Andorra",0,NA,NA
+"8","salmon","ARE","United Arab Emirates",0,NA,NA
+"9","salmon","ARG","Argentina",0,NA,NA
+"10","salmon","ARM","Armenia",0,NA,NA
+"11","salmon","ASM","American Samoa",0,NA,NA
+"12","salmon","ATG","Antigua and Barbuda",0,NA,NA
+"13","salmon","AUS","Australia",0.00101767009943528,56115.19,0.0000000181353765252382
+"14","salmon","AUT","Austria",0,NA,NA
+"15","salmon","AZE","Azerbaijan",0,NA,NA
+"16","salmon","BDI","Burundi",0.0000116964651293899,NA,NA
+"17","salmon","BEL","Belgium",0.000000767335144099709,NA,NA
+"18","salmon","BEN","Benin",0,NA,NA
+"19","salmon","BES","Bonaire, Sint Eustatius and Saba",0,NA,NA
+"20","salmon","BFA","Burkina Faso",0,NA,NA
+"21","salmon","BGD","Bangladesh",0,NA,NA
+"22","salmon","BGR","Bulgaria",0,NA,NA
+"23","salmon","BHR","Bahrain",0,NA,NA
+"24","salmon","BHS","Bahamas",0,NA,NA
+"25","salmon","BIH","Bosnia and Herzegovina",0,NA,NA
+"26","salmon","BLM","Saint-Barthélemy",0,NA,NA
+"27","salmon","BLR","Belarus",0,NA,NA
+"28","salmon","BLZ","Belize",0.0000287868002434435,NA,NA
+"29","salmon","BMU","Bermuda",0,NA,NA
+"30","salmon","BOL","Bolivia",0,NA,NA
+"31","salmon","BRA","Brazil",0.00000115582210038238,NA,NA
+"32","salmon","BRB","Barbados",0,NA,NA
+"33","salmon","BRN","Brunei",0,NA,NA
+"34","salmon","BTN","Bhutan",0,NA,NA
+"35","salmon","BWA","Botswana",0,NA,NA
+"36","salmon","CAF","Central African Republic",0,NA,NA
+"37","salmon","CAN","Canada",0.002473761271406,123522,0.0000000200268880960962
+"38","salmon","CCK","Cocos Islands",0.0000191644086347838,NA,NA
+"39","salmon","CHE","Switzerland",0,NA,NA
+"40","salmon","CHL","Chile",0.0171274723111043,642701,0.0000000266492075025623
+"41","salmon","CHN","China",0.0000319262197439911,NA,NA
+"42","salmon","CIV","Côte d'Ivoire",0.000000772188164517732,NA,NA
+"43","salmon","CMR","Cameroon",0.000057573600486887,NA,NA
+"44","salmon","COD","Democratic Republic of the Congo",0,NA,NA
+"45","salmon","COG","Republic of Congo",0,NA,NA
+"46","salmon","COK","Cook Islands",0,NA,NA
+"47","salmon","COL","Colombia",0,NA,NA
+"48","salmon","COM","Comoros",0,NA,NA
+"49","salmon","CPV","Cape Verde",0.000004837310419371,NA,NA
+"50","salmon","CRI","Costa Rica",0,NA,NA
+"51","salmon","CUB","Cuba",0,NA,NA
+"52","salmon","CUW","Curaçao",0,NA,NA
+"53","salmon","CXR","Christmas Island",0,NA,NA
+"54","salmon","CYM","Cayman Islands",0.0000926260212311535,NA,NA
+"55","salmon","CYP","Cyprus",0,NA,NA
+"56","salmon","CZE","Czech Republic",0,NA,NA
+"57","salmon","DEU","Germany",0.0000322321275660892,NA,NA
+"58","salmon","DJI","Djibouti",0.0000120919567830077,NA,NA
+"59","salmon","DMA","Dominica",0.000000384598948712311,NA,NA
+"60","salmon","DNK","Denmark",0.000258174643147735,NA,NA
+"61","salmon","DOM","Dominican Republic",0.0000241487810405105,NA,NA
+"62","salmon","DZA","Algeria",0,NA,NA
+"63","salmon","ECU","Ecuador",0,NA,NA
+"64","salmon","EGY","Egypt",0,NA,NA
+"65","salmon","ERI","Eritrea",0.000000384598948712311,NA,NA
+"66","salmon","ESH","Western Sahara",0,NA,NA
+"67","salmon","ESP","Spain",0,NA,NA
+"68","salmon","EST","Estonia",0.00000411960303542011,NA,NA
+"69","salmon","ETH","Ethiopia",0.00000154637194001238,NA,NA
+"70","salmon","FIN","Finland",0.000221706313651295,NA,NA
+"71","salmon","FJI","Fiji",0.00000288645855143275,NA,NA
+"72","salmon","FLK","Falkland Islands",0,NA,NA
+"73","salmon","FRA","France",0,NA,NA
+"74","salmon","FRO","Faroe Islands",0.00185434490968031,83300,0.0000000222610433334972
+"75","salmon","FSM","Micronesia",0,NA,NA
+"76","salmon","GAB","Gabon",0,NA,NA
+"77","salmon","GBR","United Kingdom",0.00368371374491925,163131.52,0.0000000225812506676775
+"78","salmon","GEO","Georgia",0,NA,NA
+"79","salmon","GGY","Guernsey",0,NA,NA
+"80","salmon","GHA","Ghana",0,NA,NA
+"81","salmon","GIB","Gibraltar",0,NA,NA
+"82","salmon","GIN","Guinea",0,NA,NA
+"83","salmon","GLP","Guadeloupe",0,NA,NA
+"84","salmon","GMB","Gambia",0,NA,NA
+"85","salmon","GNB","Guinea-Bissau",0,NA,NA
+"86","salmon","GNQ","Equatorial Guinea",0.00000719340381732561,NA,NA
+"87","salmon","GRC","Greece",0.0000118263793480309,NA,NA
+"88","salmon","GRD","Grenada",0,NA,NA
+"89","salmon","GRL","Greenland",0,NA,NA
+"90","salmon","GTM","Guatemala",0,NA,NA
+"91","salmon","GUF","French Guiana",0,NA,NA
+"92","salmon","GUM","Guam",0.00000479764892646512,NA,NA
+"93","salmon","GUY","Guyana",0,NA,NA
+"94","salmon","HKG","Hong Kong",0,NA,NA
+"95","salmon","HND","Honduras",0,NA,NA
+"96","salmon","HRV","Croatia",0.00000309174603730891,NA,NA
+"97","salmon","HTI","Haiti",0,NA,NA
+"98","salmon","HUN","Hungary",0,NA,NA
+"99","salmon","IDN","Indonesia",0.00000233647956461984,NA,NA
+"100","salmon","IMN","Isle of Man",0,NA,NA
+"101","salmon","IND","India",0.0000403154790646777,NA,NA
+"102","salmon","IOT","British Indian Ocean Territory",0,NA,NA
+"103","salmon","IRL","Ireland",0.000385392571301618,16300,0.0000000236437160307741
+"104","salmon","IRN","Iran",0,NA,NA
+"105","salmon","IRQ","Iraq",0,NA,NA
+"106","salmon","ISL","Iceland",0.000333359996850171,NA,NA
+"107","salmon","ISR","Israel",0.00000279204254751476,NA,NA
+"108","salmon","ITA","Italy",0,NA,NA
+"109","salmon","JAM","Jamaica",0,NA,NA
+"110","salmon","JEY","Jersey",0,NA,NA
+"111","salmon","JOR","Jordan",0,NA,NA
+"112","salmon","JPN","Japan",0.000310599773849907,13208,0.0000000235160337560499
+"113","salmon","KAZ","Kazakhstan",0,NA,NA
+"114","salmon","KEN","Kenya",0,NA,NA
+"115","salmon","KGZ","Kyrgyzstan",0,NA,NA
+"116","salmon","KHM","Cambodia",0,NA,NA
+"117","salmon","KIR","Kiribati",0,NA,NA
+"118","salmon","KNA","Saint Kitts and Nevis",0,NA,NA
+"119","salmon","KOR","South Korea",0.0000031695708322636,NA,NA
+"120","salmon","KWT","Kuwait",0.00000483028290937693,NA,NA
+"121","salmon","LAO","Laos",0.000000695163203660555,NA,NA
+"122","salmon","LBN","Lebanon",0,NA,NA
+"123","salmon","LBR","Liberia",0.000000390516624300312,NA,NA
+"124","salmon","LBY","Libya",0,NA,NA
+"125","salmon","LCA","Saint Lucia",0,NA,NA
+"126","salmon","LIE","Liechtenstein",0,NA,NA
+"127","salmon","LKA","Sri Lanka",0,NA,NA
+"128","salmon","LSO","Lesotho",0,NA,NA
+"129","salmon","LTU","Lithuania",0,NA,NA
+"130","salmon","LUX","Luxembourg",0.000000389515614023775,NA,NA
+"131","salmon","LVA","Latvia",0.0000340904679976428,NA,NA
+"132","salmon","MAC","Macao",0,NA,NA
+"133","salmon","MAF","Saint-Martin",0,NA,NA
+"134","salmon","MAR","Morocco",0,NA,NA
+"135","salmon","MCO","Monaco",0,NA,NA
+"136","salmon","MDA","Moldova",0.000000695163203660555,NA,NA
+"137","salmon","MDG","Madagascar",0,NA,NA
+"138","salmon","MDV","Maldives",0.00000302633820626268,NA,NA
+"139","salmon","MEX","Mexico",0,NA,NA
+"140","salmon","MHL","Marshall Islands",0,NA,NA
+"141","salmon","MKD","Macedonia",0.00000151316910313134,NA,NA
+"142","salmon","MLI","Mali",0.00000299223337418533,NA,NA
+"143","salmon","MLT","Malta",0,NA,NA
+"144","salmon","MMR","Myanmar",0,NA,NA
+"145","salmon","MNE","Montenegro",0,NA,NA
+"146","salmon","MNG","Mongolia",0,NA,NA
+"147","salmon","MNP","Northern Mariana Islands",0,NA,NA
+"148","salmon","MOZ","Mozambique",0,NA,NA
+"149","salmon","MRT","Mauritania",0,NA,NA
+"150","salmon","MSR","Montserrat",0,NA,NA
+"151","salmon","MTQ","Martinique",0,NA,NA
+"152","salmon","MUS","Mauritius",0.00000139316659330426,NA,NA
+"153","salmon","MWI","Malawi",0.00000149611668709267,NA,NA
+"154","salmon","MYS","Malaysia",0,NA,NA
+"155","salmon","MYT","Mayotte",0,NA,NA
+"156","salmon","NAM","Namibia",0.00000148459271413952,NA,NA
+"157","salmon","NCL","New Caledonia",0,NA,NA
+"158","salmon","NER","Niger",0,NA,NA
+"159","salmon","NFK","Norfolk Island",0,NA,NA
+"160","salmon","NGA","Nigeria",0,NA,NA
+"161","salmon","NIC","Nicaragua",0,NA,NA
+"162","salmon","NIU","Niue",0,NA,NA
+"163","salmon","NLD","Netherlands",0,NA,NA
+"164","salmon","NOR","Norway",0.0260900531977343,1233619.2,0.000000021149195146877
+"165","salmon","NPL","Nepal",0,NA,NA
+"166","salmon","NRU","Nauru",0,NA,NA
+"167","salmon","NZL","New Zealand",0.000284963450761292,11451,0.000000024885464218085
+"168","salmon","OMN","Oman",0.00000852151631235568,NA,NA
+"169","salmon","PAK","Pakistan",0,NA,NA
+"170","salmon","PAN","Panama",0.0000102272344440707,NA,NA
+"171","salmon","PCN","Pitcairn Islands",0,NA,NA
+"172","salmon","PER","Peru",0,NA,NA
+"173","salmon","PHL","Philippines",0,NA,NA
+"174","salmon","PLW","Palau",0.0000171103023175483,NA,NA
+"175","salmon","PNG","Papua New Guinea",0.0000255667503111771,NA,NA
+"176","salmon","POL","Poland",0,NA,NA
+"177","salmon","PRI","Puerto Rico",0,NA,NA
+"178","salmon","PRK","North Korea",0,NA,NA
+"179","salmon","PRT","Portugal",0.00000296918542827904,NA,NA
+"180","salmon","PRY","Paraguay",0,NA,NA
+"181","salmon","PSE","Palestina",0.000000389515614023775,NA,NA
+"182","salmon","PYF","French Polynesia",0,NA,NA
+"183","salmon","QAT","Qatar",0,NA,NA
+"184","salmon","REU","Reunion",0,NA,NA
+"185","salmon","ROU","Romania",0,NA,NA
+"186","salmon","RUS","Russia",0.00026982147774609,12857,0.0000000209863481174528
+"187","salmon","RWA","Rwanda",0,NA,NA
+"188","salmon","SAU","Saudi Arabia",0,NA,NA
+"189","salmon","SDN","Sudan",0,NA,NA
+"190","salmon","SEN","Senegal",0,NA,NA
+"191","salmon","SGP","Singapore",0,NA,NA
+"192","salmon","SHN","Saint Helena",0,NA,NA
+"193","salmon","SJM","Svalbard and Jan Mayen",0,NA,NA
+"194","salmon","SLB","Solomon Islands",0.00000148459271413952,NA,NA
+"195","salmon","SLE","Sierra Leone",0,NA,NA
+"196","salmon","SLV","El Salvador",0,NA,NA
+"197","salmon","SMR","San Marino",0,NA,NA
+"198","salmon","SOM","Somalia",0,NA,NA
+"199","salmon","SPM","Saint Pierre and Miquelon",0,NA,NA
+"200","salmon","SRB","Serbia",0,NA,NA
+"201","salmon","SSD","South Sudan",0,NA,NA
+"202","salmon","STP","São Tomé and Príncipe",0,NA,NA
+"203","salmon","SUR","Suriname",0,NA,NA
+"204","salmon","SVK","Slovakia",0.0000156241848658541,NA,NA
+"205","salmon","SVN","Slovenia",0,NA,NA
+"206","salmon","SWE","Sweden",0.0000604050426647138,NA,NA
+"207","salmon","SWZ","Swaziland",0,NA,NA
+"208","salmon","SXM","Sint Maarten",0,NA,NA
+"209","salmon","SYC","Seychelles",0,NA,NA
+"210","salmon","SYR","Syria",0,NA,NA
+"211","salmon","TCA","Turks and Caicos Islands",0,NA,NA
+"212","salmon","TCD","Chad",0.0000594549785416862,NA,NA
+"213","salmon","TGO","Togo",0.00000295631087799729,NA,NA
+"214","salmon","THA","Thailand",0,NA,NA
+"215","salmon","TJK","Tajikistan",0.00000147815543899865,NA,NA
+"216","salmon","TKL","Tokelau",0,NA,NA
+"217","salmon","TKM","Turkmenistan",0,NA,NA
+"218","salmon","TLS","Timor-Leste",0,NA,NA
+"219","salmon","TON","Tonga",0,NA,NA
+"220","salmon","TTO","Trinidad and Tobago",0.00000147815543899865,NA,NA
+"221","salmon","TUN","Tunisia",0,NA,NA
+"222","salmon","TUR","Turkey",0.0000897249284334521,NA,NA
+"223","salmon","TUV","Tuvalu",0,NA,NA
+"224","salmon","TWN","Taiwan",0,NA,NA
+"225","salmon","TZA","Tanzania",0.00000299894168150807,NA,NA
+"226","salmon","UGA","Uganda",0,NA,NA
+"227","salmon","UKR","Ukraine",0.0000149260604762244,NA,NA
+"228","salmon","URY","Uruguay",0,NA,NA
+"229","salmon","USA","United States",0.000167888099604362,16185,0.0000000103730676307916
+"230","salmon","UZB","Uzbekistan",0,NA,NA
+"231","salmon","VCT","Saint Vincent and the Grenadines",0,NA,NA
+"232","salmon","VEN","Venezuela",0,NA,NA
+"233","salmon","VGB","British Virgin Islands",0,NA,NA
+"234","salmon","VIR","Virgin Islands, U.S.",0,NA,NA
+"235","salmon","VNM","Vietnam",0,NA,NA
+"236","salmon","VUT","Vanuatu",0,NA,NA
+"237","salmon","WLF","Wallis and Futuna",0,NA,NA
+"238","salmon","WSM","Samoa",0,NA,NA
+"239","salmon","XKO","Kosovo",0.00000240189417477532,NA,NA
+"240","salmon","XMI","Madeira Island",0,NA,NA
+"241","salmon","YEM","Yemen",0,NA,NA
+"242","salmon","ZAF","South Africa",0,NA,NA
+"243","salmon","ZMB","Zambia",0,NA,NA
+"244","salmon","ZWE","Zimbabwe",0,NA,NA
