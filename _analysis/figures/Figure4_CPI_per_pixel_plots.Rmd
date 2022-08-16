@@ -16,6 +16,7 @@ library(tidyverse)
 library(ggrepel)
 library(ggpmisc)
 library(ggforce)
+library(raster)
 
 devtools::install_github("thomasp85/ggforce")
 ```
@@ -155,7 +156,7 @@ chick_cpi_km2_plot<-ggplot(sub_dat, aes(x = broiler_cells/100000, y = chicken_cp
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 40) + 
+  geom_text_repel(max.overlaps = 20) + 
   theme_bw() +
   xlab("Pixels (hundred thousands)") +
   ylab("") 
@@ -179,6 +180,12 @@ cp3
 ggsave(here("_analysis/figures/Chicken_cpi_km2_inset.png"), dpi = 300, height = 4, width = 10)
 ```
 
+```{r}
+chick_cpi_km2_plot+coord_trans(y = "log10") 
+```
+```{r}
+ggsave(here("_analysis/figures/Chicken_cpi_km2_log10.png"), dpi = 300, height = 4, width = 6)
+```
 # Salmon
 
 Salmon CPI per footprint
@@ -219,49 +226,12 @@ sp3
 ggsave(here("_analysis/figures/Salmon_cpi_km2_inset.png"),dpi = 300, height = 4, width = 10)
 ```
 
-# Log10
 
 ```{r}
-log_chick_cpi_km2_plot<-ggplot(dat, aes(x = broiler_cells/100000, y = chicken_cpi, label = Country)) + 
-  #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
-  geom_point() +
-  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
-  #stat_poly_eq(formula = my.formula, 
-  #              aes(label = paste(..rr.label.., sep = "~~~")), 
-  #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 20) + 
-  theme_bw() +
-  xlab("Pixels (hundred thousands)") +
-  ylab("") +
-  scale_x_log10()+
-  scale_y_log10()
-
-log_chick_cpi_km2_plot
+salmon_cpi_km2_plot+coord_trans(y = "log10")
 ```
+
 
 ```{r}
-
-log_salmon_cpi_km2_plot<-ggplot(dat, aes(x = salmon_cells/100000, y = salmon_cpi, label = Country)) +
- # annotation_custom(salmon_png, xmin = 0, xmax = 0.35, ymin = 0.035, ymax=0.045) +
-  geom_point() +
-  #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
-  #stat_poly_eq(formula = my.formula, 
-  #              aes(label = paste(..rr.label.., sep = "~~~")), 
-  #              parse = TRUE) +
-  geom_text_repel(max_overlaps = 40) + 
-  theme_bw() +
-  xlab("Pixels (hundred thousands, log10)") +
-  ylab("") +
-  scale_x_log10() +
-  scale_y_log10()
-
-log_salmon_cpi_km2_plot
+ggsave(here("_analysis/figures/Salmon_cpi_km2_log10.png"),dpi = 300, height = 4, width = 6)
 ```
-
-```{r}
-log_chick_cpi_km2_plot + log_salmon_cpi_km2_plot + plot_annotation(tag_levels = "A")
-```
-```{r}
-ggsave(here("_analysis/figures/CPI_footprint_plots_log10.png"), dpi = 300, height = 3, width = 10)
-```
-
