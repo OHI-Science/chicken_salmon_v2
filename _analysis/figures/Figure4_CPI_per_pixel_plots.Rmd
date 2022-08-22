@@ -17,8 +17,9 @@ library(ggrepel)
 library(ggpmisc)
 library(ggforce)
 library(raster)
+library(here)
 
-devtools::install_github("thomasp85/ggforce")
+#devtools::install_github("thomasp85/ggforce")
 ```
 
 
@@ -156,7 +157,7 @@ chick_cpi_km2_plot<-ggplot(sub_dat, aes(x = broiler_cells/100000, y = chicken_cp
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 20) + 
+  geom_text_repel(max.overlaps = 15) + 
   theme_bw() +
   xlab("Pixels (hundred thousands)") +
   ylab("") 
@@ -202,7 +203,7 @@ salmon_cpi_km2_plot<-ggplot(sub_dat_salmon, aes(x = salmon_cells/100000, y = sal
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max_overlaps = 20) + 
+  geom_text_repel(max_overlaps = 10) + 
   theme_bw() +
   xlab("Pixels (hundred thousands)") +
   ylab("") 
