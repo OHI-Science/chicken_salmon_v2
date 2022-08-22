@@ -183,6 +183,12 @@ col_cont <- c("#E42879", "#DA4C93", "#9F406E", "#561276",
          "#F6CEE2", "#BF87DA", "#95BFC0", "#4dc4ac",
          "#F9F9F91A", "#D0EBE5", "#89D8C8", "#048481")
 
+col_cont2<-c("#f00f8b", "#ee87e8",  "#92a4ff", "#0d89ff",
+  "#fa7b86", "#fde3fc",  "#d1faff", "#2bc1ff",
+  "#f8934c", "#fff3c1", "#b9fff0",  "#31c7d4",
+  "#F9F9F91A", "#a3b53a", "#46c36e", "#27996d")
+
+
 col_discrete <- c("1" = "#E42879",
                      "2" = "#DA4C93",
                      "3" = "#9F406E",
@@ -199,6 +205,27 @@ col_discrete <- c("1" = "#E42879",
                      "14" = "#D0EBE5", 
                      "15" = "#89D8C8",
                      "16" = "#048481")  
+
+
+
+col_discrete2<-c("16" = "#27996d",
+                     "15" = "#46c36e",
+                     "14" = "#a3b53a",
+                     "13" = "#F9F9F91A", #white
+                     "12" = "#31c7d4",
+                     "11" = "#b9fff0",
+                     "10" = "#fff3c1",
+                     "9" = "#f8934c",
+                     "8" = "#2bc1ff",
+                     "7" = "#d1faff",
+                     "6" = "#fde3fc",
+                     "5" = "#fa7b86", 
+                     "4" = "#0d89ff", 
+                     "3" = "#92a4ff", 
+                     "2" = "#ee87e8",
+                     "1" = "#f00f8b") 
+
+
 
 # Plot only salmon pressures
 #14,15,16
@@ -221,7 +248,8 @@ Map the raster with the color palette
 cuts <- c(0:16) #set breaks
   
 par(mar=c(1,1,1,1))
-plot <- raster::plot(rast_combo_assign, breaks=cuts, col=col_cont, add = T)
+plot<-raster::plot(rast_combo_assign, breaks=cuts, col=col_cont2, add = T)
+
 ```
 
 
@@ -233,14 +261,15 @@ legend <- read_csv(here("_analysis/figures/overlap_map/data/legend_values.csv"))
 legend_graph <- ggplot(data = legend, aes(x = salmon, y = chicken)) +
   geom_tile(aes(fill = value)) +
   theme_minimal() +
-  scale_fill_manual("value", values=col_discrete)+
+  scale_fill_manual("value", values=col_discrete2)+
   theme(panel.border = element_blank(),
         panel.grid.major = element_blank(),
         legend.position = "none",
         panel.grid.minor = element_blank(),
         text = element_text(size=15))
 legend_graph
-ggsave(here("_analysis/overlap_map/outputs/overlap_legend.jpg"), width=5, height=3, dpi=300)
+
+ggsave(here("_analysis/overlap_map/outputs/overlap_legend_newcolors.jpg"), width=5, height=3, dpi=300)
   
 ```
 
@@ -254,13 +283,13 @@ land <- st_transform(land, crs=gall_peters)
 land <- as(land, "Spatial")
 plot(land)
 
-grDevices::png(here("_analysis/figures/overlap_map/outputs/overlap_map.png"), res=500, width=6, height=3, units = "in")
+grDevices::png(here("_analysis/figures/overlap_map/outputs/overlap_map_newcolors.png"), res=500, width=6, height=3, units = "in")
 par(oma=c(1,1,1,0)) # bottom, left, top, and right
 par(mfrow=c(1, 1), mar=c(1, 0, 1, 0), new=TRUE)
 
 plot(rast_combo_assign, 
      breaks=cuts, 
-     col=col_cont,
+     col=col_cont2,
      axes=FALSE,
      box=FALSE,
     # add=TRUE,
@@ -317,7 +346,7 @@ bar_graph <- ggplot(cell_count, aes(x = category, y = number_cells/1000000, fill
         legend.position = "none",
         text = element_text(size=8),
         axis.text.x = element_text(angle = 90, hjust=0))+
-  scale_fill_manual("color_assign", values=col_discrete)
+  scale_fill_manual("color_assign", values=col_discrete2)
  
 bar_graph
 
@@ -356,7 +385,7 @@ circle_legend_plot <- ggplot(circle_legend, aes(x= salmon, y=chicken)) +
         axis.title.x = element_text(size = 13),
         axis.title.y = element_text(size = 13)) +
   scale_size_continuous(range = c(5, 36)) +
-  scale_color_manual("color_assign", values=col_discrete) +
+  scale_color_manual("color_assign", values=col_discrete2) +
   scale_x_continuous(breaks=c(0,1,2,3), labels=c("Zero", "0 to 45th",
                               "45 to 90th", ">90th"), limits=c(-0.5, 3.5), name="Salmon quantile") +
   scale_y_continuous(breaks=c(0,1,2,3), labels=c("Zero", "0 to 45th",
@@ -364,7 +393,7 @@ circle_legend_plot <- ggplot(circle_legend, aes(x= salmon, y=chicken)) +
 
 circle_legend_plot
 
-ggsave(here("_analysis/figures/overlap_map/outputs/overlap_circle_legend.jpg"), width=6, height=4, dpi=300,  bg = "white") 
+ggsave(here("_analysis/figures/overlap_map/outputs/overlap_circle_legend_newcolors.jpg"), width=6, height=4, dpi=300,  bg = "white") 
 ```
 
 
