@@ -62,6 +62,9 @@ chick_cpi_prod_plot<-ggplot(chicken, aes(x = broiler_slaughter_wt_tonnes/1000000
 
 chick_cpi_prod_plot
 ```
+```{r}
+ggsave(here("_analysis/figures/Chicken_cpi_prod.png"), dpi = 300, height = 4, width = 6)
+```
 
 ```{r}
 c_zoom<-chick_cpi_prod_plot+
@@ -137,13 +140,18 @@ chick_feed_cpi_prod_plot<-ggplot(chicken_feed_prod, aes(x = feed_tonnes/1000000,
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 30) + 
+  geom_text_repel(max.overlaps = 20) + 
   theme_bw() +
   xlab("Production (million tonnes)") +
   ylab("") 
 
 chick_feed_cpi_prod_plot
 ```
+
+```{r}
+ggsave(here("_analysis/figures/Chicken_feed_cpi_prod.png"), dpi = 300, height = 4, width = 6)
+```
+
 ```{r}
 c_feed_zoom<-chick_feed_cpi_prod_plot+
 facet_zoom(xlim = c(0, 10),
@@ -187,12 +195,16 @@ salmon_feed_cpi_prod_plot<-ggplot(salmon_feed_prod, aes(x = feed_tonnes/1000000,
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 30) + 
+  geom_text_repel(max.overlaps = 20) + 
   theme_bw() +
   xlab("Production (million tonnes)") +
   ylab("") 
 
 salmon_feed_cpi_prod_plot
+```
+
+```{r}
+ggsave(here("_analysis/figures/Salmon_feed_cpi_prod.png"), dpi = 300, height = 4, width = 6)
 ```
 
 ```{r}
