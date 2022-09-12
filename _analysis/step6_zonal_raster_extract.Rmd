@@ -60,8 +60,7 @@ land_stack <- stack(land_based)
 ```
 
 ```{r}
-rgns_proj<-projectRaster(rgns, crs = crs(land_stack))
-rgns_proj2<-resample(rgns_proj, land_stack)
+rgns_proj2<-projectRaster(rgns, land_stack, method="ngb")
 
 ```
 

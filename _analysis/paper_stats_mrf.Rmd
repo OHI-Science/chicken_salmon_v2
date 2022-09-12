@@ -1,0 +1,203 @@
+---
+title: "Paper stats"
+output: html_document
+date: "2022-09-12"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(here)
+library(raster)
+library(tidyverse)
+
+rescale_csv <- read_csv(here("_analysis/rescale_values.csv"))
+```
+
+globally and find that broiler chicken production results in spatial disturbance across ~924,000 km2 of earth’s surface, compared to ~103,500 km2 for salmon production
+Feed accounts for >78% and >69% of cumulative pressures of broiler chicken and farmed salmon production
+
+```{r}
+
+crops <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", pattern="feedcrop",
+           full=TRUE)
+broiler_farms <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell",
+                            pattern = "farm_land_chickens", full=TRUE)
+fisheries <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", pattern="feedfofm",
+           full=TRUE)
+salmon_farms <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell",
+                            pattern = "farm_marine_salmon", full=TRUE)
+
+all_rasts <- stack(c(crops, broiler_farms, fisheries, salmon_farms))
+overall <- cellStats(all_rasts, "sum", na.rm=TRUE)
+
+overall_df <- data.frame(overall)
+overall_df$category <- rownames(overall_df)
+rownames(overall_df) <- NULL  
+
+overall_df <- overall_df %>%
+  rename(value = overall) %>%
+  mutate(category = str_replace(category, "gall_peter_", "")) %>%
+  mutate(category = str_replace(category, "_per_cell", "")) %>%
+  separate(category, c("category", "location", "animal",
+                       "rearing", "product", "pressure")) %>%
+  mutate(feed = ifelse(category %in% c("feedcrop", "feedfofm"), "feed", "farm"))
+
+overall_df %>%
+  filter(pressure == "disturbance") %>%
+  group_by(animal) %>%
+  summarize(value = sum(value))
+
+overall_df %>%
+  left_join(rescale_csv) %>%
+  mutate(rescaled_pressure = value/global_total) %>%
+  group_by(animal, feed) %>%
+  summarize(value = sum(rescaled_pressure))
+3.01/(0.820 + 3.01)
+  0.128/(0.0553 +  0.128)
+```
+
+Just 14 countries account for 75% of CPI from salmon and broiler production (Fig. 2), with the United States, Brazil and Argentina making the list for both systems.
+
+
+```{r}
+country <- read_csv(here("_analysis/output_data/sum_pressures_country.csv")) %>%
+  rename(pressure = stressor) %>%
+  left_join(rescale_csv) %>%
+  mutate(chi = value/global_total)
+
+top <- country %>%
+  group_by(Country) %>%
+  summarize(chi=sum(chi)) %>%
+  arrange(-chi) %>%
+  mutate(cum_sum = cumsum(chi)) %>%
+  mutate(cum_sum_prop = cum_sum/4)
+
+country %>%
+  filter(animal_system=="salmon") %>%
+  group_by(Country) %>%
+  summarize(chi=sum(chi)) %>%
+  arrange(-chi) %>%
+  mutate(cum_sum=cumsum(chi)) %>%
+  mutate(cum_sum_prop=cum_sum/sum(chi)) %>%
+  data.frame() 
+
+country %>%
+  filter(animal_system=="chickens") %>%
+  group_by(Country) %>%
+  summarize(chi=sum(chi)) %>%
+  arrange(-chi) %>%
+  mutate(cum_sum=cumsum(chi)) %>%
+  mutate(cum_sum_prop=cum_sum/sum(chi)) %>%
+  data.frame() 
+
+
+```
+
+While the majority of chicken CPI occurs on land (>99%), every country except Afghanistan has CPI from chicken on both land and sea.
+
+Salmon pressures are more varied, with 13% of CPI on land due to salmon aquaculture currently consuming 2.3 million tonnes of crops for feed27–30, largely oil crops, soybean, and wheat (Froehlich et al. 2018). Norway has by far the largest marine CPI for salmon production while Chile and Canada have the largest land CPI.
+
+```{r}
+overall_df %>%
+  left_join(rescale_csv) %>%
+  mutate(chi = value/global_total) %>%
+  group_by(category, animal) %>%
+  summarize(chi=sum(chi))
+
+1 - 0.0171/(0.0171+2.99 + 0.820)
+
+land_chickens <- country %>%
+  filter(animal_system=="chickens") %>%
+  filter(source %in% c("farm", "feedcrop")) %>%
+  group_by(Country) %>%
+  summarize(chi = sum(chi)) %>%
+  filter(chi>0) %>%
+  arrange(-chi)
+
+ocean_chickens <- country %>%
+  filter(animal_system=="chickens") %>%
+  filter(source %in% c("feedfofm")) %>%
+  group_by(Country) %>%
+  summarize(chi = sum(chi)) %>%
+  filter(chi>0) %>%
+  arrange(-chi)
+intersect(land_chickens$Country, ocean_chickens$Country)
+
+length(unique(country$Country)) 
+
+
+land_salmon <- country %>%
+  filter(animal_system=="salmon") %>%
+  filter(source %in% c("feedcrop")) %>%
+  group_by(Country) %>%
+  summarize(chi = sum(chi)) %>%
+  filter(chi>0) %>%
+  arrange(-chi)
+
+ocean_chickens <- country %>%
+  filter(animal_system=="salmon") %>%
+  filter(source %in% c("feedfofm", "farm")) %>%
+  group_by(Country) %>%
+  summarize(chi = sum(chi)) %>%
+  filter(chi>0) %>%
+  arrange(-chi)
+
+```
+Nearly all pressure from spatial disturbance and freshwater use are driven by feed production for both systems (indeed the on-farm freshwater use of salmon is zero given that water is assumed to be released back into the catchment). Both systems show similar patterns for GHG emissions, with about 42% of emissions originating from on-farm activities. Notably, 92% of salmon nutrient pressures result from on-farm practices compared to 40% for chickens.
+```{r}
+tmp <- overall_df %>%
+  left_join(rescale_csv) %>%
+  mutate(chi = value/global_total) %>%
+  mutate(chi_prop = chi/4) %>%
+  arrange(-chi_prop)
+
+overall_df %>%
+  left_join(rescale_csv) %>%
+  mutate(chi = value/global_total) %>%
+  mutate(chi_prop = chi/4) %>%
+  group_by(animal, feed, pressure) %>%
+  summarize(chi=sum(chi)) %>%
+  filter(pressure=="ghg")
+
+0.409/(0.409+0.568)
+0.0112/(0.0112+0.0158)
+
+overall_df %>%
+  left_join(rescale_csv) %>%
+  mutate(chi = value/global_total) %>%
+  mutate(chi_prop = chi/4) %>%
+  group_by(animal, feed, pressure) %>%
+  summarize(chi=sum(chi)) %>%
+  filter(pressure=="nutrient")
+
+0.389/(0.389+0.567)
+0.0439/(0.0439+0.00390)
+```
+
+
+```{r}
+
+meat_production = data.frame(Country=c("Brazil", "United States"), production = c(13607352, 19140570))
+
+country %>%
+  filter(animal_system=="chickens" & source=="farm" & Country %in% c("United States", "Brazil")) %>%
+  select(Country, pressure, value) %>%
+  left_join(meat_production) %>%
+  mutate(pressure_rate = value/production)
+  
+country %>%
+  filter(animal_system=="chickens" & source=="farm" & Country %in% c("United States", "Brazil")) %>%
+  select(Country, pressure, chi) %>%
+  left_join(meat_production) %>% 
+  mutate(pressure_rate = chi/production*1000000000)
+
+country %>%
+  filter(animal_system=="chickens" & source=="farm" & Country %in% c("United States", "Brazil")) %>%
+  select(Country, chi) %>%
+  group_by(Country) %>%
+  summarize(chi = sum(chi)) %>%
+  left_join(meat_production) %>% 
+  mutate(pressure_rate = chi/production*1000000000)
+
+```
