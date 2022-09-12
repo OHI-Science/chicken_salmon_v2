@@ -21,6 +21,7 @@ library(tidyverse)
 library(sf)
 library("rnaturalearth")
 library(rgdal)
+library(here)
 
 gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 ```
@@ -176,6 +177,26 @@ plot(rast_combo_assign)
 
 ```
 
+# Figure of any overlap: Figure 1C
+
+We don't want 
+
+```{r}
+non_overlap<-c(13, 9, 5, 1, 14, 15, 16)
+
+anyoverlap<-rast_combo_assign
+anyoverlap[anyoverlap %in% non_overlap]<-NA
+anyoverlap[anyoverlap>1]<-1
+
+```
+
+```{r}
+png(here(sprintf("_analysis/figures/maps/Any_overlap_map.png", system)), res=500, width=7, height=3, units="in")
+
+plot(anyoverlap, col = "lemonchiffon4")
+
+dev.off()
+```
 
 ```{r}
 col_cont <- c("#E42879", "#DA4C93", "#9F406E", "#561276", 
