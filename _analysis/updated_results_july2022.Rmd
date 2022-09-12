@@ -106,6 +106,8 @@ broiler_95<-cumsum_broiler %>%
 
 nrow(broiler_95)/nrow(chicken_df)
 max(broiler_95$prop_cpi)
+
+location_95<-rasterFromXYZ(broiler_95)
 ```
 
 ```{r}
@@ -119,6 +121,8 @@ salmon_95<-cumsum_salmon %>%
 
 nrow(salmon_95)/nrow(salmon_df)
 max(salmon_95$prop_cpi)
+
+salmon_location_95<-rasterFromXYZ(salmon_95)
 ```
 
 ## Number of producing countries
@@ -521,26 +525,51 @@ crop_feed_cpi<-read.csv(here("chicken_salmon_diet/feed_cpi_per_tonne_crop.csv"))
   rename(crop_tonnes = tonnes_feed,
          crop_cpi = cpi)
 
+all_crop_cpi<-sum(crop_feed_cpi$crop_cpi)
+all_crop_prod<-sum(crop_feed_cpi$crop_tonnes)
+all_crop_eff<-all_crop_cpi/all_crop_prod
+
 
 fofm_feed_cpi<-read.csv(here("chicken_salmon_diet/feed_cpi_per_tonne_fofm.csv")) %>% 
   rename(fofm_tonnes = tonnes_feed,
          fofm_cpi = cpi)
 
+all_fofm_cpi<-sum(fofm_feed_cpi$fofm_cpi)
+all_fofm_prod<-sum(fofm_feed_cpi$fofm_tonnes)
+all_fofm_eff<-all_fofm_cpi/all_fofm_prod
+
 chicken_crop_feed_cpi<-crop_feed_cpi %>% 
   filter(system == "feed_land_chickens_industrial_meat",
          crop_tonnes>0)
+
+chick_crop_cpi<-sum(chicken_crop_feed_cpi$crop_cpi)
+chick_crop_prod<-sum(chicken_crop_feed_cpi$crop_tonnes)
+chick_crop_eff<-chick_crop_cpi/chick_crop_prod
 
 salmon_crop_feed_cpi<-crop_feed_cpi %>% 
   filter(system == "feed_marine_salmon_aquaculture_meat",
          crop_tonnes>0) 
 
+salmon_crop_cpi<-sum(salmon_crop_feed_cpi$crop_cpi)
+salmon_crop_prod<-sum(salmon_crop_feed_cpi$crop_tonnes)
+salmon_crop_eff<-salmon_crop_cpi/salmon_crop_prod
+
 chicken_fofm_feed_cpi<-fofm_feed_cpi %>% 
   filter(system == "feed_land_chickens_industrial_meat",
          fofm_tonnes>0)
 
+chick_fofm_cpi<-sum(chicken_fofm_feed_cpi$fofm_cpi)
+chick_fofm_prod<-sum(chicken_fofm_feed_cpi$fofm_tonnes)
+chick_fofm_eff<-chick_fofm_cpi/chick_fofm_prod
+
+
 salmon_fofm_feed_cpi<-fofm_feed_cpi %>% 
   filter(system == "feed_marine_salmon_aquaculture_meat",
          fofm_tonnes>0) 
+
+salmon_fofm_cpi<-sum(salmon_fofm_feed_cpi$fofm_cpi)
+salmon_fofm_prod<-sum(salmon_fofm_feed_cpi$fofm_tonnes)
+salmon_fofm_eff<-salmon_fofm_cpi/salmon_fofm_prod
 ```
 
 ```{r}
@@ -552,7 +581,10 @@ crop_fofsm<-full_join(crop_feed_cpi, fofm_feed_cpi, by = c("iso3c", "country", "
 
 chicken_crop_fofsm<-crop_fofsm %>% 
   filter(system == "feed_land_chickens_industrial_meat",
-         feed_tonnes>0) #%>% 
+         feed_tonnes>0) %>% 
+         mutate(crop_eff = crop_cpi/crop_tonnes,
+                fofm_eff = fofm_cpi/fofm_tonnes,
+                test_crop_fofm = crop_eff-fofm_eff) #%>% 
   #dplyr::select(iso3c, country, feed_tonnes, feed_cpi, cpi_per_tonne)
 
 
