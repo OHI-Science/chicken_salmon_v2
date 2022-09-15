@@ -1,489 +1,489 @@
 "","iso3c","Country","animal_system","source2","country_farm_feed_chi"
-"1","ABW","Aruba","chickens","farm",0.0000183621250507514
-"2","ABW","Aruba","chickens","feed",0.0000272530062761482
-"3","AFG","Afghanistan","chickens","farm",0.000015459065975102
-"4","AFG","Afghanistan","chickens","feed",0.000737256394171471
-"5","AGO","Angola","chickens","farm",0.000478437927420494
-"6","AGO","Angola","chickens","feed",0.00317888425943915
-"7","AIA","Anguilla","chickens","farm",0.00000100667218935756
-"8","AIA","Anguilla","chickens","feed",0.00000464094972770906
-"9","ALA","Åland","chickens","farm",0.000000332930237432707
-"10","ALA","Åland","chickens","feed",0.00000175677688461757
-"11","ALB","Albania","chickens","farm",0.000299538319294012
-"12","ALB","Albania","chickens","feed",0.000497092162278733
-"13","AND","Andorra","chickens","farm",0.00000410316662982189
-"14","AND","Andorra","chickens","feed",0.00000395538162460775
-"15","ARE","United Arab Emirates","chickens","farm",0.000676775790823117
-"16","ARE","United Arab Emirates","chickens","feed",0.000426699325917261
-"17","ARG","Argentina","chickens","farm",0.0067390946402631
-"18","ARG","Argentina","chickens","feed",0.108378583348257
-"19","ARM","Armenia","chickens","farm",0.000122487893550884
-"20","ARM","Armenia","chickens","feed",0.0000670196195445211
-"21","ASM","American Samoa","chickens","farm",0.00000502965130695662
-"22","ASM","American Samoa","chickens","feed",0.00000842141461890771
-"23","ATG","Antigua and Barbuda","chickens","farm",0.00000680748491820106
-"24","ATG","Antigua and Barbuda","chickens","feed",0.00000272965915732749
-"25","AUS","Australia","chickens","farm",0.00512573208305989
-"26","AUS","Australia","chickens","feed",0.0522033272090619
-"27","AUT","Austria","chickens","farm",0.00068771739002508
-"28","AUT","Austria","chickens","feed",0.00183429620744496
-"29","AZE","Azerbaijan","chickens","farm",0.00108157602595874
-"30","AZE","Azerbaijan","chickens","feed",0.00287880370908387
-"31","BDI","Burundi","chickens","farm",0.0000357140187335269
-"32","BDI","Burundi","chickens","feed",0.000239336368651601
-"33","BEL","Belgium","chickens","farm",0.00131487375184474
-"34","BEL","Belgium","chickens","feed",0.00276689360006649
-"35","BEN","Benin","chickens","farm",0.000144154282523558
-"36","BEN","Benin","chickens","feed",0.00068277683738597
-"37","BES","Bonaire, Sint Eustatius and Saba","chickens","farm",0.0000758638422397607
-"38","BES","Bonaire, Sint Eustatius and Saba","chickens","feed",0.000299529302946009
-"39","BFA","Burkina Faso","chickens","farm",0.0000690800180977769
-"40","BFA","Burkina Faso","chickens","feed",0.00309567209391938
-"41","BGD","Bangladesh","chickens","farm",0.00248910960003016
-"42","BGD","Bangladesh","chickens","feed",0.000993172822254019
-"43","BGR","Bulgaria","chickens","farm",0.000566807782018105
-"44","BGR","Bulgaria","chickens","feed",0.00260830344973571
-"45","BHR","Bahrain","chickens","farm",0.0000346314179438843
-"46","BHR","Bahrain","chickens","feed",0.0000573624184508803
-"47","BHS","Bahamas","chickens","farm",0.000106014726446022
-"48","BHS","Bahamas","chickens","feed",0.000204532014650196
-"49","BIH","Bosnia and Herzegovina","chickens","farm",0.000518475042248123
-"50","BIH","Bosnia and Herzegovina","chickens","feed",0.000902922398599656
-"51","BLM","Saint-Barthélemy","chickens","farm",0.0000670486436518237
-"52","BLM","Saint-Barthélemy","chickens","feed",0.000288763082250365
-"53","BLR","Belarus","chickens","farm",0.00252495937585183
-"54","BLR","Belarus","chickens","feed",0.00532785692709519
-"55","BLZ","Belize","chickens","farm",0.0000971932239684756
-"56","BLZ","Belize","chickens","feed",0.000290666720049994
-"57","BMU","Bermuda","chickens","farm",0.0000588391158569901
-"58","BMU","Bermuda","chickens","feed",0.000186078808539632
-"59","BOL","Bolivia","chickens","farm",0.00543253053701216
-"60","BOL","Bolivia","chickens","feed",0.0143711756004182
-"61","BRA","Brazil","chickens","farm",0.059983481566462
-"62","BRA","Brazil","chickens","feed",0.253026860430159
-"63","BRB","Barbados","chickens","farm",0.00015336331939422
-"64","BRB","Barbados","chickens","feed",0.000108889736004667
-"65","BRN","Brunei","chickens","farm",0.000423105442879354
-"66","BRN","Brunei","chickens","feed",0.000153039785364799
-"67","BTN","Bhutan","chickens","farm",0.000101061162501875
-"68","BTN","Bhutan","chickens","feed",0.000219260630234753
-"69","BWA","Botswana","chickens","farm",0.000106856592310741
-"70","BWA","Botswana","chickens","feed",0.000464119028649869
-"71","CAF","Central African Republic","chickens","farm",0.0000781208388193085
-"72","CAF","Central African Republic","chickens","feed",0.000563631648133169
-"73","CAN","Canada","chickens","farm",0.00613737378633846
-"74","CAN","Canada","chickens","feed",0.0443796709679109
-"75","CCK","Cocos Islands","chickens","farm",0.0000753137513032976
-"76","CCK","Cocos Islands","chickens","feed",0.000183582566687212
-"77","CHE","Switzerland","chickens","farm",0.000434326270046042
-"78","CHE","Switzerland","chickens","feed",0.00217559381214597
-"79","CHL","Chile","chickens","farm",0.00322730544458181
-"80","CHL","Chile","chickens","feed",0.0155782077904763
-"81","CHN","China","chickens","farm",0.223183816091274
-"82","CHN","China","chickens","feed",0.476805286425235
-"83","CIV","Côte d'Ivoire","chickens","farm",0.000798089620124734
-"84","CIV","Côte d'Ivoire","chickens","feed",0.00169791897101883
-"85","CMR","Cameroon","chickens","farm",0.000366678425639167
-"86","CMR","Cameroon","chickens","feed",0.00245678394119017
-"87","COD","Democratic Republic of the Congo","chickens","farm",0.0000382294860560336
-"88","COD","Democratic Republic of the Congo","chickens","feed",0.000778704106964646
-"89","COG","Republic of Congo","chickens","farm",0.000109996872474527
-"90","COG","Republic of Congo","chickens","feed",0.000359735305086778
-"91","COK","Cook Islands","chickens","farm",0.0000886085895724956
-"92","COK","Cook Islands","chickens","feed",0.00020003975339131
-"93","COL","Colombia","chickens","farm",0.00688050168077585
-"94","COL","Colombia","chickens","feed",0.00439401505324309
-"95","COM","Comoros","chickens","farm",0.0000994506970082296
-"96","COM","Comoros","chickens","feed",0.000176981719414907
-"97","CPV","Cape Verde","chickens","farm",0.0000778326648976432
-"98","CPV","Cape Verde","chickens","feed",0.000281654799415473
-"99","CRI","Costa Rica","chickens","farm",0.000798845571485281
-"100","CRI","Costa Rica","chickens","feed",0.000236069511757849
-"101","CUB","Cuba","chickens","farm",0.000965223251442126
-"102","CUB","Cuba","chickens","feed",0.000920266648494491
-"103","CUW","Curaçao","chickens","farm",0.0000573971929316352
-"104","CUW","Curaçao","chickens","feed",0.000183267416317768
-"105","CXR","Christmas Island","chickens","farm",0.0000897313208727148
-"106","CXR","Christmas Island","chickens","feed",0.000297941520890319
-"107","CYM","Cayman Islands","chickens","farm",0.0000213118343165314
-"108","CYM","Cayman Islands","chickens","feed",0.000176826441183008
-"109","CYP","Cyprus","chickens","farm",0.000184345941610422
-"110","CYP","Cyprus","chickens","feed",0.000527804053310843
-"111","CZE","Czech Republic","chickens","farm",0.000798513821080386
-"112","CZE","Czech Republic","chickens","feed",0.00890283391631014
-"113","DEU","Germany","chickens","farm",0.00551778812197175
-"114","DEU","Germany","chickens","feed",0.0269323200888106
-"115","DJI","Djibouti","chickens","farm",0.0000963278197254563
-"116","DJI","Djibouti","chickens","feed",0.000140462671526637
-"117","DMA","Dominica","chickens","farm",0.0000590028785283194
-"118","DMA","Dominica","chickens","feed",0.000153430987239867
-"119","DNK","Denmark","chickens","farm",0.000891230217504824
-"120","DNK","Denmark","chickens","feed",0.00201821055342801
-"121","DOM","Dominican Republic","chickens","farm",0.00263790439488318
-"122","DOM","Dominican Republic","chickens","feed",0.000640040357310127
-"123","DZA","Algeria","chickens","farm",0.00364372618383454
-"124","DZA","Algeria","chickens","feed",0.000421233961670231
-"125","ECU","Ecuador","chickens","farm",0.00439485759864271
-"126","ECU","Ecuador","chickens","feed",0.0225076928026791
-"127","EGY","Egypt","chickens","farm",0.00451104431966587
-"128","EGY","Egypt","chickens","feed",0.0270657711349369
-"129","ERI","Eritrea","chickens","farm",0.000139934180479547
-"130","ERI","Eritrea","chickens","feed",0.000593192292814595
-"131","ESH","Western Sahara","chickens","farm",0.00000570635073572339
-"132","ESH","Western Sahara","chickens","feed",0.0000373727073844448
-"133","ESP","Spain","chickens","farm",0.00651529217935559
-"134","ESP","Spain","chickens","feed",0.0149228680026327
-"135","EST","Estonia","chickens","farm",0.000439214936612759
-"136","EST","Estonia","chickens","feed",0.00113646388574805
-"137","ETH","Ethiopia","chickens","farm",0.000105912135587914
-"138","ETH","Ethiopia","chickens","feed",0.00462937325507615
-"139","FIN","Finland","chickens","farm",0.000578059736646342
-"140","FIN","Finland","chickens","feed",0.0012329225882403
-"141","FJI","Fiji","chickens","farm",0.000191805148421975
-"142","FJI","Fiji","chickens","feed",0.000218750592397793
-"143","FLK","Falkland Islands","chickens","farm",0.0000516371112804347
-"144","FLK","Falkland Islands","chickens","feed",0.000151465888404763
-"145","FRA","France","chickens","farm",0.00690192916359576
-"146","FRA","France","chickens","feed",0.0375240856920389
-"147","FRO","Faroe Islands","chickens","farm",0.0000542384861489835
-"148","FRO","Faroe Islands","chickens","feed",0.000239252785600382
-"149","FSM","Micronesia","chickens","farm",0.0000645997691540298
-"150","FSM","Micronesia","chickens","feed",0.000335398358419466
-"151","GAB","Gabon","chickens","farm",0.000115787608531588
-"152","GAB","Gabon","chickens","feed",0.000494296691375185
-"153","GBR","United Kingdom","chickens","farm",0.00860783761112455
-"154","GBR","United Kingdom","chickens","feed",0.0198477351537685
-"155","GEO","Georgia","chickens","farm",0.000241243450531177
-"156","GEO","Georgia","chickens","feed",0.000617538190770197
-"157","GGY","Guernsey","chickens","farm",0.0000413908504784867
-"158","GGY","Guernsey","chickens","feed",0.000206917871681476
-"159","GHA","Ghana","chickens","farm",0.000491671936939659
-"160","GHA","Ghana","chickens","feed",0.00206801973447751
-"161","GIB","Gibraltar","chickens","farm",0.000129635266301753
-"162","GIB","Gibraltar","chickens","feed",0.000232239181979452
-"163","GIN","Guinea","chickens","farm",0.000242335036498973
-"164","GIN","Guinea","chickens","feed",0.000882717807178498
-"165","GLP","Guadeloupe","chickens","farm",0.0000650472383680476
-"166","GLP","Guadeloupe","chickens","feed",0.000180551439431608
-"167","GMB","Gambia","chickens","farm",0.0000757246385918712
-"168","GMB","Gambia","chickens","feed",0.000254624549046534
-"169","GNB","Guinea-Bissau","chickens","farm",0.0000640437049092044
-"170","GNB","Guinea-Bissau","chickens","feed",0.000286796274316079
-"171","GNQ","Equatorial Guinea","chickens","farm",0.000126093543149661
-"172","GNQ","Equatorial Guinea","chickens","feed",0.000253294013826329
-"173","GRC","Greece","chickens","farm",0.00130764456676405
-"174","GRC","Greece","chickens","feed",0.00373898656152202
-"175","GRD","Grenada","chickens","farm",0.0000677957547069578
-"176","GRD","Grenada","chickens","feed",0.000168946302023832
-"177","GRL","Greenland","chickens","farm",0.0000601537480388613
-"178","GRL","Greenland","chickens","feed",0.000245089359092563
-"179","GTM","Guatemala","chickens","farm",0.00137185782736689
-"180","GTM","Guatemala","chickens","feed",0.001992888698881
-"181","GUF","French Guiana","chickens","farm",0.0000445292150227827
-"182","GUF","French Guiana","chickens","feed",0.000185424895868753
-"183","GUM","Guam","chickens","farm",0.0000622042358070643
-"184","GUM","Guam","chickens","feed",0.000172089117317381
-"185","GUY","Guyana","chickens","farm",0.000621996620115287
-"186","GUY","Guyana","chickens","feed",0.000239430611437277
-"187","HKG","Hong Kong","chickens","farm",0.000112155681415094
-"188","HKG","Hong Kong","chickens","feed",0.000269812981495323
-"189","HND","Honduras","chickens","farm",0.00103551046210121
-"190","HND","Honduras","chickens","feed",0.00364247945127893
-"191","HRV","Croatia","chickens","farm",0.000308227045891529
-"192","HRV","Croatia","chickens","feed",0.00147717042454404
-"193","HTI","Haiti","chickens","farm",0.000113567737372883
-"194","HTI","Haiti","chickens","feed",0.000983312810773799
-"195","HUN","Hungary","chickens","farm",0.0012988816103092
-"196","HUN","Hungary","chickens","feed",0.00515884019365783
-"197","IDN","Indonesia","chickens","farm",0.0526893289797345
-"198","IDN","Indonesia","chickens","feed",0.0923822574736918
-"199","IMN","Isle of Man","chickens","farm",0.000112117685113968
-"200","IMN","Isle of Man","chickens","feed",0.000242342660876168
-"201","IND","India","chickens","farm",0.0234533365647374
-"202","IND","India","chickens","feed",0.151061541619201
-"203","IOT","British Indian Ocean Territory","chickens","farm",0.000035699137578319
-"204","IOT","British Indian Ocean Territory","chickens","feed",0.000199633631741927
-"205","IRL","Ireland","chickens","farm",0.000501251625340795
-"206","IRL","Ireland","chickens","feed",0.00182532564346675
-"207","IRN","Iran","chickens","farm",0.0235710426268604
-"208","IRN","Iran","chickens","feed",0.192924092520139
-"209","IRQ","Iraq","chickens","farm",0.000997273413970837
-"210","IRQ","Iraq","chickens","feed",0.0186912091287254
-"211","ISL","Iceland","chickens","farm",0.000140913277997992
-"212","ISL","Iceland","chickens","feed",0.000377516864684462
-"213","ISR","Israel","chickens","farm",0.00175720393130794
-"214","ISR","Israel","chickens","feed",0.000829152572419173
-"215","ITA","Italy","chickens","farm",0.00775254814568932
-"216","ITA","Italy","chickens","feed",0.00744188658396003
-"217","JAM","Jamaica","chickens","farm",0.000600636440511358
-"218","JAM","Jamaica","chickens","feed",0.000367879681665166
-"219","JEY","Jersey","chickens","farm",0.00022796636386111
-"220","JEY","Jersey","chickens","feed",0.00024058313542161
-"221","JOR","Jordan","chickens","farm",0.00101455815393434
-"222","JOR","Jordan","chickens","feed",0.000573415171117896
-"223","JPN","Japan","chickens","farm",0.0164917149900812
-"224","JPN","Japan","chickens","feed",0.00308667454324098
-"225","KAZ","Kazakhstan","chickens","farm",0.00189283281831
-"226","KAZ","Kazakhstan","chickens","feed",0.00688368515853775
-"227","KEN","Kenya","chickens","farm",0.000436598534356902
-"228","KEN","Kenya","chickens","feed",0.00186767402663345
-"229","KGZ","Kyrgyzstan","chickens","farm",0.000246347383326285
-"230","KGZ","Kyrgyzstan","chickens","feed",0.000404467358998504
-"231","KHM","Cambodia","chickens","farm",0.000234020050662669
-"232","KHM","Cambodia","chickens","feed",0.000842482019846301
-"233","KIR","Kiribati","chickens","farm",0.000143937603160424
-"234","KIR","Kiribati","chickens","feed",0.000271011967282819
-"235","KNA","Saint Kitts and Nevis","chickens","farm",0.0000389823156662657
-"236","KNA","Saint Kitts and Nevis","chickens","feed",0.000203646369679946
-"237","KOR","South Korea","chickens","farm",0.007818004517993
-"238","KOR","South Korea","chickens","feed",0.00153430882294332
-"239","KWT","Kuwait","chickens","farm",0.00131893644293381
-"240","KWT","Kuwait","chickens","feed",0.000291853627102336
-"241","LAO","Laos","chickens","farm",0.000178175091947242
-"242","LAO","Laos","chickens","feed",0.000820044707465431
-"243","LBN","Lebanon","chickens","farm",0.00162917735660157
-"244","LBN","Lebanon","chickens","feed",0.00116324637462248
-"245","LBR","Liberia","chickens","farm",0.0000826911329288047
-"246","LBR","Liberia","chickens","feed",0.000275258202789111
-"247","LBY","Libya","chickens","farm",0.00135328410799299
-"248","LBY","Libya","chickens","feed",0.000689230238185467
-"249","LCA","Saint Lucia","chickens","farm",0.0000546984337498236
-"250","LCA","Saint Lucia","chickens","feed",0.000278280621937535
-"251","LIE","Liechtenstein","chickens","farm",0.0000803083269130718
-"252","LIE","Liechtenstein","chickens","feed",0.000343562366831924
-"253","LKA","Sri Lanka","chickens","farm",0.00113944909618256
-"254","LKA","Sri Lanka","chickens","feed",0.000699332304031784
-"255","LSO","Lesotho","chickens","farm",0.000163147974024247
-"256","LSO","Lesotho","chickens","feed",0.000497845255352145
-"257","LTU","Lithuania","chickens","farm",0.000579752224692576
-"258","LTU","Lithuania","chickens","feed",0.0037222107364262
-"259","LUX","Luxembourg","chickens","farm",0.000166911568179236
-"260","LUX","Luxembourg","chickens","feed",0.000270881182780803
-"261","LVA","Latvia","chickens","farm",0.000264559241100289
-"262","LVA","Latvia","chickens","feed",0.00209636336341829
-"263","MAC","Macao","chickens","farm",0.000145672395131758
-"264","MAC","Macao","chickens","feed",0.000279582644756406
-"265","MAF","Saint-Martin","chickens","farm",0.0000552812131635657
-"266","MAF","Saint-Martin","chickens","feed",0.000179008146820552
-"267","MAR","Morocco","chickens","farm",0.00666051012586467
-"268","MAR","Morocco","chickens","feed",0.00831449461955134
-"269","MCO","Monaco","chickens","farm",0.000125217920533013
-"270","MCO","Monaco","chickens","feed",0.00041410346248436
-"271","MDA","Moldova","chickens","farm",0.000580641046587685
-"272","MDA","Moldova","chickens","feed",0.00306777295737209
-"273","MDG","Madagascar","chickens","farm",0.000459450496233715
-"274","MDG","Madagascar","chickens","feed",0.00200587304288399
-"275","MDV","Maldives","chickens","farm",0.000114435879656681
-"276","MDV","Maldives","chickens","feed",0.000257423837727894
-"277","MEX","Mexico","chickens","farm",0.0225277457837376
-"278","MEX","Mexico","chickens","feed",0.0735345189641567
-"279","MHL","Marshall Islands","chickens","farm",0.000167676016169408
-"280","MHL","Marshall Islands","chickens","feed",0.000240277154463047
-"281","MKD","Macedonia","chickens","farm",0.000182082362160894
-"282","MKD","Macedonia","chickens","feed",0.000355984983997615
-"283","MLI","Mali","chickens","farm",0.00021948029699328
-"284","MLI","Mali","chickens","feed",0.00253674175651476
-"285","MLT","Malta","chickens","farm",0.000246257604116328
-"286","MLT","Malta","chickens","feed",0.000593365368408948
-"287","MMR","Myanmar","chickens","farm",0.00262007315845808
-"288","MMR","Myanmar","chickens","feed",0.00384319205223048
-"289","MNE","Montenegro","chickens","farm",0.000175783004377472
-"290","MNE","Montenegro","chickens","feed",0.000435197784747039
-"291","MNG","Mongolia","chickens","farm",0.000116930451741158
-"292","MNG","Mongolia","chickens","feed",0.000431696062487731
-"293","MNP","Northern Mariana Islands","chickens","farm",0.0000557057469094839
-"294","MNP","Northern Mariana Islands","chickens","feed",0.00040418411710265
-"295","MOZ","Mozambique","chickens","farm",0.000213754831519983
-"296","MOZ","Mozambique","chickens","feed",0.00177482025667431
-"297","MRT","Mauritania","chickens","farm",0.000102583262405436
-"298","MRT","Mauritania","chickens","feed",0.000527458044241552
-"299","MSR","Montserrat","chickens","farm",0.000149774068103222
-"300","MSR","Montserrat","chickens","feed",0.000347287901174014
-"301","MTQ","Martinique","chickens","farm",0.000139038353335785
-"302","MTQ","Martinique","chickens","feed",0.000262415758118588
-"303","MUS","Mauritius","chickens","farm",0.000455950278609769
-"304","MUS","Mauritius","chickens","feed",0.000195597957263914
-"305","MWI","Malawi","chickens","farm",0.000197450937444763
-"306","MWI","Malawi","chickens","feed",0.00135390052223998
-"307","MYS","Malaysia","chickens","farm",0.0133425618650271
-"308","MYS","Malaysia","chickens","feed",0.000930433291561351
-"309","MYT","Mayotte","chickens","farm",0.0000729914804806407
-"310","MYT","Mayotte","chickens","feed",0.000316034869463838
-"311","NAM","Namibia","chickens","farm",0.00021329502968174
-"312","NAM","Namibia","chickens","feed",0.000633190173234843
-"313","NCL","New Caledonia","chickens","farm",0.0000695556099347437
-"314","NCL","New Caledonia","chickens","feed",0.000288470886136891
-"315","NER","Niger","chickens","farm",0.0000854593863354926
-"316","NER","Niger","chickens","feed",0.00286333578839272
-"317","NFK","Norfolk Island","chickens","farm",0.000142615816721299
-"318","NFK","Norfolk Island","chickens","feed",0.00016695690222657
-"319","NGA","Nigeria","chickens","farm",0.00231792230533531
-"320","NGA","Nigeria","chickens","feed",0.0108071975163177
-"321","NIC","Nicaragua","chickens","farm",0.00058219729493529
-"322","NIC","Nicaragua","chickens","feed",0.00336666908676111
-"323","NIU","Niue","chickens","farm",0.0000674524514281397
-"324","NIU","Niue","chickens","feed",0.000345157293740129
-"325","NLD","Netherlands","chickens","farm",0.00416629396273763
-"326","NLD","Netherlands","chickens","feed",0.00232958786340627
-"327","NOR","Norway","chickens","farm",0.000702723734733481
-"328","NOR","Norway","chickens","feed",0.00218594727156383
-"329","NPL","Nepal","chickens","farm",0.000566933712350414
-"330","NPL","Nepal","chickens","feed",0.00362345911063634
-"331","NRU","Nauru","chickens","farm",0.000117281734584931
-"332","NRU","Nauru","chickens","feed",0.000375182280292274
-"333","NZL","New Zealand","chickens","farm",0.00106542852077769
-"334","NZL","New Zealand","chickens","feed",0.00208050558782252
-"335","OMN","Oman","chickens","farm",0.000203605721833313
-"336","OMN","Oman","chickens","feed",0.000674507624271236
-"337","PAK","Pakistan","chickens","farm",0.0102701407052371
-"338","PAK","Pakistan","chickens","feed",0.115007642777433
-"339","PAN","Panama","chickens","farm",0.000913268116672496
-"340","PAN","Panama","chickens","feed",0.000935330794521153
-"341","PCN","Pitcairn Islands","chickens","farm",0.0000538810938042771
-"342","PCN","Pitcairn Islands","chickens","feed",0.000233646978152925
-"343","PER","Peru","chickens","farm",0.00533583077387445
-"344","PER","Peru","chickens","feed",0.0140147292427737
-"345","PHL","Philippines","chickens","farm",0.00551633537010306
-"346","PHL","Philippines","chickens","feed",0.00844701545943943
-"347","PLW","Palau","chickens","farm",0.000104113044419962
-"348","PLW","Palau","chickens","feed",0.000238761735725704
-"349","PNG","Papua New Guinea","chickens","farm",0.000170831964844137
-"350","PNG","Papua New Guinea","chickens","feed",0.000201796757674069
-"351","POL","Poland","chickens","farm",0.00692464012385894
-"352","POL","Poland","chickens","feed",0.0159746676562274
-"353","PRI","Puerto Rico","chickens","farm",0.000499627805732023
-"354","PRI","Puerto Rico","chickens","feed",0.000233004584627781
-"355","PRK","North Korea","chickens","farm",0.000390392322337081
-"356","PRK","North Korea","chickens","feed",0.00104212158236617
-"357","PRT","Portugal","chickens","farm",0.00102109345157419
-"358","PRT","Portugal","chickens","feed",0.00117505972612734
-"359","PRY","Paraguay","chickens","farm",0.000517102849054285
-"360","PRY","Paraguay","chickens","feed",0.0211666252383895
-"361","PSE","Palestina","chickens","farm",0.00015891952268807
-"362","PSE","Palestina","chickens","feed",0.000180524588049757
-"363","PYF","French Polynesia","chickens","farm",0.0000555066893984002
-"364","PYF","French Polynesia","chickens","feed",0.000150882172534288
-"365","QAT","Qatar","chickens","farm",0.000151153854407428
-"366","QAT","Qatar","chickens","feed",0.000241526126212727
-"367","REU","Reunion","chickens","farm",0.000442681630446549
-"368","REU","Reunion","chickens","feed",0.00025432923426235
-"369","ROU","Romania","chickens","farm",0.00315589965131435
-"370","ROU","Romania","chickens","feed",0.0082919990734203
-"371","RUS","Russia","chickens","farm",0.022630705182165
-"372","RUS","Russia","chickens","feed",0.103535006464685
-"373","RWA","Rwanda","chickens","farm",0.0000938409459794134
-"374","RWA","Rwanda","chickens","feed",0.000663735997366944
-"375","SAU","Saudi Arabia","chickens","farm",0.00557054309795313
-"376","SAU","Saudi Arabia","chickens","feed",0.012326123369017
-"377","SDN","Sudan","chickens","farm",0.000436245026589564
-"378","SDN","Sudan","chickens","feed",0.0273039541136368
-"379","SEN","Senegal","chickens","farm",0.000567897360902684
-"380","SEN","Senegal","chickens","feed",0.00150699545333379
-"381","SGP","Singapore","chickens","farm",0.000118184971862414
-"382","SGP","Singapore","chickens","feed",0.000829378292906776
-"383","SHN","Saint Helena","chickens","farm",0.0000391610779347295
-"384","SHN","Saint Helena","chickens","feed",0.000228893483729758
-"385","SJM","Svalbard and Jan Mayen","chickens","farm",0.0000520397213361251
-"386","SJM","Svalbard and Jan Mayen","chickens","feed",0.000190326238091822
-"387","SLB","Solomon Islands","chickens","farm",0.0000666153780980085
-"388","SLB","Solomon Islands","chickens","feed",0.000152449398992296
-"389","SLE","Sierra Leone","chickens","farm",0.000157485102412712
-"390","SLE","Sierra Leone","chickens","feed",0.000555471440590733
-"391","SLV","El Salvador","chickens","farm",0.000671745801383691
-"392","SLV","El Salvador","chickens","feed",0.00153765427175055
-"393","SMR","San Marino","chickens","farm",0.0000673866224394948
-"394","SMR","San Marino","chickens","feed",0.000176506381785542
-"395","SOM","Somalia","chickens","farm",0.000153714961136701
-"396","SOM","Somalia","chickens","feed",0.000948395422021701
-"397","SPM","Saint Pierre and Miquelon","chickens","farm",0.0000612546299530845
-"398","SPM","Saint Pierre and Miquelon","chickens","feed",0.000193487468163765
-"399","SRB","Serbia","chickens","farm",0.000762053247793533
-"400","SRB","Serbia","chickens","feed",0.00296271773573278
-"401","SSD","South Sudan","chickens","farm",0.000222250076118905
-"402","SSD","South Sudan","chickens","feed",0.00299950799779284
-"403","STP","São Tomé and Príncipe","chickens","farm",0.0000841370589116009
-"404","STP","São Tomé and Príncipe","chickens","feed",0.000251247659062489
-"405","SUR","Suriname","chickens","farm",0.000167224811340324
-"406","SUR","Suriname","chickens","feed",0.000203309858328045
-"407","SVK","Slovakia","chickens","farm",0.000500263017766219
-"408","SVK","Slovakia","chickens","feed",0.00165037892288326
-"409","SVN","Slovenia","chickens","farm",0.000166537400393771
-"410","SVN","Slovenia","chickens","feed",0.00030010015192567
-"411","SWE","Sweden","chickens","farm",0.000765499007729406
-"412","SWE","Sweden","chickens","feed",0.00158825845258883
-"413","SWZ","Swaziland","chickens","farm",0.0000799999103372436
-"414","SWZ","Swaziland","chickens","feed",0.000271626783119597
-"415","SXM","Sint Maarten","chickens","farm",0.0000683219242848431
-"416","SXM","Sint Maarten","chickens","feed",0.000179219842780802
-"417","SYC","Seychelles","chickens","farm",0.000118433298845206
-"418","SYC","Seychelles","chickens","feed",0.000301095749390616
-"419","SYR","Syria","chickens","farm",0.000859424277249711
-"420","SYR","Syria","chickens","feed",0.00252708326905993
-"421","TCA","Turks and Caicos Islands","chickens","farm",0.0000671595196082594
-"422","TCA","Turks and Caicos Islands","chickens","feed",0.00032766218474244
-"423","TCD","Chad","chickens","farm",0.0000469921499358332
-"424","TCD","Chad","chickens","feed",0.00174334464097761
-"425","TGO","Togo","chickens","farm",0.00015530770022755
-"426","TGO","Togo","chickens","feed",0.0015802778210409
-"427","THA","Thailand","chickens","farm",0.00968461185351443
-"428","THA","Thailand","chickens","feed",0.0161700960773514
-"429","TJK","Tajikistan","chickens","farm",0.00011242477133023
-"430","TJK","Tajikistan","chickens","feed",0.000668510954208004
-"431","TKL","Tokelau","chickens","farm",0.0000300829445976
-"432","TKL","Tokelau","chickens","feed",0.000418710470073389
-"433","TKM","Turkmenistan","chickens","farm",0.000428795201351492
-"434","TKM","Turkmenistan","chickens","feed",0.00965562905880411
-"435","TLS","Timor-Leste","chickens","farm",0.0000274607060463625
-"436","TLS","Timor-Leste","chickens","feed",0.000209821753772281
-"437","TON","Tonga","chickens","farm",0.0000387797887811905
-"438","TON","Tonga","chickens","feed",0.000379631751531511
-"439","TTO","Trinidad and Tobago","chickens","farm",0.000809524118240324
-"440","TTO","Trinidad and Tobago","chickens","feed",0.000364287212204901
-"441","TUN","Tunisia","chickens","farm",0.00315820783506104
-"442","TUN","Tunisia","chickens","feed",0.000901377011733769
-"443","TUR","Turkey","chickens","farm",0.0148397659749873
-"444","TUR","Turkey","chickens","feed",0.0435062061952248
-"445","TUV","Tuvalu","chickens","farm",0.0000315741375565824
-"446","TUV","Tuvalu","chickens","feed",0.000353945424188323
-"447","TWN","Taiwan","chickens","farm",0.00316543053070143
-"448","TWN","Taiwan","chickens","feed",0.000603808611667044
-"449","TZA","Tanzania","chickens","farm",0.000216863558523917
-"450","TZA","Tanzania","chickens","feed",0.00264507341581631
-"451","UGA","Uganda","chickens","farm",0.000134191614345344
-"452","UGA","Uganda","chickens","feed",0.00133651279559562
-"453","UKR","Ukraine","chickens","farm",0.00710496286932036
-"454","UKR","Ukraine","chickens","feed",0.0351880948276149
-"455","URY","Uruguay","chickens","farm",0.000774086778097621
-"456","URY","Uruguay","chickens","feed",0.00653636468956459
-"457","USA","United States","chickens","farm",0.0972029324434581
-"458","USA","United States","chickens","feed",0.653742007716772
-"459","UZB","Uzbekistan","chickens","farm",0.00125632010441374
-"460","UZB","Uzbekistan","chickens","feed",0.0045935267278888
-"461","VCT","Saint Vincent and the Grenadines","chickens","farm",0.0000878486220260185
-"462","VCT","Saint Vincent and the Grenadines","chickens","feed",0.000135914585863584
-"463","VEN","Venezuela","chickens","farm",0.00304480608272964
-"464","VEN","Venezuela","chickens","feed",0.00959229450121177
-"465","VGB","British Virgin Islands","chickens","farm",0.0000231003805813839
-"466","VGB","British Virgin Islands","chickens","feed",0.000126030950999268
-"467","VIR","Virgin Islands, U.S.","chickens","farm",0.00000518305003981365
-"468","VIR","Virgin Islands, U.S.","chickens","feed",0.0000129237631713522
-"469","VNM","Vietnam","chickens","farm",0.00352051121149401
-"470","VNM","Vietnam","chickens","feed",0.00618656728095083
-"471","VUT","Vanuatu","chickens","farm",0.0000253954240379055
-"472","VUT","Vanuatu","chickens","feed",0.0000482335585115263
-"473","WLF","Wallis and Futuna","chickens","farm",0.0000060662776942649
-"474","WLF","Wallis and Futuna","chickens","feed",0.0000400514760551143
-"475","WSM","Samoa","chickens","farm",0.0000939958929370565
-"476","WSM","Samoa","chickens","feed",0.000218067169595867
-"477","XKO","Kosovo","chickens","farm",0.000124697438841623
-"478","XKO","Kosovo","chickens","feed",0.000262601200918818
-"479","XMI","Madeira Island","chickens","farm",0.0000000978517849348567
-"480","XMI","Madeira Island","chickens","feed",0.00000598675209237791
-"481","YEM","Yemen","chickens","farm",0.00134950623628831
-"482","YEM","Yemen","chickens","feed",0.00978487359034744
-"483","ZAF","South Africa","chickens","farm",0.00656554809748683
-"484","ZAF","South Africa","chickens","feed",0.0171884508899008
-"485","ZMB","Zambia","chickens","farm",0.000359639751142829
-"486","ZMB","Zambia","chickens","feed",0.0017813106831256
-"487","ZWE","Zimbabwe","chickens","farm",0.0000872927362033348
-"488","ZWE","Zimbabwe","chickens","feed",0.00158968331707774
+"1","ABW","Aruba","chickens","farm",0
+"2","ABW","Aruba","chickens","feed",0.0000000509037938795951
+"3","AFG","Afghanistan","chickens","farm",0.0000500865700090291
+"4","AFG","Afghanistan","chickens","feed",0.000919618664700491
+"5","AGO","Angola","chickens","farm",0.00048463463487424
+"6","AGO","Angola","chickens","feed",0.00329711279530302
+"7","AIA","Anguilla","chickens","farm",0.00000645397929725455
+"8","AIA","Anguilla","chickens","feed",0.0000000167207558307597
+"9","ALA","Åland","chickens","farm",0.000000401640998572772
+"10","ALA","Åland","chickens","feed",0.000000477089589913195
+"11","ALB","Albania","chickens","farm",0.000322342229559673
+"12","ALB","Albania","chickens","feed",0.000559523802140832
+"13","AND","Andorra","chickens","farm",0.000000041576193770946
+"14","AND","Andorra","chickens","feed",0
+"15","ARE","United Arab Emirates","chickens","farm",0.000685131615530854
+"16","ARE","United Arab Emirates","chickens","feed",0.000115034922257137
+"17","ARG","Argentina","chickens","farm",0.00709541921128856
+"18","ARG","Argentina","chickens","feed",0.108891103969211
+"19","ARM","Armenia","chickens","farm",0.000170706696330511
+"20","ARM","Armenia","chickens","feed",0.0000561589463650705
+"21","ASM","American Samoa","chickens","farm",0.00000116790520939094
+"22","ASM","American Samoa","chickens","feed",0.000000389951587082452
+"23","ATG","Antigua and Barbuda","chickens","farm",0.00000499842878313583
+"24","ATG","Antigua and Barbuda","chickens","feed",0.0000000941636147768408
+"25","AUS","Australia","chickens","farm",0.00511034636182849
+"26","AUS","Australia","chickens","feed",0.0521857990479881
+"27","AUT","Austria","chickens","farm",0.000835450232919195
+"28","AUT","Austria","chickens","feed",0.00247724359670582
+"29","AZE","Azerbaijan","chickens","farm",0.00120566739183912
+"30","AZE","Azerbaijan","chickens","feed",0.00363064631097969
+"31","BDI","Burundi","chickens","farm",0.00000730575403080782
+"32","BDI","Burundi","chickens","feed",0.000147657328273036
+"33","BEL","Belgium","chickens","farm",0.00166521081664993
+"34","BEL","Belgium","chickens","feed",0.00324051297612094
+"35","BEN","Benin","chickens","farm",0.0000657488117926983
+"36","BEN","Benin","chickens","feed",0.000591438556226735
+"37","BES","Bonaire, Sint Eustatius and Saba","chickens","farm",0.00000280720171020864
+"38","BES","Bonaire, Sint Eustatius and Saba","chickens","feed",0.0000000871889657491339
+"39","BFA","Burkina Faso","chickens","farm",0.0000326249061869824
+"40","BFA","Burkina Faso","chickens","feed",0.00312408166504903
+"41","BGD","Bangladesh","chickens","farm",0.00290971424996694
+"42","BGD","Bangladesh","chickens","feed",0.00102823299351549
+"43","BGR","Bulgaria","chickens","farm",0.000564759096474586
+"44","BGR","Bulgaria","chickens","feed",0.00295359945942979
+"45","BHR","Bahrain","chickens","farm",0.0000193773082683328
+"46","BHR","Bahrain","chickens","feed",0.00000559281417622887
+"47","BHS","Bahamas","chickens","farm",0.0000683606854089836
+"48","BHS","Bahamas","chickens","feed",0.00000302728397350363
+"49","BIH","Bosnia and Herzegovina","chickens","farm",0.000543472422606912
+"50","BIH","Bosnia and Herzegovina","chickens","feed",0.000980284549668052
+"51","BLM","Saint-Barthélemy","chickens","farm",0
+"52","BLM","Saint-Barthélemy","chickens","feed",0.0000000000131919715996522
+"53","BLR","Belarus","chickens","farm",0.00260494883933176
+"54","BLR","Belarus","chickens","feed",0.00572969052239053
+"55","BLZ","Belize","chickens","farm",0.0000867248287643739
+"56","BLZ","Belize","chickens","feed",0.00010665316827914
+"57","BMU","Bermuda","chickens","farm",0
+"58","BMU","Bermuda","chickens","feed",0.0000000933950220229952
+"59","BOL","Bolivia","chickens","farm",0.00539946408219566
+"60","BOL","Bolivia","chickens","feed",0.0144102826892896
+"61","BRA","Brazil","chickens","farm",0.0603325807600496
+"62","BRA","Brazil","chickens","feed",0.255675654766497
+"63","BRB","Barbados","chickens","farm",0.000111535760944423
+"64","BRB","Barbados","chickens","feed",0.000000954037806731694
+"65","BRN","Brunei","chickens","farm",0.000600238765953611
+"66","BRN","Brunei","chickens","feed",0.0000048967913041513
+"67","BTN","Bhutan","chickens","farm",0.000052420308351657
+"68","BTN","Bhutan","chickens","feed",0.000019619418085442
+"69","BWA","Botswana","chickens","farm",0.0000435917880430934
+"70","BWA","Botswana","chickens","feed",0.00020141839777558
+"71","CAF","Central African Republic","chickens","farm",0.000055831137060572
+"72","CAF","Central African Republic","chickens","feed",0.000505906066778955
+"73","CAN","Canada","chickens","farm",0.00672925223932533
+"74","CAN","Canada","chickens","feed",0.0458803205137843
+"75","CCK","Cocos Islands","chickens","farm",0
+"76","CCK","Cocos Islands","chickens","feed",0.00000030323039439056
+"77","CHE","Switzerland","chickens","farm",0.000510169902112657
+"78","CHE","Switzerland","chickens","feed",0.00307130984996126
+"79","CHL","Chile","chickens","farm",0.00322790106025323
+"80","CHL","Chile","chickens","feed",0.0153504224218908
+"81","CHN","China","chickens","farm",0.224003087160115
+"82","CHN","China","chickens","feed",0.478546528220517
+"83","CIV","Côte d'Ivoire","chickens","farm",0.000754895180982184
+"84","CIV","Côte d'Ivoire","chickens","feed",0.00161170076251478
+"85","CMR","Cameroon","chickens","farm",0.000365556739846917
+"86","CMR","Cameroon","chickens","feed",0.00270195971349712
+"87","COD","Democratic Republic of the Congo","chickens","farm",0.0000413665818326202
+"88","COD","Democratic Republic of the Congo","chickens","feed",0.000840319240866714
+"89","COG","Republic of Congo","chickens","farm",0.0000558562407342972
+"90","COG","Republic of Congo","chickens","feed",0.000117868801689885
+"91","COK","Cook Islands","chickens","farm",0
+"92","COK","Cook Islands","chickens","feed",0.000000293923467459644
+"93","COL","Colombia","chickens","farm",0.00678241027322397
+"94","COL","Colombia","chickens","feed",0.00371443969749503
+"95","COM","Comoros","chickens","farm",0.0000059110474042801
+"96","COM","Comoros","chickens","feed",0.00000000637039792882443
+"97","CPV","Cape Verde","chickens","farm",0.0000231617207272135
+"98","CPV","Cape Verde","chickens","feed",0.0000552484994901168
+"99","CRI","Costa Rica","chickens","farm",0.000739073766969481
+"100","CRI","Costa Rica","chickens","feed",0.0000946301651944049
+"101","CUB","Cuba","chickens","farm",0.00085732382792185
+"102","CUB","Cuba","chickens","feed",0.000723575711395932
+"103","CUW","Curaçao","chickens","farm",0.00000219939947768065
+"104","CUW","Curaçao","chickens","feed",0.0000000638201878993708
+"105","CXR","Christmas Island","chickens","farm",0
+"106","CXR","Christmas Island","chickens","feed",0.00000182175650693564
+"107","CYM","Cayman Islands","chickens","farm",0.000000151958103813617
+"108","CYM","Cayman Islands","chickens","feed",0.000000000062788036880767
+"109","CYP","Cyprus","chickens","farm",0.000125116976672903
+"110","CYP","Cyprus","chickens","feed",0.000355889815099418
+"111","CZE","Czech Republic","chickens","farm",0.000805883693589771
+"112","CZE","Czech Republic","chickens","feed",0.00965848698846678
+"113","DEU","Germany","chickens","farm",0.00603747510552955
+"114","DEU","Germany","chickens","feed",0.0278823730552789
+"115","DJI","Djibouti","chickens","farm",0.000000660002112963895
+"116","DJI","Djibouti","chickens","feed",0.00000138958639890374
+"117","DMA","Dominica","chickens","farm",0.00000647917409520637
+"118","DMA","Dominica","chickens","feed",0.0000013759409257073
+"119","DNK","Denmark","chickens","farm",0.000897637996617995
+"120","DNK","Denmark","chickens","feed",0.00185285455351613
+"121","DOM","Dominican Republic","chickens","farm",0.0026980778941296
+"122","DOM","Dominican Republic","chickens","feed",0.000455710342541678
+"123","DZA","Algeria","chickens","farm",0.00368528396344955
+"124","DZA","Algeria","chickens","feed",0.000427300897675383
+"125","ECU","Ecuador","chickens","farm",0.00438004848834211
+"126","ECU","Ecuador","chickens","feed",0.022917245063391
+"127","EGY","Egypt","chickens","farm",0.00444254401139428
+"128","EGY","Egypt","chickens","feed",0.0269099466783603
+"129","ERI","Eritrea","chickens","farm",0.00000331256347292553
+"130","ERI","Eritrea","chickens","feed",0.000456898662669111
+"131","ESH","Western Sahara","chickens","farm",0.00000000280561796031834
+"132","ESH","Western Sahara","chickens","feed",0.0000191840338273047
+"133","ESP","Spain","chickens","farm",0.00662283984371247
+"134","ESP","Spain","chickens","feed",0.0149321586178072
+"135","EST","Estonia","chickens","farm",0.000122274248837058
+"136","EST","Estonia","chickens","feed",0.000595264112628329
+"137","ETH","Ethiopia","chickens","farm",0.0000645826440227825
+"138","ETH","Ethiopia","chickens","feed",0.00529281798213946
+"139","FIN","Finland","chickens","farm",0.000507042784685
+"140","FIN","Finland","chickens","feed",0.00110096196384573
+"141","FJI","Fiji","chickens","farm",0.000137159843966683
+"142","FJI","Fiji","chickens","feed",0.00000238211203141144
+"143","FLK","Falkland Islands","chickens","farm",0.000000133432121591356
+"144","FLK","Falkland Islands","chickens","feed",0.0000015986373720653
+"145","FRA","France","chickens","farm",0.00699925070577622
+"146","FRA","France","chickens","feed",0.0381683071007677
+"147","FRO","Faroe Islands","chickens","farm",0
+"148","FRO","Faroe Islands","chickens","feed",0.0000610750801671874
+"149","FSM","Micronesia","chickens","farm",0
+"150","FSM","Micronesia","chickens","feed",0.0000000185232613915113
+"151","GAB","Gabon","chickens","farm",0.0000691847131946963
+"152","GAB","Gabon","chickens","feed",0.000210148790792212
+"153","GBR","United Kingdom","chickens","farm",0.0088789594340037
+"154","GBR","United Kingdom","chickens","feed",0.0196775087016347
+"155","GEO","Georgia","chickens","farm",0.000200369085493023
+"156","GEO","Georgia","chickens","feed",0.000374576682601386
+"157","GGY","Guernsey","chickens","farm",0
+"158","GGY","Guernsey","chickens","feed",0.0000207924094619656
+"159","GHA","Ghana","chickens","farm",0.000454913952500681
+"160","GHA","Ghana","chickens","feed",0.00214055239795001
+"161","GIB","Gibraltar","chickens","farm",0
+"162","GIB","Gibraltar","chickens","feed",0.0000000140636803245975
+"163","GIN","Guinea","chickens","farm",0.000162779385575046
+"164","GIN","Guinea","chickens","feed",0.000455674914921232
+"165","GLP","Guadeloupe","chickens","farm",0.00000857772414742271
+"166","GLP","Guadeloupe","chickens","feed",0.000000000767440553313799
+"167","GMB","Gambia","chickens","farm",0.00000614229596122758
+"168","GMB","Gambia","chickens","feed",0.000112705027377415
+"169","GNB","Guinea-Bissau","chickens","farm",0.0000131311029656092
+"170","GNB","Guinea-Bissau","chickens","feed",0.0000682739688706042
+"171","GNQ","Equatorial Guinea","chickens","farm",0.0000118440998853282
+"172","GNQ","Equatorial Guinea","chickens","feed",0.00000198724726921706
+"173","GRC","Greece","chickens","farm",0.00129486760751186
+"174","GRC","Greece","chickens","feed",0.00374381120372612
+"175","GRD","Grenada","chickens","farm",0.0000116488078935446
+"176","GRD","Grenada","chickens","feed",0.00000163707896212743
+"177","GRL","Greenland","chickens","farm",0
+"178","GRL","Greenland","chickens","feed",0.000029070200704335
+"179","GTM","Guatemala","chickens","farm",0.00132807916209324
+"180","GTM","Guatemala","chickens","feed",0.00213990259153263
+"181","GUF","French Guiana","chickens","farm",0.00000678814683232627
+"182","GUF","French Guiana","chickens","feed",0.00000104203886246726
+"183","GUM","Guam","chickens","farm",0.00000865159339283186
+"184","GUM","Guam","chickens","feed",0.00000000654075871629608
+"185","GUY","Guyana","chickens","farm",0.000599705927067831
+"186","GUY","Guyana","chickens","feed",0.0000396495239669927
+"187","HKG","Hong Kong","chickens","farm",0.0000627212856151619
+"188","HKG","Hong Kong","chickens","feed",0.000000122284374292979
+"189","HND","Honduras","chickens","farm",0.00105594236499236
+"190","HND","Honduras","chickens","feed",0.00383950068770694
+"191","HRV","Croatia","chickens","farm",0.000400875745671762
+"192","HRV","Croatia","chickens","feed",0.00159504047751872
+"193","HTI","Haiti","chickens","farm",0.0000367564348867705
+"194","HTI","Haiti","chickens","feed",0.000711821917546955
+"195","HUN","Hungary","chickens","farm",0.0015691730467022
+"196","HUN","Hungary","chickens","feed",0.00609816876064657
+"197","IDN","Indonesia","chickens","farm",0.052646081792378
+"198","IDN","Indonesia","chickens","feed",0.0922812625525755
+"199","IMN","Isle of Man","chickens","farm",0.000000552916340478212
+"200","IMN","Isle of Man","chickens","feed",0.00000218567656528691
+"201","IND","India","chickens","farm",0.0239113914439482
+"202","IND","India","chickens","feed",0.152254492922008
+"203","IOT","British Indian Ocean Territory","chickens","farm",0
+"204","IOT","British Indian Ocean Territory","chickens","feed",0.00000000339144448671763
+"205","IRL","Ireland","chickens","farm",0.000712525765312416
+"206","IRL","Ireland","chickens","feed",0.00169331028029992
+"207","IRN","Iran","chickens","farm",0.0239235688832177
+"208","IRN","Iran","chickens","feed",0.194976150361546
+"209","IRQ","Iraq","chickens","farm",0.000960130591821105
+"210","IRQ","Iraq","chickens","feed",0.0187410300585079
+"211","ISL","Iceland","chickens","farm",0.0000151624619049677
+"212","ISL","Iceland","chickens","feed",0.0000402920951544797
+"213","ISR","Israel","chickens","farm",0.00238525976699914
+"214","ISR","Israel","chickens","feed",0.000928094376116747
+"215","ITA","Italy","chickens","farm",0.00761306389898262
+"216","ITA","Italy","chickens","feed",0.00686984650452986
+"217","JAM","Jamaica","chickens","farm",0.000454531088849545
+"218","JAM","Jamaica","chickens","feed",0.000021728573096864
+"219","JEY","Jersey","chickens","farm",0.000000521266761854225
+"220","JEY","Jersey","chickens","feed",0.00000355730915675924
+"221","JOR","Jordan","chickens","farm",0.00111360662329755
+"222","JOR","Jordan","chickens","feed",0.000453934635772072
+"223","JPN","Japan","chickens","farm",0.0160890708076067
+"224","JPN","Japan","chickens","feed",0.00263026592074224
+"225","KAZ","Kazakhstan","chickens","farm",0.00186600915175837
+"226","KAZ","Kazakhstan","chickens","feed",0.00755742419136643
+"227","KEN","Kenya","chickens","farm",0.000323987323421145
+"228","KEN","Kenya","chickens","feed",0.00167785158602926
+"229","KGZ","Kyrgyzstan","chickens","farm",0.000127348030708381
+"230","KGZ","Kyrgyzstan","chickens","feed",0.000302612763526372
+"231","KHM","Cambodia","chickens","farm",0.000175229205720289
+"232","KHM","Cambodia","chickens","feed",0.000729313229729782
+"233","KIR","Kiribati","chickens","farm",0
+"234","KIR","Kiribati","chickens","feed",0.000000434651246449659
+"235","KNA","Saint Kitts and Nevis","chickens","farm",0.00000451937590095769
+"236","KNA","Saint Kitts and Nevis","chickens","feed",0.00000000509224462623419
+"237","KOR","South Korea","chickens","farm",0.00798377344222471
+"238","KOR","South Korea","chickens","feed",0.00105514404324311
+"239","KWT","Kuwait","chickens","farm",0.00134689287764987
+"240","KWT","Kuwait","chickens","feed",0.0000446668708575233
+"241","LAO","Laos","chickens","farm",0.000141183859577633
+"242","LAO","Laos","chickens","feed",0.000805161496381791
+"243","LBN","Lebanon","chickens","farm",0.00183800025015587
+"244","LBN","Lebanon","chickens","feed",0.00133665880806938
+"245","LBR","Liberia","chickens","farm",0.0000165469218365344
+"246","LBR","Liberia","chickens","feed",0.0000178754918459093
+"247","LBY","Libya","chickens","farm",0.00125225304370183
+"248","LBY","Libya","chickens","feed",0.00034739841864953
+"249","LCA","Saint Lucia","chickens","farm",0.0000106031571021765
+"250","LCA","Saint Lucia","chickens","feed",0.00000000499240057832224
+"251","LIE","Liechtenstein","chickens","farm",0.000000118618485789904
+"252","LIE","Liechtenstein","chickens","feed",0.00000243371442796112
+"253","LKA","Sri Lanka","chickens","farm",0.00110417738615468
+"254","LKA","Sri Lanka","chickens","feed",0.000507790999814597
+"255","LSO","Lesotho","chickens","farm",0.00000839852714484275
+"256","LSO","Lesotho","chickens","feed",0.00017192015904668
+"257","LTU","Lithuania","chickens","farm",0.000529207344228276
+"258","LTU","Lithuania","chickens","feed",0.00408204085140034
+"259","LUX","Luxembourg","chickens","farm",0.00000699727718588807
+"260","LUX","Luxembourg","chickens","feed",0.000212622159657124
+"261","LVA","Latvia","chickens","farm",0.000213310167583569
+"262","LVA","Latvia","chickens","feed",0.00177897346200691
+"263","MAC","Macao","chickens","farm",0.0000242041673244785
+"264","MAC","Macao","chickens","feed",0.000000363487331009453
+"265","MAF","Saint-Martin","chickens","farm",0.00000118127405569887
+"266","MAF","Saint-Martin","chickens","feed",0.00000000233564946432849
+"267","MAR","Morocco","chickens","farm",0.00662548672698508
+"268","MAR","Morocco","chickens","feed",0.00801479226761479
+"269","MCO","Monaco","chickens","farm",0
+"270","MCO","Monaco","chickens","feed",0.00000000920722008720621
+"271","MDA","Moldova","chickens","farm",0.000653561650586588
+"272","MDA","Moldova","chickens","feed",0.00370919506445225
+"273","MDG","Madagascar","chickens","farm",0.000356533308578442
+"274","MDG","Madagascar","chickens","feed",0.00176279483686352
+"275","MDV","Maldives","chickens","farm",0
+"276","MDV","Maldives","chickens","feed",0.00000000260822347374684
+"277","MEX","Mexico","chickens","farm",0.0224951047960901
+"278","MEX","Mexico","chickens","feed",0.0745262074574595
+"279","MHL","Marshall Islands","chickens","farm",0
+"280","MHL","Marshall Islands","chickens","feed",0.00000000683068052990849
+"281","MKD","Macedonia","chickens","farm",0.0000964671490997142
+"282","MKD","Macedonia","chickens","feed",0.0000804778907645154
+"283","MLI","Mali","chickens","farm",0.0000619978088904085
+"284","MLI","Mali","chickens","feed",0.00239449779298813
+"285","MLT","Malta","chickens","farm",0.0000434239717431115
+"286","MLT","Malta","chickens","feed",0.00000770782917810372
+"287","MMR","Myanmar","chickens","farm",0.00256137541067425
+"288","MMR","Myanmar","chickens","feed",0.00369181825131371
+"289","MNE","Montenegro","chickens","farm",0.0000500907135572712
+"290","MNE","Montenegro","chickens","feed",0.0000033319298821409
+"291","MNG","Mongolia","chickens","farm",0.0000262051105201572
+"292","MNG","Mongolia","chickens","feed",0.000124275492090881
+"293","MNP","Northern Mariana Islands","chickens","farm",0
+"294","MNP","Northern Mariana Islands","chickens","feed",0.0000000000277458630080555
+"295","MOZ","Mozambique","chickens","farm",0.0000928337076707411
+"296","MOZ","Mozambique","chickens","feed",0.00162522747006964
+"297","MRT","Mauritania","chickens","farm",0.0000554928567152102
+"298","MRT","Mauritania","chickens","feed",0.000419215228582088
+"299","MSR","Montserrat","chickens","farm",0.00000156217791694343
+"300","MSR","Montserrat","chickens","feed",0.000000292327877307246
+"301","MTQ","Martinique","chickens","farm",0.0000124764189102132
+"302","MTQ","Martinique","chickens","feed",0.00000000778723710454622
+"303","MUS","Mauritius","chickens","farm",0.000394427833321052
+"304","MUS","Mauritius","chickens","feed",0.000000572090140720865
+"305","MWI","Malawi","chickens","farm",0.000113162346895113
+"306","MWI","Malawi","chickens","feed",0.00128141086218985
+"307","MYS","Malaysia","chickens","farm",0.0138772827808937
+"308","MYS","Malaysia","chickens","feed",0.000669815745863685
+"309","MYT","Mayotte","chickens","farm",0.000000432984101295512
+"310","MYT","Mayotte","chickens","feed",0.000000000842530011825473
+"311","NAM","Namibia","chickens","farm",0.000101930229393981
+"312","NAM","Namibia","chickens","feed",0.000297371061338972
+"313","NCL","New Caledonia","chickens","farm",0.0000148443663594151
+"314","NCL","New Caledonia","chickens","feed",0.00000190664981494869
+"315","NER","Niger","chickens","farm",0.0000188824846334578
+"316","NER","Niger","chickens","feed",0.00255254969900007
+"317","NFK","Norfolk Island","chickens","farm",0.0000870325924079108
+"318","NFK","Norfolk Island","chickens","feed",0.0000000427696367715535
+"319","NGA","Nigeria","chickens","farm",0.00229653420009125
+"320","NGA","Nigeria","chickens","feed",0.0107418057385663
+"321","NIC","Nicaragua","chickens","farm",0.000530299338047035
+"322","NIC","Nicaragua","chickens","feed",0.0026973760202388
+"323","NIU","Niue","chickens","farm",0
+"324","NIU","Niue","chickens","feed",0.0000000000686550893384894
+"325","NLD","Netherlands","chickens","farm",0.00550156763358973
+"326","NLD","Netherlands","chickens","feed",0.00282307581550677
+"327","NOR","Norway","chickens","farm",0.000671210397224203
+"328","NOR","Norway","chickens","feed",0.00171741550305963
+"329","NPL","Nepal","chickens","farm",0.000458285641813558
+"330","NPL","Nepal","chickens","feed",0.00413811000988049
+"331","NRU","Nauru","chickens","farm",0
+"332","NRU","Nauru","chickens","feed",0.00000000100775011737851
+"333","NZL","New Zealand","chickens","farm",0.00100188242501635
+"334","NZL","New Zealand","chickens","feed",0.0017679273731314
+"335","OMN","Oman","chickens","farm",0.000158426385255794
+"336","OMN","Oman","chickens","feed",0.000217289635582624
+"337","PAK","Pakistan","chickens","farm",0.0105989078278845
+"338","PAK","Pakistan","chickens","feed",0.117884416374724
+"339","PAN","Panama","chickens","farm",0.000858201900266509
+"340","PAN","Panama","chickens","feed",0.000732897531592895
+"341","PCN","Pitcairn Islands","chickens","farm",0
+"342","PCN","Pitcairn Islands","chickens","feed",0.00000000022223598587571
+"343","PER","Peru","chickens","farm",0.00531038017122857
+"344","PER","Peru","chickens","feed",0.0137680842602914
+"345","PHL","Philippines","chickens","farm",0.00547619927246318
+"346","PHL","Philippines","chickens","feed",0.00827818823656973
+"347","PLW","Palau","chickens","farm",0.0000000185407725018106
+"348","PLW","Palau","chickens","feed",0.0000000659325995039702
+"349","PNG","Papua New Guinea","chickens","farm",0.0000932555113488085
+"350","PNG","Papua New Guinea","chickens","feed",0.00000326646842835739
+"351","POL","Poland","chickens","farm",0.00712773640699295
+"352","POL","Poland","chickens","feed",0.0169124901179211
+"353","PRI","Puerto Rico","chickens","farm",0.000437518698575073
+"354","PRI","Puerto Rico","chickens","feed",0.000000140936213048059
+"355","PRK","North Korea","chickens","farm",0.000442337452399183
+"356","PRK","North Korea","chickens","feed",0.000801467795598711
+"357","PRT","Portugal","chickens","farm",0.000985795626886168
+"358","PRT","Portugal","chickens","feed",0.00106794897291742
+"359","PRY","Paraguay","chickens","farm",0.000691698179435788
+"360","PRY","Paraguay","chickens","feed",0.0227901026787273
+"361","PSE","Palestina","chickens","farm",0.000227421251141387
+"362","PSE","Palestina","chickens","feed",0.0000053411282081614
+"363","PYF","French Polynesia","chickens","farm",0
+"364","PYF","French Polynesia","chickens","feed",0.00000000431607410345978
+"365","QAT","Qatar","chickens","farm",0.000101837056742772
+"366","QAT","Qatar","chickens","feed",0.0000147206591422192
+"367","REU","Reunion","chickens","farm",0.000333625527095353
+"368","REU","Reunion","chickens","feed",0.00000000173025920661593
+"369","ROU","Romania","chickens","farm",0.00337721527566537
+"370","ROU","Romania","chickens","feed",0.0091018778224189
+"371","RUS","Russia","chickens","farm",0.0231395631473407
+"372","RUS","Russia","chickens","feed",0.105397238434787
+"373","RWA","Rwanda","chickens","farm",0.0000180922171756597
+"374","RWA","Rwanda","chickens","feed",0.000294804028642296
+"375","SAU","Saudi Arabia","chickens","farm",0.00556640263985289
+"376","SAU","Saudi Arabia","chickens","feed",0.0138913622729222
+"377","SDN","Sudan","chickens","farm",0.000411697278885503
+"378","SDN","Sudan","chickens","feed",0.027896585339556
+"379","SEN","Senegal","chickens","farm",0.000502358485945298
+"380","SEN","Senegal","chickens","feed",0.000975948407990165
+"381","SGP","Singapore","chickens","farm",0.000401795098670686
+"382","SGP","Singapore","chickens","feed",0.000000900676744985178
+"383","SHN","Saint Helena","chickens","farm",0.000000135019631513655
+"384","SHN","Saint Helena","chickens","feed",0.00000000888896901414822
+"385","SJM","Svalbard and Jan Mayen","chickens","farm",0
+"386","SJM","Svalbard and Jan Mayen","chickens","feed",0.00000170884307507746
+"387","SLB","Solomon Islands","chickens","farm",0.00000656263289823574
+"388","SLB","Solomon Islands","chickens","feed",0.0000000496904815941518
+"389","SLE","Sierra Leone","chickens","farm",0.000088330442439393
+"390","SLE","Sierra Leone","chickens","feed",0.000184880119981102
+"391","SLV","El Salvador","chickens","farm",0.00060893565201475
+"392","SLV","El Salvador","chickens","feed",0.0015858301479655
+"393","SMR","San Marino","chickens","farm",0.0000101176255661624
+"394","SMR","San Marino","chickens","feed",0.000000150037050214369
+"395","SOM","Somalia","chickens","farm",0.0000899692211523234
+"396","SOM","Somalia","chickens","feed",0.000745051112136741
+"397","SPM","Saint Pierre and Miquelon","chickens","farm",0
+"398","SPM","Saint Pierre and Miquelon","chickens","feed",0.00000138807162350883
+"399","SRB","Serbia","chickens","farm",0.000817479020696749
+"400","SRB","Serbia","chickens","feed",0.00298435834231787
+"401","SSD","South Sudan","chickens","farm",0.000166081406230115
+"402","SSD","South Sudan","chickens","feed",0.00297168323261682
+"403","STP","São Tomé and Príncipe","chickens","farm",0.00000351875200298721
+"404","STP","São Tomé and Príncipe","chickens","feed",0.00000257897238739593
+"405","SUR","Suriname","chickens","farm",0.000134990899118134
+"406","SUR","Suriname","chickens","feed",0.000000485748884345245
+"407","SVK","Slovakia","chickens","farm",0.000619548508719378
+"408","SVK","Slovakia","chickens","feed",0.00217705992258323
+"409","SVN","Slovenia","chickens","farm",0.000233878713447953
+"410","SVN","Slovenia","chickens","feed",0.000268489149238291
+"411","SWE","Sweden","chickens","farm",0.000740680540400378
+"412","SWE","Sweden","chickens","feed",0.00129438869489844
+"413","SWZ","Swaziland","chickens","farm",0.0000595596868662441
+"414","SWZ","Swaziland","chickens","feed",0.000181686212000239
+"415","SXM","Sint Maarten","chickens","farm",0
+"416","SXM","Sint Maarten","chickens","feed",0
+"417","SYC","Seychelles","chickens","farm",0
+"418","SYC","Seychelles","chickens","feed",0.0000000419531342342901
+"419","SYR","Syria","chickens","farm",0.000981953923885122
+"420","SYR","Syria","chickens","feed",0.00291700264775991
+"421","TCA","Turks and Caicos Islands","chickens","farm",0
+"422","TCA","Turks and Caicos Islands","chickens","feed",0.0000000160117467807485
+"423","TCD","Chad","chickens","farm",0.00000316257974404545
+"424","TCD","Chad","chickens","feed",0.00163498502228614
+"425","TGO","Togo","chickens","farm",0.000174022385832727
+"426","TGO","Togo","chickens","feed",0.00153476547464614
+"427","THA","Thailand","chickens","farm",0.00986469083617923
+"428","THA","Thailand","chickens","feed",0.0161581176285335
+"429","TJK","Tajikistan","chickens","farm",0.000092465858733346
+"430","TJK","Tajikistan","chickens","feed",0.000546905279219584
+"431","TKL","Tokelau","chickens","farm",0
+"432","TKL","Tokelau","chickens","feed",0.0000000291856793297436
+"433","TKM","Turkmenistan","chickens","farm",0.000445250833432586
+"434","TKM","Turkmenistan","chickens","feed",0.010352568745472
+"435","TLS","Timor-Leste","chickens","farm",0.0000100812261588599
+"436","TLS","Timor-Leste","chickens","feed",0.0000985874120052634
+"437","TON","Tonga","chickens","farm",0.00000846776500915272
+"438","TON","Tonga","chickens","feed",0.000000403790507834132
+"439","TTO","Trinidad and Tobago","chickens","farm",0.000777439972966707
+"440","TTO","Trinidad and Tobago","chickens","feed",0.0000184020308417959
+"441","TUN","Tunisia","chickens","farm",0.00323220015432456
+"442","TUN","Tunisia","chickens","feed",0.000420325282817734
+"443","TUR","Turkey","chickens","farm",0.014875305722607
+"444","TUR","Turkey","chickens","feed",0.0448740457904385
+"445","TUV","Tuvalu","chickens","farm",0
+"446","TUV","Tuvalu","chickens","feed",0.0000000215328895332514
+"447","TWN","Taiwan","chickens","farm",0.00311860847038539
+"448","TWN","Taiwan","chickens","feed",0.000425351692670139
+"449","TZA","Tanzania","chickens","farm",0.000175926260698922
+"450","TZA","Tanzania","chickens","feed",0.0025388129158508
+"451","UGA","Uganda","chickens","farm",0.0000740178282304463
+"452","UGA","Uganda","chickens","feed",0.000964659964006573
+"453","UKR","Ukraine","chickens","farm",0.00735604596737316
+"454","UKR","Ukraine","chickens","feed",0.0364444456987039
+"455","URY","Uruguay","chickens","farm",0.000733700588340538
+"456","URY","Uruguay","chickens","feed",0.00697991422042255
+"457","USA","United States","chickens","farm",0.0971826608469062
+"458","USA","United States","chickens","feed",0.655914363349956
+"459","UZB","Uzbekistan","chickens","farm",0.00150189267754922
+"460","UZB","Uzbekistan","chickens","feed",0.00596759062392025
+"461","VCT","Saint Vincent and the Grenadines","chickens","farm",0.00000732365562026085
+"462","VCT","Saint Vincent and the Grenadines","chickens","feed",0.000000681258825523128
+"463","VEN","Venezuela","chickens","farm",0.00304988822619717
+"464","VEN","Venezuela","chickens","feed",0.00956267738350693
+"465","VGB","British Virgin Islands","chickens","farm",0.00000129974240724993
+"466","VGB","British Virgin Islands","chickens","feed",0.000000123995664443118
+"467","VIR","Virgin Islands, U.S.","chickens","farm",0.00000183673617704872
+"468","VIR","Virgin Islands, U.S.","chickens","feed",0.00000000100206909751135
+"469","VNM","Vietnam","chickens","farm",0.00362912881400886
+"470","VNM","Vietnam","chickens","feed",0.00674533883658422
+"471","VUT","Vanuatu","chickens","farm",0.0000204810476413338
+"472","VUT","Vanuatu","chickens","feed",0.0000158482317972988
+"473","WLF","Wallis and Futuna","chickens","farm",0
+"474","WLF","Wallis and Futuna","chickens","feed",0.00000000000758663263925327
+"475","WSM","Samoa","chickens","farm",0.00000789638659191811
+"476","WSM","Samoa","chickens","feed",0.0000000035707295544219
+"477","XKO","Kosovo","chickens","farm",0.0000167083684748198
+"478","XKO","Kosovo","chickens","feed",0.0000284441744088939
+"479","XMI","Madeira Island","chickens","farm",0
+"480","XMI","Madeira Island","chickens","feed",0.00000135704398750899
+"481","YEM","Yemen","chickens","farm",0.00137961674733074
+"482","YEM","Yemen","chickens","feed",0.0101249777245997
+"483","ZAF","South Africa","chickens","farm",0.00652668092552201
+"484","ZAF","South Africa","chickens","feed",0.0172438936643613
+"485","ZMB","Zambia","chickens","farm",0.000373274222998128
+"486","ZMB","Zambia","chickens","feed",0.0019167780212749
+"487","ZWE","Zimbabwe","chickens","farm",0.0000901445456958115
+"488","ZWE","Zimbabwe","chickens","feed",0.00165576618163031

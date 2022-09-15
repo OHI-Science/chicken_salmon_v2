@@ -237,6 +237,11 @@ iso3_chicken_location<-results %>%
   mutate(prop_of_global = value/global_total) %>%
    group_by(iso3c, Country, location) %>%
   summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE))
+
+test<-iso3_chicken_location %>% 
+  pivot_wider(., names_from = "location", values_from = "country_farm_feed_chi")
+
+length(which(test$land>0 & test$marine >0))
   
 ```
 ```{r}
@@ -262,6 +267,13 @@ iso3_salmon_location<-results %>%
   mutate(prop_of_global = value/global_total) %>%
    group_by(iso3c, Country, location) %>%
   summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE))
+
+test2<-iso3_salmon_location %>% 
+  pivot_wider(., names_from = "location", values_from = "country_farm_feed_chi")
+
+length(which(test2$land>0 & test2$marine >0))
+length(which(test2$land>0))
+length(which(test2$marine>0))
 ```
 
 # Feed drives overlap for cumulative pressures
@@ -502,7 +514,10 @@ iso3_broiler_cpi_farm_pressure<-results %>%
    group_by(iso3c, Country, animal_system, stressor) %>%
   summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE),
             variance_chi = var(prop_of_global, na.rm = T)) %>% 
-  filter(iso3c %in% c("USA", "BRA", "CHN"))
+  left_join(., broiler_prod) %>% 
+  filter(iso3c %in% c("USA", "BRA", "CHN")) %>% 
+  mutate(eff = country_farm_feed_chi/broiler_slaughter_wt_tonnes) %>% 
+  dplyr::select(iso3c, Country, animal_system, stressor, country_farm_feed_chi, broiler_slaughter_wt_tonnes, eff)
 
 
 # Salmon CPI
@@ -516,7 +531,10 @@ iso3_salmon_cpi_farm_pressure<-results %>%
   summarize(country_farm_feed_chi = sum(prop_of_global, na.rm=TRUE),
             variance_chi = var(prop_of_global, na.rm = T)) %>%
   filter(animal_system == "salmon") %>% 
-  filter(iso3c %in% c("NOR", "CHL", "CAN", "GBR"))
+    left_join(., salmon_prod) %>% 
+  filter(iso3c %in% c("NOR", "CHL", "CAN", "GBR")) %>% 
+  mutate(eff = country_farm_feed_chi/fao_tonnes_production) %>% 
+  dplyr::select(iso3c, Country, animal_system, stressor, country_farm_feed_chi, fao_tonnes_production, eff)
 ```
 
 Feed
@@ -584,13 +602,15 @@ chicken_crop_fofsm<-crop_fofsm %>%
          feed_tonnes>0) %>% 
          mutate(crop_eff = crop_cpi/crop_tonnes,
                 fofm_eff = fofm_cpi/fofm_tonnes,
-                test_crop_fofm = crop_eff-fofm_eff) #%>% 
+                test_crop_fofm = crop_eff-fofm_eff,
+                perc_crop_prod = crop_tonnes/feed_tonnes) #%>% 
   #dplyr::select(iso3c, country, feed_tonnes, feed_cpi, cpi_per_tonne)
 
 
 salmon_crop_fofsm<-crop_fofsm %>% 
   filter(system == "feed_marine_salmon_aquaculture_meat",
-         feed_tonnes>0) #%>% 
+         feed_tonnes>0) %>% 
+  mutate(perc_crop_prod = crop_tonnes/feed_tonnes)
   #dplyr::select(iso3c, country, feed_tonnes, feed_cpi, cpi_per_tonne)
 
 write.csv(chicken_crop_fofsm,here("_analysis/output_data/Broiler_feed_cpi_prod.csv"))
@@ -599,6 +619,8 @@ write.csv(salmon_crop_fofsm,here("_analysis/output_data/Salmon_feed_cpi_prod.csv
 ```
 
 # Efficiency CPI/area
+
+This file is created in the CPI_per_pixel_plots.Rmd
 
 ```{r}
 cpi_pixel<-read.csv(here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
