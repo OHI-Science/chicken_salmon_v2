@@ -17,7 +17,7 @@ library(ggrepel)
 library(ggpmisc)
 library(ggforce)
 
-devtools::install_github("thomasp85/ggforce")
+#devtools::install_github("thomasp85/ggforce")
 ```
 
 
@@ -49,7 +49,7 @@ salmon_prod<-read.csv("/home/shares/food-systems/Food_footprint/chicken_salmon/p
 
 ```{r}
 rgns_proj<-projectRaster(rgns, crs = broiler_cpi)
-rgns_rs<-resample(rgns_proj, broiler_cpi)
+rgns_rs<-resample(rgns_proj, broiler_cpi, method = "ngb")
 
 rgn_df<-tabularaster::as_tibble(rgns_rs) %>% 
   rename(ID_0 = cellvalue)
@@ -78,18 +78,6 @@ bottom_5_perc<-iso3_cpi %>%
 rm_5<-full_join(iso3_cpi, bottom_5_perc) %>% 
   mutate(broiler_cpi2 = ifelse(broiler_cpi<=broiler_quant_5, 0, as.numeric(broiler_cpi)),
          salmon_cpi2 = ifelse(salmon_cpi<=salmon_quant_5, 0, as.numeric(salmon_cpi)))
-
-iso3_broiler_cpi<-iso3_broiler_cpi %>% 
-  dplyr::select(-variance_chi, )
-
-broiler_prod<-broiler_prod %>% 
-  rename(broiler_kcal = kcal,
-         broiler_protein_tonnes = protein_tonnes)
-
-salmon_prod<-salmon_prod %>% 
-  rename(salmon_kcal = kcal,
-         salmon_protein_tonnes = protein_tonnes) %>% 
-  mutate(country = ifelse(country == "United States of America", "United States", country))
   
 test<-rm_5 %>% 
   group_by(iso3c, ncells) %>% 
