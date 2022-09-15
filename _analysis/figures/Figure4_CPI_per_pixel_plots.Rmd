@@ -105,7 +105,8 @@ test<-rm_5 %>%
   mutate(broiler_cpi_cell = chicken_cpi/broiler_cells,
          salmon_cpi_cell = salmon_cpi/salmon_cells) %>% 
   full_join(., broiler_prod) %>% 
-  full_join(., salmon_prod, by = c("Country" = "country", "iso3c"))
+  full_join(., salmon_prod, by = c("Country" = "country", "iso3c")) %>% 
+  mutate(prop_salmon = salmon_cells/ncells)
 
 cells_iso3_cpi<- iso3_cpi %>% 
   group_by(iso3c, Country, ncells) %>% 
@@ -138,28 +139,31 @@ Chicken CPI vs CPI footprint
 
 ```{r}
 sub_dat<-test %>% 
-  dplyr::select(iso3c, Country, broiler_cells, chicken_cpi) %>% 
+  dplyr::select(iso3c, Country, broiler_cells, chicken_cpi, prop_broiler) %>% 
   mutate(broiler_cpi_pixel_lab = ifelse(broiler_cells>50000 | chicken_cpi > 0.1, as.character(Country), "Zoom"))
 
 ```
 
 ```{r}
 sub_dat<- sub_dat %>% 
-  filter(chicken_cpi>0)
+  filter(chicken_cpi>0,
+         chicken_cells>0)
 
-chick_cpi_km2_plot<-ggplot(sub_dat, aes(x = broiler_cells/100000, y = chicken_cpi, label = Country)) + 
+chick_cpi_km2_plot<-ggplot(sub_dat, aes(x = broiler_cells/100000, y = chicken_cpi, label = Country, col = prop_broiler)) + 
   #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
   geom_point() +
   scale_x_log10() +
   scale_y_log10() +
+  scale_color_viridis_c(direction = -1) +
   #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 15) + 
+  geom_text_repel(max.overlaps = 8) + 
   theme_bw() +
   xlab("Pixels (hundred thousands, log)") +
-  ylab("") 
+  ylab("") +
+  labs(color = "Prop. of country cells")
 
 chick_cpi_km2_plot
 ```
@@ -174,21 +178,26 @@ Salmon CPI per footprint
 
 ```{r}
 sub_dat_salmon<-test %>% 
-  filter(salmon_cpi>0) %>% 
-  dplyr::select(iso3c, Country, salmon_cells, salmon_cpi) %>% 
-  mutate(salmon_cpi_pixel_lab = ifelse(salmon_cells>25000 | salmon_cpi > 0.05, as.character(Country), "Zoom"))
+  filter(salmon_cpi>0,
+         salmon_cells>0) %>% 
+  dplyr::select(iso3c, Country, salmon_cells, salmon_cpi, prop_salmon) %>% 
+  mutate(salmon_cpi_pixel_lab = ifelse(salmon_cells>100000 | salmon_cpi > 0.005, as.character(Country), 
+                                       ifelse(salmon_cells<20, as.character(Country), NA))) %>% 
+  mutate(salmon_cpi/salmon_cells)
 
-salmon_cpi_km2_plot<-ggplot(sub_dat_salmon, aes(x = salmon_cells/100000, y = salmon_cpi, label = Country)) +
+salmon_cpi_km2_plot<-ggplot(sub_dat_salmon, aes(x = salmon_cells/100000, y = salmon_cpi, label = salmon_cpi_pixel_lab, color = prop_salmon)) +
  # annotation_custom(salmon_png, xmin = 0, xmax = 0.35, ymin = 0.035, ymax=0.045) +
   geom_point() +
   scale_x_log10() +
   scale_y_log10() +
+  geom_text_repel(max.overlaps= 20) +
+  scale_color_viridis_c(direction = -1) +
   #geom_smooth(method = "lm", se=FALSE, color="lightblue", formula = my.formula) +
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 5, 
-                  force = 1) + 
+ # geom_text_repel(max.overlaps = 7, 
+#                  force = 1) + 
   theme_bw() +
   xlab("Pixels (hundred thousands, log)") +
   ylab("") 
