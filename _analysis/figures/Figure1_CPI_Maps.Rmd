@@ -40,7 +40,7 @@ land <- land[!land$sov_a3 == "ATA",]
 land <- st_as_sf(land)
 land <- st_transform(land, crs=gall_peters)
 land <- as(land, "Spatial")
-plot(land)
+#plot(land)
 ```
 
 
@@ -64,7 +64,7 @@ salmon_png<-rasterGrob(salmon_png)
 
 ```{r}
 
-chi_cols <- brewer.pal(9, "YlOrBr")[4:9]
+chi_cols <- brewer.pal(9, "RdYlGn")[4:9]
 chi_cols = colorRampPalette(chi_cols)(10000) 
 chi_cols = c("NA", paste0(chi_cols, "BF"))
               
@@ -75,56 +75,64 @@ chi_cols = c("NA", paste0(chi_cols, "BF"))
 ## Cumulative salmon and chicken
 
 ```{r}
-chi_plot_system <- function(system){
-#system="salmon"
 
-## get the max value
-# chi
 chi_all<- raster("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/cumulative_stress.tif")/1000000
 
 chi_all_quantile <- quantile(chi_all, 0.9999)
   
-chi <- raster(list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/", pattern = system, full=TRUE))/1000000
+system= "chicken"
+chicken_chi <- raster(list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/", pattern = system, full=TRUE))/1000000
 
-chi_cols <- brewer.pal(9, "YlOrBr")[4:9]
-chi_cols = colorRampPalette(chi_cols)(10000) 
-chi_cols = c("NA", paste0(chi_cols, "BF"))
+system="salmon"
+salmon_chi<-raster(list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure/", pattern = system, full=TRUE))/1000000
 
-chi[chi > chi_all_quantile] <- chi_all_quantile
+#chi_cols <- brewer.pal(9, "YlOrBr")[4:9]
+#chi_cols = colorRampPalette(chi_cols)(10000) 
+#chi_cols = c("NA", paste0(chi_cols, "BF"))
 
-              
-#chi[chi > chi_all_quantile] <- quant 
+chicken_chi[chicken_chi > chi_all_quantile] <- chi_all_quantile
+salmon_chi[salmon_chi > chi_all_quantile] <- chi_all_quantile
 
-raster_data=chi
-title="" 
-cols=chi_cols
+chicken_chi_spdf <- as(chicken_chi, "SpatialPixelsDataFrame")
+chicken_chi_df <- as.data.frame(chicken_chi_spdf)
+colnames(chicken_chi_df) <- c("value", "x", "y")
 
-png(here(sprintf("_analysis/figures/maps/%s_cumulative.png", system)), res=500, width=7, height=3, units="in")
+salmon_chi_spdf <- as(salmon_chi, "SpatialPixelsDataFrame")
+salmon_chi_df <- as.data.frame(salmon_chi_spdf)
+colnames(salmon_chi_df) <- c("value", "x", "y")
 
-par(oma=c(1,1,1,0), new = TRUE) # bottom, left, top, and right
-par(mfrow=c(1, 1), mar=c(1, 0, 1, 2))
-  
-#cuts=c(0,0.5,1,1.5,2,2.5,3,3.5,4)
+land2<-st_as_sf(land)
 
-plot(water, border="#f2f8fc", col="#f2f8fc", lwd=0.5, cex=0.75)
-plot(land, border="#c5b89c", col="#f6f2e9", lwd=0.5, add=TRUE)
-plot(raster_data, 
-     breaks=seq(0, chi_all_quantile, length.out=10000),
-     col=cols, 
-     axes=FALSE, 
-     box=FALSE, 
-     add=TRUE,  
-     legend=TRUE, 
-     legend.shrink= 0.7, 
-     legend.width=.4, 
-     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1, at = c(0,0.00002,0.00004,round(chi_all_quantile, 6)),
-                      labels=c("0", "0.00002", "0.00004", paste0(">", round(chi_all_quantile, 6)))), 
-     legend.args=list(text = "", cex = 0.7, side = 3, line = 1))
-
-dev.off()
-}
+land2<-land2 %>% 
+  mutate(diss = 1) %>% 
+  group_by(diss) %>% 
+  summarise(id = sum(diss,na.rm = T))
 
 ```
+```{r}
+
+ggplot() +
+  geom_raster(data = chicken_chi_df, aes(x = x, y = y, fill = value)) +
+  scale_fill_continuous(trans= "log10", type = "viridis", na.value="white") +
+  geom_sf(data = land2, fill = "transparent", col = "black", lwd = 0.5) +
+  labs(fill = "") +
+  theme_minimal()
+
+
+ggsave(here("_analysis/figures/maps/chicken_cumulative2.png"), dpi = 300, width = 7, height = 7)
+```
+
+```{r}
+ggplot() +
+  geom_raster(data = salmon_chi_df, aes(x = x, y = y, fill = value)) +
+  scale_fill_continuous(trans= "log10", type = "viridis", na.value="white") +
+  geom_sf(data = land2, fill = "transparent", col = "black", lwd = 0.5) +
+  labs(fill = "") +
+  theme_minimal() 
+
+ggsave(here("_analysis/figures/maps/salmon_cumulative2.png"), dpi = 300, width = 7, height = 7)
+```
+
 
 ```{r}
 chi_plot_system(system="chickens")
