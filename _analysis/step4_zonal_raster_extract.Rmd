@@ -152,14 +152,10 @@ sum_df2 <- sum_df %>%
   ### CDK: Happy to discuss - we currently sum them within Country (group_by argument above) if that makes more sense with what you mean by "within a location"? I looked through the updated_results script and I don't think this variable is used in the results anyways.
  # mutate(total_avg_chi = sum(avg_chi_km2_1e_9, na.rm=TRUE))
 
-tmp2 <- filter(sum_df2, iso3c=="USA") %>%
-  data.frame() %>%
-  rowwise() %>%
-  mutate(test = country_farm_feed_chi/(land_area_km2 + eez_area_km2)*1000000)
-arrange(sum_df, -total_avg_chi)
+tmp2 <- filter(sum_df2, iso3c=="USA") 
 
 sum(tmp2$country_farm_feed_chi)
-0.7840785
+0.7589731
 
 
 ```
@@ -178,8 +174,6 @@ farm <- grep("farm_marine_salmon", marine, value=TRUE)
 marine_stack <- stack(c(farm, feed))
 marine_total <- sum(marine_stack, na.rm=TRUE)
 cellStats(marine_total, "sum", na.rm=TRUE)/1000000
-
-0.1690388/0.1749438 ## 0.9662463, proportion of cumulative disturbance accounted for within EEZ areas  vs. open ocean
 ```
 
 Checking to see what this all means.
@@ -205,28 +199,22 @@ cellStats(land, function(x,...) sum(x==243, na.rm=TRUE))
 zonal_sum <- zonal(rescaled, land, "sum", na.rm=TRUE)
 ## This matches the sum above
 
-## MRF NOTE: not sure what is going on here
-land_pressure <- stack(rescaled, land)
-land_pressure_df <- as.data.frame(land_pressure) %>%
-  filter(master_rgns_gall_peters)
-## MRF End
-
 zonal_sum <- data.frame(zonal_sum) %>%
   rename(ID_0 = zone) %>%
   left_join(rgn_names, by="ID_0")
 filter(zonal_sum, iso3c=="USA")
-785011.8/505014  ##cumulative divided by number of cells
-1.554436 # same as taking mean
+758973.1/505014  ##cumulative divided by number of cells
+1.502875 # same as taking mean
 
-785011.8/(505014*36)  ## cumulative divided by area
-0.04317877 ## cumualative per km2 from raster area
+758973.1/(505014*36)  ## cumulative divided by area
+0.04174654 ## cumualative per km2 from raster area
 
 18180504  # area from raster data
 
 #area we have above is larger (not sure why the difference):
 9473015+10578339
 20051354
-785011.8/20051354  
+758973.1/20051354  
 0.03915006 # smaller chi per km2, but this is due to differences in area estimates
 
 zonal_avg <- zonal(rescaled, land, "mean", na.rm=TRUE)
@@ -236,7 +224,7 @@ zonal_avg <- data.frame(zonal_avg) %>%
 
 # this is mean per cell, cell 36km2
 filter(zonal_avg, iso3c=="USA")
-1.55
+1.504988
 
 ## I think this would be correct, but I am concerned that the land area may be wrong (9.15 million km2 according to world bank)
 
