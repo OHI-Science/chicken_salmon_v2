@@ -213,7 +213,7 @@ ggsave(here("_analysis/figures/maps/Any_overlap_map.png"), dpi=300, width=5, hei
 ```{r}
 png(here(sprintf("_analysis/figures/maps/Any_overlap_map.png", system)), res=500, width=5, height=3, units="in")
 
-plot(anyoverlap, col = "lemonchiffon4")
+plot(anyoverlap, col = "coral1")
 
 dev.off()
 ```

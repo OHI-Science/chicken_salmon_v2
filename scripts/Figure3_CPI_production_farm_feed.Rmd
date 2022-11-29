@@ -30,6 +30,7 @@ salmon<-read.csv(here("_analysis/output_data/Salmon_farm_cpi_prod.csv"))
 ```{r}
 chicken<-chicken %>% 
   filter(broiler_slaughter_wt_tonnes>0)
+
 chick_cpi_prod_plot<-ggplot(chicken, aes(x = broiler_slaughter_wt_tonnes/1000000, y = cpi_prod, label = Country)) + 
   #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
   geom_point() +
@@ -39,7 +40,7 @@ chick_cpi_prod_plot<-ggplot(chicken, aes(x = broiler_slaughter_wt_tonnes/1000000
   #stat_poly_eq(formula = my.formula, 
   #              aes(label = paste(..rr.label.., sep = "~~~")), 
   #              parse = TRUE) +
-  geom_text_repel(max.overlaps = 15,
+  geom_text_repel(max.overlaps = 5,
                   force = 1) + 
   theme_bw() +
   xlab("Production (million tonnes, log)") +
