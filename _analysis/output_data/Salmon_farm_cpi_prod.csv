@@ -3,15 +3,15 @@
 "2","salmon","AFG","Afghanistan",0,NA,NA
 "3","salmon","AGO","Angola",0,NA,NA
 "4","salmon","AIA","Anguilla",0,NA,NA
-"5","salmon","ALA","Åland",0.00000366258236908866,NA,NA
+"5","salmon","ALA","Åland",0.00000366371545475723,NA,NA
 "6","salmon","ALB","Albania",0,NA,NA
 "7","salmon","AND","Andorra",0,NA,NA
 "8","salmon","ARE","United Arab Emirates",0,NA,NA
-"9","salmon","ARG","Argentina",0.0000287868002434435,NA,NA
+"9","salmon","ARG","Argentina",0.0000287948737051436,NA,NA
 "10","salmon","ARM","Armenia",0,NA,NA
 "11","salmon","ASM","American Samoa",0,NA,NA
 "12","salmon","ATG","Antigua and Barbuda",0,NA,NA
-"13","salmon","AUS","Australia",0.00101767009943528,56115.19,0.0000000181353765252382
+"13","salmon","AUS","Australia",0.00101795481117736,56115.19,0.0000000181404502270661
 "14","salmon","AUT","Austria",0,NA,NA
 "15","salmon","AZE","Azerbaijan",0,NA,NA
 "16","salmon","BDI","Burundi",0,NA,NA
@@ -35,10 +35,10 @@
 "34","salmon","BTN","Bhutan",0,NA,NA
 "35","salmon","BWA","Botswana",0,NA,NA
 "36","salmon","CAF","Central African Republic",0,NA,NA
-"37","salmon","CAN","Canada",0.00286478909114512,123522,0.0000000231925413379408
+"37","salmon","CAN","Canada",0.00286559512724327,123522,0.0000000231990667835954
 "38","salmon","CCK","Cocos Islands",0,NA,NA
 "39","salmon","CHE","Switzerland",0,NA,NA
-"40","salmon","CHL","Chile",0.0171986880023449,642701,0.0000000267600143804738
+"40","salmon","CHL","Chile",0.0172035102410217,642701,0.000000026767517463053
 "41","salmon","CHN","China",0,NA,NA
 "42","salmon","CIV","Côte d'Ivoire",0,NA,NA
 "43","salmon","CMR","Cameroon",0,NA,NA
@@ -58,7 +58,7 @@
 "57","salmon","DEU","Germany",0,NA,NA
 "58","salmon","DJI","Djibouti",0,NA,NA
 "59","salmon","DMA","Dominica",0,NA,NA
-"60","salmon","DNK","Denmark",0.000257014864211339,NA,NA
+"60","salmon","DNK","Denmark",0.000257086926383942,NA,NA
 "61","salmon","DOM","Dominican Republic",0,NA,NA
 "62","salmon","DZA","Algeria",0,NA,NA
 "63","salmon","ECU","Ecuador",0,NA,NA
@@ -68,14 +68,14 @@
 "67","salmon","ESP","Spain",0,NA,NA
 "68","salmon","EST","Estonia",0,NA,NA
 "69","salmon","ETH","Ethiopia",0,NA,NA
-"70","salmon","FIN","Finland",0.000238125885522163,NA,NA
+"70","salmon","FIN","Finland",0.000238196412236635,NA,NA
 "71","salmon","FJI","Fiji",0,NA,NA
 "72","salmon","FLK","Falkland Islands",0,NA,NA
 "73","salmon","FRA","France",0,NA,NA
-"74","salmon","FRO","Faroe Islands",0.00185415261020596,83300,0.000000022258734816398
+"74","salmon","FRO","Faroe Islands",0.00185467092667775,83300,0.0000000222649571029742
 "75","salmon","FSM","Micronesia",0,NA,NA
 "76","salmon","GAB","Gabon",0,NA,NA
-"77","salmon","GBR","United Kingdom",0.00368371374491925,163131.52,0.0000000225812506676775
+"77","salmon","GBR","United Kingdom",0.00368474691291617,163131.52,0.0000000225875840114539
 "78","salmon","GEO","Georgia",0,NA,NA
 "79","salmon","GGY","Guernsey",0,NA,NA
 "80","salmon","GHA","Ghana",0,NA,NA
@@ -85,7 +85,7 @@
 "84","salmon","GMB","Gambia",0,NA,NA
 "85","salmon","GNB","Guinea-Bissau",0,NA,NA
 "86","salmon","GNQ","Equatorial Guinea",0,NA,NA
-"87","salmon","GRC","Greece",0.0000127566251154505,NA,NA
+"87","salmon","GRC","Greece",0.0000127602395011853,NA,NA
 "88","salmon","GRD","Grenada",0,NA,NA
 "89","salmon","GRL","Greenland",0,NA,NA
 "90","salmon","GTM","Guatemala",0,NA,NA
@@ -101,16 +101,16 @@
 "100","salmon","IMN","Isle of Man",0,NA,NA
 "101","salmon","IND","India",0,NA,NA
 "102","salmon","IOT","British Indian Ocean Territory",0,NA,NA
-"103","salmon","IRL","Ireland",0.000393754440036367,16300,0.0000000241567141126606
+"103","salmon","IRL","Ireland",0.000393865849645934,16300,0.0000000241635490580328
 "104","salmon","IRN","Iran",0,NA,NA
 "105","salmon","IRQ","Iraq",0,NA,NA
-"106","salmon","ISL","Iceland",0.000333359996850171,NA,NA
+"106","salmon","ISL","Iceland",0.000333453857295915,NA,NA
 "107","salmon","ISR","Israel",0,NA,NA
 "108","salmon","ITA","Italy",0,NA,NA
 "109","salmon","JAM","Jamaica",0,NA,NA
 "110","salmon","JEY","Jersey",0,NA,NA
 "111","salmon","JOR","Jordan",0,NA,NA
-"112","salmon","JPN","Japan",0.000307813440663298,13208,0.0000000233050757619093
+"112","salmon","JPN","Japan",0.000307900151368244,13208,0.0000000233116407759119
 "113","salmon","KAZ","Kazakhstan",0,NA,NA
 "114","salmon","KEN","Kenya",0,NA,NA
 "115","salmon","KGZ","Kyrgyzstan",0,NA,NA
@@ -162,10 +162,10 @@
 "161","salmon","NIC","Nicaragua",0,NA,NA
 "162","salmon","NIU","Niue",0,NA,NA
 "163","salmon","NLD","Netherlands",0,NA,NA
-"164","salmon","NOR","Norway",0.0261242065326765,1233619.2,0.000000021176880623029
+"164","salmon","NOR","Norway",0.0261315214157193,1233619.2,0.000000021182810234892
 "165","salmon","NPL","Nepal",0,NA,NA
 "166","salmon","NRU","Nauru",0,NA,NA
-"167","salmon","NZL","New Zealand",0.000284963450761292,11451,0.000000024885464218085
+"167","salmon","NZL","New Zealand",0.000285043511969298,11451,0.0000000248924558527026
 "168","salmon","OMN","Oman",0,NA,NA
 "169","salmon","PAK","Pakistan",0,NA,NA
 "170","salmon","PAN","Panama",0,NA,NA
@@ -184,7 +184,7 @@
 "183","salmon","QAT","Qatar",0,NA,NA
 "184","salmon","REU","Reunion",0,NA,NA
 "185","salmon","ROU","Romania",0,NA,NA
-"186","salmon","RUS","Russia",0.000270210993360114,12857,0.0000000210166441129435
+"186","salmon","RUS","Russia",0.000270287125356527,12857,0.000000021022565556236
 "187","salmon","RWA","Rwanda",0,NA,NA
 "188","salmon","SAU","Saudi Arabia",0,NA,NA
 "189","salmon","SDN","Sudan",0,NA,NA
@@ -204,7 +204,7 @@
 "203","salmon","SUR","Suriname",0,NA,NA
 "204","salmon","SVK","Slovakia",0,NA,NA
 "205","salmon","SVN","Slovenia",0,NA,NA
-"206","salmon","SWE","Sweden",0.0000574061009832057,NA,NA
+"206","salmon","SWE","Sweden",0.0000574228627586062,NA,NA
 "207","salmon","SWZ","Swaziland",0,NA,NA
 "208","salmon","SXM","Sint Maarten",0,NA,NA
 "209","salmon","SYC","Seychelles",0,NA,NA
@@ -220,14 +220,14 @@
 "219","salmon","TON","Tonga",0,NA,NA
 "220","salmon","TTO","Trinidad and Tobago",0,NA,NA
 "221","salmon","TUN","Tunisia",0,NA,NA
-"222","salmon","TUR","Turkey",0.000106089211694881,NA,NA
+"222","salmon","TUR","Turkey",0.000106119216293845,NA,NA
 "223","salmon","TUV","Tuvalu",0,NA,NA
 "224","salmon","TWN","Taiwan",0,NA,NA
 "225","salmon","TZA","Tanzania",0,NA,NA
 "226","salmon","UGA","Uganda",0,NA,NA
 "227","salmon","UKR","Ukraine",0,NA,NA
 "228","salmon","URY","Uruguay",0,NA,NA
-"229","salmon","USA","United States",0.000219034693324015,16185,0.0000000135331908139645
+"229","salmon","USA","United States",0.000219096231741936,16185,0.0000000135369930022821
 "230","salmon","UZB","Uzbekistan",0,NA,NA
 "231","salmon","VCT","Saint Vincent and the Grenadines",0,NA,NA
 "232","salmon","VEN","Venezuela",0,NA,NA

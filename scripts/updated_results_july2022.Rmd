@@ -35,6 +35,7 @@ eez_rgns <- read_csv("/home/shares/food-systems/Food_footprint/chicken_salmon/_s
 
 rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) 
 ```
+
 # Land and sea area
 
 ```{r}
@@ -42,7 +43,7 @@ land_area<-sum(rgn_names$land_area_km2,na.rm = T)
 eez_area<-sum(eez_rgns$eez_area_km2, na.rm = T)
 ```
 
-# Results from Step 6 zonal states
+# Results from Step 4 zonal states
 ```{r}
 results<-read.csv(here("_analysis/output_data/sum_pressures_country.csv"))
 ```
@@ -205,13 +206,6 @@ length(unique(all_75$Country))
 which(broiler_75$Country %in% salmon_75$Country)
 ```
 
-## Variance within countries
-
-```{r}
-cor.test(iso3_broiler_cpi$country_farm_feed_chi, iso3_broiler_cpi$variance_chi, type = "pearson")
-cor.test(iso3_salmon_cpi$country_farm_feed_chi, iso3_salmon_cpi$variance_chi, type = "pearson")
-```
-
 ## Land vs Sea CPI total and by country
 
 ```{r}
@@ -279,6 +273,8 @@ length(which(test2$marine>0))
 # Feed drives overlap for cumulative pressures
 
 ## CPI Overlap
+
+This file is created in the overlap_map.Rmd script. Run that script first.
 
 ```{r}
 cell_count<-read.csv(here("_analysis/figures/overlap_map/data/cell_count.csv")) 
@@ -620,7 +616,7 @@ write.csv(salmon_crop_fofsm,here("_analysis/output_data/Salmon_feed_cpi_prod.csv
 
 # Efficiency CPI/area
 
-This file is created in the CPI_per_pixel_plots.Rmd
+This file is created in the Figure4_CPI_per_pixel_plots.Rmd
 
 ```{r}
 cpi_pixel<-read.csv(here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
