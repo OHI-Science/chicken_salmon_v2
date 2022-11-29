@@ -188,10 +188,30 @@ anyoverlap<-rast_combo_assign
 anyoverlap[anyoverlap %in% non_overlap]<-NA
 anyoverlap[anyoverlap>1]<-1
 
+anyoverlap_spdf <- as(anyoverlap, "SpatialPixelsDataFrame")
+anyoverlap_df <- as.data.frame(anyoverlap_spdf)
+colnames(anyoverlap_df) <- c("value", "x", "y")
+
+land <- ne_countries(scale = "medium", returnclass = "sf") 
+land <- land[!land$sov_a3 == "ATA",]
+land <- st_transform(land, crs=gall_peters)
+
 ```
 
 ```{r}
-png(here(sprintf("_analysis/figures/maps/Any_overlap_map.png", system)), res=500, width=7, height=3, units="in")
+ggplot() +
+  geom_raster(data = anyoverlap_df, aes(x = x, y = y, fill = value)) +
+  geom_sf(data = land, fill = "transparent", col = "black", lwd = 0.5) +
+  labs(fill = "") +
+  theme_minimal()
+```
+
+```{r}
+ggsave(here("_analysis/figures/maps/Any_overlap_map.png"), dpi=300, width=5, height=3)
+```
+
+```{r}
+png(here(sprintf("_analysis/figures/maps/Any_overlap_map.png", system)), res=500, width=5, height=3, units="in")
 
 plot(anyoverlap, col = "lemonchiffon4")
 

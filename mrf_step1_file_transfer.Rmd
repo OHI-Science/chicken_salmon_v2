@@ -31,6 +31,7 @@ to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/raw"
 
 file.copy(from_raw_list, to)
 
+
 ```
 
 
@@ -44,9 +45,74 @@ to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_p
 
 file.copy(from_mol_list, to)
 
+
 ```
 
-These are the spatial layers I need for summarising
+Feed revision
+
+The following is a change in the way we calculate fofm feed.
+For the food project we used the estimated tonnes of forage fish consumption for each food group from Halley's paper: "Avoiding the ecological limits of forage fish for fed aquaculture". She estimated about 2.8 million tonnes of forage fish taxa are fed to salmon.  Here, we estimate consumption using the following formula:
+
+feed conversion rate x proportion of fofm in diet x tonnes salmon production = tonnes of fish oil fish meal
+
+To convert from fish oil/meal to live weight fish we use assume a loss of 72% (i.e., we divide fofm by 0.28).
+
+Based on these measurements, we estimate about 2,493,129 tonnes of consumption by salmon. We assume a globally consistent diet and fcr, so we can simply convert our estimates by multiplying the salmon fofm pressures by 0.886 (i.e., 2,493,129 / 2,813,893).
+
+NOTE: no changes were made to the files transferred to datalayers (I think those are there as backup/archive, and we don't do anything with them)
+
+This is mostly here for record keeping.
+```{r}
+
+# first copy over the originals to a new file, the ones in the raw folder will be overwritten
+
+from <-  list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/raw", pattern="feedfofm_marine_salmon_aquaculture", full=TRUE)
+to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/salmon_fofm_feed_unaltered"
+
+file.copy(from, to)
+
+from <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell", pattern = "feedfofm_marine_salmon", full=TRUE)
+to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/salmon_fofm_feed_unaltered"
+file.copy(from, to)
+
+
+feed_change_raw <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/salmon_fofm_feed_unaltered", full=TRUE)
+feed_change_raw <- grep(x=feed_change_raw, pattern="gall_peter", value=TRUE, invert=TRUE)
+
+for(file in feed_change_raw){ # file = feed_change_raw[1]
+  tmp <- raster::raster(file)
+  name <- basename(file)
+  start <- raster::cellStats(tmp, "sum", na.rm=TRUE)
+  new_tmp <- tmp*0.886
+  end <- raster::cellStats(new_tmp, "sum", na.rm=TRUE)
+  start
+  end
+  cat(end/start)
+  raster::writeRaster(new_tmp, sprintf("/home/shares/food-systems/Food_footprint/chicken_salmon/raw/%s", name), overwrite=TRUE)
+}
+
+feed_change_gp <- list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/salmon_fofm_feed_unaltered", full=TRUE)
+feed_change_gp <- grep(x=feed_change_gp, pattern="gall_peter", value=TRUE)
+
+for(file in feed_change_gp){ # file = feed_change_gp[1]
+  tmp <- raster::raster(file)
+  name <- basename(file)
+  start <- raster::cellStats(tmp, "sum", na.rm=TRUE)
+  new_tmp <- tmp*0.886
+  end <- raster::cellStats(new_tmp, "sum", na.rm=TRUE)
+  start
+  end
+  cat(end/start)
+  raster::writeRaster(new_tmp, sprintf("/home/shares/food-systems/Food_footprint/chicken_salmon/_tif_equal_area_proj_per_cell/%s", name), overwrite=TRUE)
+}
+
+
+
+```
+
+
+
+These are the spatial layers I need for summarizing
 
 ```{r}
 
@@ -61,7 +127,7 @@ file.copy(from_spatial_list, to)
 
 ```
 
-These are the production values
+
 
 ```{r}
 prod_files <- c("/home/kuempel/food_chicken_salmon/_analysis/data/broiler_production.csv", "/home/kuempel/food_chicken_salmon/_analysis/data/salmon_production.csv")
@@ -71,3 +137,16 @@ to <- "/home/shares/food-systems/Food_footprint/chicken_salmon/production"
 file.copy(prod_files, to)
 ```
 
+```{r}
+
+tmp <- raster::stack(list.files("/home/shares/food-systems/Food_footprint/chicken_salmon/raw", 
+                 full=TRUE))
+
+total <- raster::cellStats(tmp, "sum", na.rm=TRUE)
+total <- as.data.frame(total) 
+total <- cbind(total, names=row.names(total))
+  mutate(names = row.names(total))
+
+write_csv(total, here("checking_cs.csv"))
+                 
+```
