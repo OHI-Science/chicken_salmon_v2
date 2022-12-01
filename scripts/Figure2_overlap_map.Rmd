@@ -206,12 +206,9 @@ ggplot() +
   theme_minimal()
 ```
 
-```{r}
-ggsave(here("_analysis/figures/maps/Any_overlap_map.png"), dpi=300, width=5, height=3)
-```
 
 ```{r}
-png(here(sprintf("_analysis/figures/maps/Any_overlap_map.png", system)), res=500, width=5, height=3, units="in")
+png(here(sprintf("_analysis/figures/Figure1c_Any_overlap_map.png", system)), res=500, width=5, height=3, units="in")
 
 plot(anyoverlap, col = "coral1")
 
@@ -310,7 +307,7 @@ legend_graph <- ggplot(data = legend, aes(x = salmon, y = chicken)) +
         text = element_text(size=15))
 legend_graph
 
-ggsave(here("_analysis/overlap_map/outputs/overlap_legend_newcolors.jpg"), width=5, height=3, dpi=300)
+ggsave(here("_analysis/figures/Figure2_overlap_legend_newcolors.jpg"), width=5, height=3, dpi=300)
   
 ```
 
@@ -324,7 +321,7 @@ land <- st_transform(land, crs=gall_peters)
 land <- as(land, "Spatial")
 plot(land)
 
-grDevices::png(here("_analysis/figures/overlap_map/outputs/overlap_map_newcolors.png"), res=500, width=6, height=3, units = "in")
+grDevices::png(here("_analysis/figures/Figure2_overlap_map_newcolors.png"), res=500, width=6, height=3, units = "in")
 par(oma=c(1,1,1,0)) # bottom, left, top, and right
 par(mfrow=c(1, 1), mar=c(1, 0, 1, 0), new=TRUE)
 
@@ -391,7 +388,7 @@ bar_graph <- ggplot(cell_count, aes(x = category, y = number_cells/1000000, fill
  
 bar_graph
 
-ggsave(here("_analysis/figures/overlap_map/outputs/bar_graph_with_zero.jpg"),height = 5, width = 6,  dpi=300) 
+#ggsave(here("_analysis/figures/overlap_map/outputs/bar_graph_with_zero.jpg"),height = 5, width = 6,  dpi=300) 
 #ggsave("_analysis/int_figs/bar_graph_no_zero.jpg", height = 2, width = 12, dpi=300) 
  
 write.csv(cell_count, here("_analysis/figures/overlap_map/data/cell_count.csv"))
@@ -439,7 +436,7 @@ circle_legend_plot
 
 
 ```{r}
-ggsave(here("_analysis/figures/overlap_map/outputs/overlap_circle_legend_newcolors.jpg"), width=6, height=4, dpi=300,  bg = "white") 
+ggsave(here("_analysis/figures/Figure2_overlap_circle_legend_newcolors.jpg"), width=6, height=4, dpi=300,  bg = "white") 
 ```
 
 
