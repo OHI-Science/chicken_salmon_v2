@@ -29,7 +29,8 @@ salmon<-read.csv(here("_analysis/output_data/Salmon_farm_cpi_prod.csv"))
 
 ```{r}
 chicken<-chicken %>% 
-  filter(broiler_slaughter_wt_tonnes>0)
+  filter(broiler_slaughter_wt_tonnes>0,
+         cpi_prod>0)
 
 chick_cpi_prod_plot<-ggplot(chicken, aes(x = broiler_slaughter_wt_tonnes/1000000, y = cpi_prod, label = Country)) + 
   #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
@@ -44,13 +45,13 @@ chick_cpi_prod_plot<-ggplot(chicken, aes(x = broiler_slaughter_wt_tonnes/1000000
                   force = 1) + 
   theme_bw() +
   xlab("Production (million tonnes, log)") +
-  ylab("On-farm efficiency (log)") #+
+  ylab("On-farm CPI per tonne production (log)") #+
  # coord_trans("log10")
 
 chick_cpi_prod_plot
 ```
 ```{r}
-ggsave(here("_analysis/figures/Chicken_on_farm_efficiency_log10.png"), dpi = 300, height = 4, width = 6)
+ggsave(here("_analysis/figures/Figure3a_Chicken_on_farm_efficiency_log10.png"), dpi = 300, height = 4, width = 6)
 ```
 
 ```{r}
@@ -66,13 +67,13 @@ salmon_cpi_prod_plot<-ggplot(salmon, aes(x = fao_tonnes_production/1000000, y = 
   scale_x_log10() +
   scale_y_log10() +
   xlab("Production (million tonnes, log)") +
-  ylab("On-farm efficiency (log)") 
+  ylab("On-farm CPI per tonne production (log)") 
 
 salmon_cpi_prod_plot
 ```
 
 ```{r}
-ggsave(here("_analysis/figures/Salmon_on_farm_efficiency_log10.png"), dpi = 300, height = 4, width = 6) #width was 10
+ggsave(here("_analysis/figures/Figure3b_Salmon_on_farm_efficiency_log10.png"), dpi = 300, height = 4, width = 6) #width was 10
 ```
 
 # Feed
@@ -96,13 +97,13 @@ chick_feed_cpi_prod_plot<-ggplot(chicken_feed_prod, aes(x = feed_tonnes/1000000,
   #              parse = TRUE) +
   geom_text_repel(max.overlaps = 14) + 
   theme_bw() +
-  xlab("Production (million tonnes, log)") +
-  ylab("Feed efficiency (log)")
+  xlab("Feed production (million tonnes, log)") +
+  ylab("Feed CPI per tonne feed production (log)")
 
 chick_feed_cpi_prod_plot
 ```
 ```{r}
-ggsave(here("_analysis/figures/Chicken_feed_efficiency_log10.png"), dpi = 300, height = 4, width = 6)
+ggsave(here("_analysis/figures/Figure3c_Chicken_feed_efficiency_log10.png"), dpi = 300, height = 4, width = 6)
 ```
 
 
@@ -119,13 +120,13 @@ salmon_feed_cpi_prod_plot<-ggplot(salmon_feed_prod, aes(x = feed_tonnes/1000000,
   #              parse = TRUE) +
   geom_text_repel(max.overlaps = 7) + 
   theme_bw() +
-  xlab("Production (million tonnes, log)") +
-  ylab("Feed efficiency (log))")
+  xlab("Feed production (million tonnes, log)") +
+  ylab("Feed CPI per tonne feed production (log)")
 
 salmon_feed_cpi_prod_plot
 ```
 ```{r}
-ggsave(here("_analysis/figures/Salmon_feed_efficiency_log10.png"), dpi = 300, height = 4, width = 6)
+ggsave(here("_analysis/figures/Figure3d_Salmon_feed_efficiency_log10.png"), dpi = 300, height = 4, width = 6)
 ```
 
 

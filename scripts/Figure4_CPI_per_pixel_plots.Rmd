@@ -169,7 +169,7 @@ chick_cpi_km2_plot
 ```
 
 ```{r}
-ggsave(here("_analysis/figures/Chicken_cpi_km2_log10.png"), dpi = 300, height = 4, width = 10)
+ggsave(here("_analysis/figures/Figure4a_Chicken_cpi_km2_log10.png"), dpi = 300, height = 4, width = 10)
 ```
 
 # Salmon
@@ -207,6 +207,6 @@ salmon_cpi_km2_plot
 
 
 ```{r}
-ggsave(here("_analysis/figures/Salmon_cpi_km2_log10.png"),dpi = 300, height = 4, width = 10)
+ggsave(here("_analysis/figures/Figure4b_Salmon_cpi_km2_log10.png"),dpi = 300, height = 4, width = 10)
 ```
 
