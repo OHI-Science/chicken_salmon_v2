@@ -200,20 +200,16 @@ land <- st_transform(land, crs=gall_peters)
 
 ```{r}
 ggplot() +
-  geom_raster(data = anyoverlap_df, aes(x = x, y = y, fill = value)) +
+  geom_raster(data = anyoverlap_df, aes(x = x, y = y, fill = "coral1")) +
   geom_sf(data = land, fill = "transparent", col = "black", lwd = 0.5) +
   labs(fill = "") +
   theme_minimal()
 ```
 
-
 ```{r}
-png(here(sprintf("_analysis/figures/Figure1c_Any_overlap_map.png", system)), res=500, width=5, height=3, units="in")
-
-plot(anyoverlap, col = "coral1")
-
-dev.off()
+ggsave(here("_analysis/figures/Figure1c_Any_overlap_map.png"),dpi=300, width=5, height=3, units="in")
 ```
+
 
 ```{r}
 col_cont <- c("#E42879", "#DA4C93", "#9F406E", "#561276", 

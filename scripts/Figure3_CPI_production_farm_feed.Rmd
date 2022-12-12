@@ -17,6 +17,8 @@ library(ggrepel)
 library(ggpmisc)
 library(ggforce)
 library(here)
+
+options(scipen = 0)
 ```
 
 ```{r}
@@ -86,6 +88,9 @@ salmon_feed_prod<-read.csv(here("_analysis/output_data/Salmon_feed_cpi_prod.csv"
 
 
 ```{r}
+chicken_feed_prod<-chicken_feed_prod %>% 
+  mutate(country = ifelse(country == "Palestina", "Palestine", as.character(country)))
+
 chick_feed_cpi_prod_plot<-ggplot(chicken_feed_prod, aes(x = feed_tonnes/1000000, y = cpi_per_tonne, label = country)) + 
   #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
   geom_point() +
@@ -109,6 +114,9 @@ ggsave(here("_analysis/figures/Figure3c_Chicken_feed_efficiency_log10.png"), dpi
 
 
 ```{r}
+salmon_feed_prod<-salmon_feed_prod %>% 
+  mutate(country = ifelse(country == "Palestina", "Palestine", as.character(country)))
+
 salmon_feed_cpi_prod_plot<-ggplot(salmon_feed_prod, aes(x = feed_tonnes/1000000, y = cpi_per_tonne, label = country)) + 
   #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
   geom_point() +
