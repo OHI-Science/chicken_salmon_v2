@@ -19,6 +19,9 @@ library(ggforce)
 library(raster)
 library(here)
 
+
+options(scipen = 0)
+
 #devtools::install_github("thomasp85/ggforce")
 ```
 
@@ -39,9 +42,9 @@ salmon_cpi<-raster("/home/shares/food-systems/Food_footprint/chicken_salmon/resc
 ```
 
 ```{r}
-iso3_broiler_cpi<-read.csv(here("_analysis/figures/Country_results/Broiler_country_cpi.csv"))
+iso3_broiler_cpi<-read.csv(here("_analysis/output_data/Broiler_country_cpi.csv"))
 
-iso3_salmon_cpi<-read.csv(here("_analysis/figures/Country_results/Salmon_country_cpi.csv"))
+iso3_salmon_cpi<-read.csv(here("_analysis/output_data/Salmon_country_cpi.csv"))
 ```
 
 ```{r}
@@ -132,6 +135,10 @@ write.csv(cells_iso3_cpi, here("_analysis/output_data/CPI_cells_by_country.csv")
 write.csv(test, here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
 ```
 
+```{r}
+test<-read.csv(here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
+```
+
 
 # Chicken
 
@@ -147,7 +154,8 @@ sub_dat<-test %>%
 ```{r}
 sub_dat<- sub_dat %>% 
   filter(chicken_cpi>0,
-         broiler_cells>0)
+         broiler_cells>0) %>% 
+  mutate(Country = ifelse(Country == "Palestina", "Palestine", as.character(Country)))
 
 chick_cpi_km2_plot<-ggplot(sub_dat, aes(x = broiler_cells/100000, y = chicken_cpi, label = Country, col = prop_broiler)) + 
   #annotation_custom(chicken_png, xmin = -0.5, xmax = 1, ymin = 0.65, ymax=0.75) +
@@ -183,7 +191,8 @@ sub_dat_salmon<-test %>%
   dplyr::select(iso3c, Country, salmon_cells, salmon_cpi, prop_salmon) %>% 
   mutate(salmon_cpi_pixel_lab = ifelse(salmon_cells>100000 | salmon_cpi > 0.005, as.character(Country), 
                                        ifelse(salmon_cells<20, as.character(Country), NA))) %>% 
-  mutate(salmon_cpi/salmon_cells)
+  mutate(salmon_cpi/salmon_cells) %>% 
+ mutate(Country = ifelse(Country == "Palestina", "Palestine", as.character(Country)))
 
 salmon_cpi_km2_plot<-ggplot(sub_dat_salmon, aes(x = salmon_cells/100000, y = salmon_cpi, label = salmon_cpi_pixel_lab, color = prop_salmon)) +
  # annotation_custom(salmon_png, xmin = 0, xmax = 0.35, ymin = 0.035, ymax=0.045) +
@@ -200,7 +209,8 @@ salmon_cpi_km2_plot<-ggplot(sub_dat_salmon, aes(x = salmon_cells/100000, y = sal
 #                  force = 1) + 
   theme_bw() +
   xlab("Pixels (hundred thousands, log)") +
-  ylab("") 
+  ylab("") +
+  labs(color = "Prop. of country cells")
 
 salmon_cpi_km2_plot
 ```
