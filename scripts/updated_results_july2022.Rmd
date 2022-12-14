@@ -165,8 +165,8 @@ iso3_salmon_cpi<-results %>%
             variance_chi = var(prop_of_global, na.rm = T)) %>%
   filter(animal_system == "salmon") 
 
-write.csv(iso3_broiler_cpi, here("_analysis/figures/Country_results/Broiler_country_cpi.csv"))
-write.csv(iso3_salmon_cpi, here("_analysis/figures/Country_results/Salmon_country_cpi.csv"))
+write.csv(iso3_broiler_cpi, here("_analysis/output_data/Broiler_country_cpi.csv"))
+write.csv(iso3_salmon_cpi, here("_analysis/output_data/Salmon_country_cpi.csv"))
 
 ```
 
@@ -201,9 +201,26 @@ unique(salmon_75$Country)
 ```{r}
 all_75<-rbind(broiler_75, salmon_75)
 
+unique(all_75$Country)
+
 length(unique(all_75$Country))
 
 which(broiler_75$Country %in% salmon_75$Country)
+```
+Amount of production these 20 countries make up
+
+```{r}
+total_prod<-sum(broiler_prod$broiler_slaughter_wt_tonnes, na.rm = T) + sum(salmon_prod$fao_tonnes_production, na.rm = T)
+
+sub_broiler_prod<-broiler_prod %>% 
+  filter(iso3c %in% unique(all_75$iso3c))
+
+sub_salmon_prod<-salmon_prod %>% 
+  filter(iso3c %in% unique(all_75$iso3c))
+
+sub_total<-sum(sub_broiler_prod$broiler_slaughter_wt_tonnes, na.rm = T) + sum(sub_salmon_prod$fao_tonnes_production, na.rm = T)
+
+sub_total/total_prod
 ```
 
 ## Land vs Sea CPI total and by country
@@ -528,9 +545,12 @@ iso3_salmon_cpi_farm_pressure<-results %>%
             variance_chi = var(prop_of_global, na.rm = T)) %>%
   filter(animal_system == "salmon") %>% 
     left_join(., salmon_prod) %>% 
-  filter(iso3c %in% c("NOR", "CHL", "CAN", "GBR")) %>% 
+  filter(iso3c %in% c("NOR", "CHL", "CAN", "GBR", "USA")) %>% 
   mutate(eff = country_farm_feed_chi/fao_tonnes_production) %>% 
   dplyr::select(iso3c, Country, animal_system, stressor, country_farm_feed_chi, fao_tonnes_production, eff)
+
+test<-iso3_salmon_cpi_farm_pressure %>% 
+  filter(iso3c %in% c("CHL", "USA"))
 ```
 
 Feed
@@ -620,6 +640,9 @@ This file is created in the Figure4_CPI_per_pixel_plots.Rmd
 
 ```{r}
 cpi_pixel<-read.csv(here("_analysis/output_data/CPI_cells_by_country_top95perc.csv"))
+
+test<-cpi_pixel %>% 
+  dplyr::select(iso3c, ncells, salmon_cells, prop_salmon, salmon_cpi, salmon_cpi_cell, fao_tonnes_production)
 
 ```
 
