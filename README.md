@@ -46,11 +46,10 @@ Files saved here for unscaled stressors: /home/shares/food-systems/Food_footprin
 Files saved here for rescaled stressors:/home/shares/food-systems/Food_footprint/chicken_salmon/rescaled_cumulative_pressure
 
 3. step4_zonal_raster_extract.Rmd
-*** There is some text convo between us in this script I think we can delete now ***
 4. updated_results_july2022.Rmd
 
 Figures
 1. Figure1_CPI_Maps.Rmd
-2. 
+2. Figure2_overlap_map.Rmd
 3. Figure3_CPI_production_farm_feed.Rmd
 4. Figure4_CPI_per_pixel_plots.Rmd
